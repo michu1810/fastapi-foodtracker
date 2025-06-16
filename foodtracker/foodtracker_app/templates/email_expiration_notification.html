@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Powiadomienie o Wygasających Produktach - FoodTracker</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; margin: 20px auto;">
+        <tr>
+            <td style="padding: 20px 0; text-align: center;">
+                <img src="https://i.imgur.com/2JXwoGT.png" alt="FoodTracker Logo" width="60" style="display: block; margin: 0 auto;">
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h1 style="margin: 0; font-size: 24px; color: #333333; font-weight: 600;">🔔 Masz produkty do wykorzystania!</h1>
+                <p style="margin: 20px 0 0; font-size: 16px; color: #555555; line-height: 1.5;">
+                    Cześć {{ email }}!
+                </p>
+                <p style="margin: 10px 0 25px; font-size: 16px; color: #555555; line-height: 1.5;">
+                    Oto lista Twoich produktów, których data ważności wkrótce upływa lub już upłynęła:
+                </p>
+
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="text-align: left; font-size: 16px;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 0 0 10px; border-bottom: 1px solid #eeeeee; color: #888888; font-weight: 500;">Produkt</th>
+                            <th style="padding: 0 0 10px; border-bottom: 1px solid #eeeeee; color: #888888; font-weight: 500; text-align: right;">Wygasa do</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td style="padding: 12px 0; color: #333333; font-weight: 600;">{{ product.name }}</td>
+                            <td style="padding: 12px 0; {% if product.is_expired %}color: #d9534f;{% else %}#f0ad4e{% endif %}; font-weight: 600; text-align: right;">
+                                {{ product.expiration_date }}
+                                {% if product.is_expired %}(Dziś się przeterminuje!){% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p style="text-align: center; margin: 35px 0 15px;">
+                    <a href="http://localhost:5173" target="_blank" style="background-color: #28a745; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 5px; font-weight: 600; display: inline-block;">
+                        Zajrzyj do FoodTrackera i oznacz jako zużyte!
+                    </a>
+                </p>
+
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px 30px; text-align: center;">
+                <p style="margin: 0; font-size: 12px; color: #999999; line-height: 1.5;">
+                    Ta wiadomość została wygenerowana automatycznie. Prosimy na nią nie odpowiadać.<br>
+                    &copy; {{ now.year }} FoodTracker. Wszelkie prawa zastrzeżone.
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
