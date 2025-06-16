@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .fade-in { @apply animate-fade-in; }
+  .scrollbar-thin { scrollbar-width: thin; }
+  .scrollbar-thumb-gray-300::-webkit-scrollbar-thumb { background: rgba(156,163,175,0.5); border-radius: 4px; }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition animate-fade-in; }
+  .card-title { @apply text-xl font-semibold mb-4; }
+  .btn-primary, .btn-secondary {
+    @apply bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-white font-semibold
+      px-4 py-2 rounded-lg transform transition scale-100 hover:scale-105 active:scale-95 w-full;
+  }
+  .btn-secondary { @apply bg-green-600 hover:bg-green-700 focus:ring-green-300; }
+}
+
+/* Calendar styling */
+.react-calendar {
+  @apply w-full border-none rounded-lg p-4 bg-white;
+}
+.react-calendar__navigation {
+  @apply flex items-center justify-between mb-4 px-2;
+}
+.react-calendar__navigation button {
+  @apply p-2 text-lg font-semibold hover:bg-gray-200 rounded-lg transition-colors;
+}
+.react-calendar__navigation button:disabled {
+  @apply bg-transparent opacity-50 cursor-not-allowed;
+}
+.react-calendar__month-view__weekdays__weekday {
+  @apply text-center font-bold text-sm text-gray-500 pb-2;
+}
+.react-calendar__tile {
+  @apply text-center text-base h-16 flex flex-col items-center justify-start p-1
+    rounded-lg transition-colors;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus { @apply bg-blue-100; }
+.react-calendar__tile--now {
+  @apply bg-blue-100 font-bold;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus { @apply bg-blue-200; }
+.react-calendar__tile--active {
+  @apply bg-blue-500 text-white font-bold;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus { @apply bg-blue-600; }
+.react-calendar__month-view__days__day--neighboringMonth {
+  @apply text-gray-400;
+}
+
+
