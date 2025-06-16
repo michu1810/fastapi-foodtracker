@@ -88,14 +88,22 @@ Dzięki pełnej konteneryzacji, cały projekt (backend, baza danych, Redis, Cele
 
 ## 🖼️ Galeria
 
-*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację. Zastąp linki na swoje)*
+*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację.)*
 
-![Panel Główny](https://i.imgur.com/e4c9de.png)
-_Panel główny aplikacji z wykresem trendów._
-
-![Logowanie](https://i.imgur.com/e464a1.jpg)
+![Logowanie](https://imgur.com/FF3zlVz)
 _Strona logowania z opcjami OAuth._
 
+![Panel Glowny](https://imgur.com/3ciOqZF)
+_Panel główny aplikacji z kalendarzem, mini statystykami pod kalendarzem oraz panelem wkrótce wygasajacych produktów._
+
+![Statystyki](https://imgur.com/xAzbQE2)
+_Strona ze statystykami gdzie można kontrolować to w jakim tempie ratujemy jedzenie oraz ile oszczędzamy dzięki aplikacji._
+
+![Osiagniecia](https://imgur.com/JnkB6KY)
+_Strona z osiągnięciami użytkownika motywująca do dalszego korzystania z aplikacji._
+
+![Profil uzytkownika](https://imgur.com/fl8mInj)
+_Strona profilu użytkownika z opcjami zmiany hasła, dodania zdjęcia profilowego oraz usunięcia konta._
 ## 👤 Autor
 
 Projekt stworzony przeze mnie od A do Z. <br>
