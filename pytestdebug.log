@@ -1,0 +1,2503 @@
+versions pytest-8.4.0, python-3.13.4.final.0
+invocation_dir=C:\Users\nowyf\FoodTracker\pythonProject
+cwd=C:\Users\nowyf\FoodTracker\pythonProject
+args=('--debug',)
+
+  pytest_cmdline_main [hook]
+      config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+    pytest_plugin_registered [hook]
+        plugin: <Session  exitstatus='<UNSET>' testsfailed=0 testscollected=0>
+        plugin_name: session
+        manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+    finish pytest_plugin_registered --> [] [hook]
+    pytest_configure [hook]
+        config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x000001BFA993A7B0>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x000001BFAA284980>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: faulthandler [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: pdb [assertion]
+    early skip of rewriting module: cmd [assertion]
+    early skip of rewriting module: code [assertion]
+    early skip of rewriting module: codeop [assertion]
+    early skip of rewriting module: rlcompleter [assertion]
+    early skip of rewriting module: readline [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+          plugin_name: 1922666647232
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x000001BFA7DCF380>
+          plugin_name: pytestconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\mark\\__init__.py'>
+          plugin_name: mark
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\main.py'>
+          plugin_name: main
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\runner.py'>
+          plugin_name: runner
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\fixtures.py'>
+          plugin_name: fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\helpconfig.py'>
+          plugin_name: helpconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\python.py'>
+          plugin_name: python
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\terminal.py'>
+          plugin_name: terminal
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\debugging.py'>
+          plugin_name: debugging
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\unittest.py'>
+          plugin_name: unittest
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\capture.py'>
+          plugin_name: capture
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\skipping.py'>
+          plugin_name: skipping
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\legacypath.py'>
+          plugin_name: legacypath
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\tmpdir.py'>
+          plugin_name: tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\monkeypatch.py'>
+          plugin_name: monkeypatch
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\recwarn.py'>
+          plugin_name: recwarn
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\pastebin.py'>
+          plugin_name: pastebin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\assertion\\__init__.py'>
+          plugin_name: assertion
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\junitxml.py'>
+          plugin_name: junitxml
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\doctest.py'>
+          plugin_name: doctest
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\cacheprovider.py'>
+          plugin_name: cacheprovider
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\freeze_support.py'>
+          plugin_name: freeze_support
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\setuponly.py'>
+          plugin_name: setuponly
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\setupplan.py'>
+          plugin_name: setupplan
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\stepwise.py'>
+          plugin_name: stepwise
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\unraisableexception.py'>
+          plugin_name: unraisableexception
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\threadexception.py'>
+          plugin_name: threadexception
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\warnings.py'>
+          plugin_name: warnings
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\logging.py'>
+          plugin_name: logging
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\reports.py'>
+          plugin_name: reports
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\faulthandler.py'>
+          plugin_name: faulthandler
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'anyio.pytest_plugin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\anyio\\pytest_plugin.py'>
+          plugin_name: anyio
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_asyncio.plugin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\pytest_asyncio\\plugin.py'>
+          plugin_name: asyncio
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=9 _state='suspended' tmpfile=<EncodedFile name='<tempfile._TemporaryFileWrapper object at 0x000001BFAA2842F0>' mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=11 _state='suspended' tmpfile=<EncodedFile name='<tempfile._TemporaryFileWrapper object at 0x000001BFA99E5BD0>' mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=7 _state='started' tmpfile=<_io.TextIOWrapper name='nul' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          plugin_name: capturemanager
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          plugin_name: session
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x000001BFA993A7B0>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x000001BFAA284980>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x000001BFAA285D30>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x000001BFAA2863C0>
+          plugin_name: logging-plugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+    finish pytest_configure --> [] [hook]
+    pytest_sessionstart [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+          plugin_name: 1922666647232
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x000001BFA7DCF380>
+          plugin_name: pytestconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\mark\\__init__.py'>
+          plugin_name: mark
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\main.py'>
+          plugin_name: main
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\runner.py'>
+          plugin_name: runner
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\fixtures.py'>
+          plugin_name: fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\helpconfig.py'>
+          plugin_name: helpconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\python.py'>
+          plugin_name: python
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\terminal.py'>
+          plugin_name: terminal
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\debugging.py'>
+          plugin_name: debugging
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\unittest.py'>
+          plugin_name: unittest
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\capture.py'>
+          plugin_name: capture
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\skipping.py'>
+          plugin_name: skipping
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\legacypath.py'>
+          plugin_name: legacypath
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\tmpdir.py'>
+          plugin_name: tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\monkeypatch.py'>
+          plugin_name: monkeypatch
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\recwarn.py'>
+          plugin_name: recwarn
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\pastebin.py'>
+          plugin_name: pastebin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\assertion\\__init__.py'>
+          plugin_name: assertion
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\junitxml.py'>
+          plugin_name: junitxml
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\doctest.py'>
+          plugin_name: doctest
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\cacheprovider.py'>
+          plugin_name: cacheprovider
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\freeze_support.py'>
+          plugin_name: freeze_support
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\setuponly.py'>
+          plugin_name: setuponly
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\setupplan.py'>
+          plugin_name: setupplan
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\stepwise.py'>
+          plugin_name: stepwise
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\unraisableexception.py'>
+          plugin_name: unraisableexception
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\threadexception.py'>
+          plugin_name: threadexception
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\warnings.py'>
+          plugin_name: warnings
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\logging.py'>
+          plugin_name: logging
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\reports.py'>
+          plugin_name: reports
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pytest\\faulthandler.py'>
+          plugin_name: faulthandler
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'anyio.pytest_plugin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\anyio\\pytest_plugin.py'>
+          plugin_name: anyio
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_asyncio.plugin' from 'C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\pytest_asyncio\\plugin.py'>
+          plugin_name: asyncio
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=9 _state='suspended' tmpfile=<EncodedFile name='<tempfile._TemporaryFileWrapper object at 0x000001BFAA2842F0>' mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=11 _state='suspended' tmpfile=<EncodedFile name='<tempfile._TemporaryFileWrapper object at 0x000001BFA99E5BD0>' mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=7 _state='started' tmpfile=<_io.TextIOWrapper name='nul' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          plugin_name: capturemanager
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          plugin_name: session
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x000001BFA993A7B0>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x000001BFAA284980>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x000001BFAA285D30>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x000001BFAA2863C0>
+          plugin_name: logging-plugin
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.fixtures.FixtureManager object at 0x000001BFAA286CF0>
+          plugin_name: funcmanage
+          manager: <_pytest.config.PytestPluginManager object at 0x000001BFA7DCCEC0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_report_header [hook]
+          config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+          start_path: C:\Users\nowyf\FoodTracker\pythonProject
+          startdir: C:\Users\nowyf\FoodTracker\pythonProject
+      early skip of rewriting module: importlib.metadata._adapters [assertion]
+      early skip of rewriting module: email.message [assertion]
+      early skip of rewriting module: quopri [assertion]
+      early skip of rewriting module: email.utils [assertion]
+      early skip of rewriting module: urllib [assertion]
+      early skip of rewriting module: urllib.parse [assertion]
+      early skip of rewriting module: email._parseaddr [assertion]
+      early skip of rewriting module: email.errors [assertion]
+      early skip of rewriting module: email._policybase [assertion]
+      early skip of rewriting module: email.header [assertion]
+      early skip of rewriting module: email.quoprimime [assertion]
+      early skip of rewriting module: email.base64mime [assertion]
+      early skip of rewriting module: email.charset [assertion]
+      early skip of rewriting module: email.encoders [assertion]
+      early skip of rewriting module: email._encoded_words [assertion]
+      early skip of rewriting module: email.iterators [assertion]
+      early skip of rewriting module: importlib.metadata._text [assertion]
+      early skip of rewriting module: email.parser [assertion]
+      early skip of rewriting module: email.feedparser [assertion]
+      finish pytest_report_header --> [['asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function'], ['rootdir: C:\\Users\\nowyf\\FoodTracker\\pythonProject', 'plugins: anyio-4.9.0, asyncio-1.0.0'], ['using: pytest-8.4.0', 'registered third-party plugins:', '  anyio-4.9.0 at C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\anyio\\pytest_plugin.py', '  pytest-asyncio-1.0.0 at C:\\Users\\nowyf\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\pytest_asyncio\\plugin.py']] [hook]
+    finish pytest_sessionstart --> [] [hook]
+    pytest_collection [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+    perform_collect <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0> ['C:\\Users\\nowyf\\FoodTracker\\pythonProject'] [collection]
+        pytest_collectstart [hook]
+            collector: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        finish pytest_collectstart --> [] [hook]
+        pytest_make_collect_report [hook]
+            collector: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        processing argument CollectionArgument(path=WindowsPath('C:/Users/nowyf/FoodTracker/pythonProject'), parts=[], module_name=None) [collection]
+            pytest_collect_directory [hook]
+                path: C:\Users\nowyf\FoodTracker\pythonProject
+                parent: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+            finish pytest_collect_directory --> <Dir pythonProject> [hook]
+        finish pytest_make_collect_report --> <CollectReport '' lenresult=1 outcome='passed'> [hook]
+        pytest_collectreport [hook]
+            report: <CollectReport '' lenresult=1 outcome='passed'>
+        finish pytest_collectreport --> [] [hook]
+    genitems <Dir pythonProject> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir pythonProject>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir pythonProject>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\.git
+            path: C:\Users\nowyf\FoodTracker\pythonProject\.git
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\.idea
+            path: C:\Users\nowyf\FoodTracker\pythonProject\.idea
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\.pytest_cache
+            path: C:\Users\nowyf\FoodTracker\pythonProject\.pytest_cache
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\Dockerfile
+            path: C:\Users\nowyf\FoodTracker\pythonProject\Dockerfile
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pythonProject>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\Dockerfile
+            path: C:\Users\nowyf\FoodTracker\pythonProject\Dockerfile
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\docker-compose.yml
+            path: C:\Users\nowyf\FoodTracker\pythonProject\docker-compose.yml
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pythonProject>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\docker-compose.yml
+            path: C:\Users\nowyf\FoodTracker\pythonProject\docker-compose.yml
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker
+            parent: <Dir pythonProject>
+        finish pytest_collect_directory --> <Package foodtracker> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend
+            parent: <Dir pythonProject>
+        finish pytest_collect_directory --> <Dir frontend> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\pytestdebug.log
+            path: C:\Users\nowyf\FoodTracker\pythonProject\pytestdebug.log
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pythonProject>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\pytestdebug.log
+            path: C:\Users\nowyf\FoodTracker\pythonProject\pytestdebug.log
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport '.' lenresult=2 outcome='passed'> [hook]
+    genitems <Package foodtracker> [collection]
+      pytest_collectstart [hook]
+          collector: <Package foodtracker>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package foodtracker>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.env
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.env
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.env
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.env
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.gitignore
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.gitignore
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.gitignore
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.gitignore
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.pytest_cache
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.pytest_cache
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.venv
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\.venv
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\beat_db.sqlite3
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\beat_db.sqlite3
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\beat_db.sqlite3
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\beat_db.sqlite3
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-shm
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-shm
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-shm
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-shm
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-wal
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-wal
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-wal
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\celerybeat-schedule-wal
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app
+            parent: <Package foodtracker>
+        finish pytest_collect_directory --> <Package foodtracker_app> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\pytest.ini
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\pytest.ini
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\pytest.ini
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\pytest.ini
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\requirements.txt
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\requirements.txt
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\requirements.txt
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\requirements.txt
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker' lenresult=1 outcome='passed'> [hook]
+    genitems <Package foodtracker_app> [collection]
+      pytest_collectstart [hook]
+          collector: <Package foodtracker_app>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package foodtracker_app>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker_app>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\.pytest_cache
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\.pytest_cache
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir alembic> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic.ini
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic.ini
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker_app>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic.ini
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic.ini
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Package auth> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Package calendar_view> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\celerybeat-schedule
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\celerybeat-schedule
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker_app>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\celerybeat-schedule
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\celerybeat-schedule
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir core> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir db> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir external> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\main.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\main.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker_app>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\main.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\main.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Package models> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Package notifications> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir scripts> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\settings.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\settings.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package foodtracker_app>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\settings.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\settings.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir templates> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\tests
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\tests
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\tests
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Package tests> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir uploads> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils
+            parent: <Package foodtracker_app>
+        finish pytest_collect_directory --> <Dir utils> [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app' lenresult=13 outcome='passed'> [hook]
+    genitems <Dir alembic> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir alembic>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir alembic>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\README
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\README
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir alembic>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\README
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\README
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\env.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\env.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir alembic>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\env.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\env.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\script.py.mako
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\script.py.mako
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir alembic>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\script.py.mako
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\script.py.mako
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions
+            parent: <Dir alembic>
+        finish pytest_collect_directory --> <Dir versions> [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/alembic' lenresult=1 outcome='passed'> [hook]
+    genitems <Dir versions> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir versions>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir versions>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\279ecf3961aa_initial_database_structure.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\279ecf3961aa_initial_database_structure.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir versions>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\279ecf3961aa_initial_database_structure.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\279ecf3961aa_initial_database_structure.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\alembic\versions\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/alembic/versions' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/alembic/versions' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/alembic' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Package auth> [collection]
+      pytest_collectstart [hook]
+          collector: <Package auth>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package auth>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\dependancies.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\dependancies.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\dependancies.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\dependancies.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\routes.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\routes.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\schemas.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\schemas.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\schemas.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\schemas.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\social.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\social.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\social.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\social.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\utils.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package auth>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\auth\utils.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/auth' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/auth' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Package calendar_view> [collection]
+      pytest_collectstart [hook]
+          collector: <Package calendar_view>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package calendar_view>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package calendar_view>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\routes.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package calendar_view>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\calendar_view\routes.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/calendar_view' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/calendar_view' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir core> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir core>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir core>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\security.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\security.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir core>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\security.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\core\security.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/core' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/core' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir db> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir db>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir db>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\database.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\database.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir db>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\database.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\db\database.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/db' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/db' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir external> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir external>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir external>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\routes.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir external>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\external\routes.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/external' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/external' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Package models> [collection]
+      pytest_collectstart [hook]
+          collector: <Package models>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package models>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package models>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\product.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\product.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package models>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\product.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\product.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\user.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\user.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package models>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\user.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\models\user.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/models' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/models' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Package notifications> [collection]
+      pytest_collectstart [hook]
+          collector: <Package notifications>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package notifications>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package notifications>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__init__.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\celery_worker.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\celery_worker.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package notifications>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\celery_worker.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\celery_worker.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\routes.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package notifications>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\routes.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\routes.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\tasks.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\tasks.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package notifications>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\tasks.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\tasks.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\utils.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package notifications>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\notifications\utils.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/notifications' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/notifications' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir scripts> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir scripts>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir scripts>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\cleanupt_test_users.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\cleanupt_test_users.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir scripts>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\cleanupt_test_users.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\cleanupt_test_users.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\delete_all_users.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\delete_all_users.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir scripts>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\delete_all_users.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\scripts\delete_all_users.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/scripts' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/scripts' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir templates> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir templates>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir templates>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_expiration_notification.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_expiration_notification.html
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir templates>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_expiration_notification.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_expiration_notification.html
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_reminder.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_reminder.html
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir templates>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_reminder.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\email_reminder.html
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\reset_password_email.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\reset_password_email.html
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir templates>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\reset_password_email.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\reset_password_email.html
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\verify_email.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\verify_email.html
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir templates>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\verify_email.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\templates\verify_email.html
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/templates' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/templates' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Package tests> [collection]
+      pytest_collectstart [hook]
+          collector: <Package tests>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package tests>
+      early skip of rewriting module: foodtracker [assertion]
+      early skip of rewriting module: foodtracker.foodtracker_app [assertion]
+      early skip of rewriting module: foodtracker.foodtracker_app.tests [assertion]
+      find_module called for: foodtracker.foodtracker_app.tests.conftest [assertion]
+      rewriting conftest file: 'C:\\Users\\nowyf\\FoodTracker\\pythonProject\\foodtracker\\foodtracker_app\\tests\\conftest.py' [assertion]
+      found cached rewritten pyc for C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\tests\conftest.py [assertion]
+      early skip of rewriting module: fastapi [assertion]
+      early skip of rewriting module: starlette [assertion]
+      early skip of rewriting module: starlette.status [assertion]
+      early skip of rewriting module: fastapi.applications [assertion]
+      early skip of rewriting module: fastapi.routing [assertion]
+      early skip of rewriting module: fastapi.params [assertion]
+      early skip of rewriting module: fastapi.openapi [assertion]
+      early skip of rewriting module: fastapi.openapi.models [assertion]
+      early skip of rewriting module: fastapi._compat [assertion]
+      early skip of rewriting module: fastapi.exceptions [assertion]
+      early skip of rewriting module: pydantic [assertion]
+      early skip of rewriting module: pydantic._migration [assertion]
+      early skip of rewriting module: pydantic.version [assertion]
+      early skip of rewriting module: pydantic_core [assertion]
+      early skip of rewriting module: pydantic_core._pydantic_core [assertion]
+      early skip of rewriting module: pydantic_core.core_schema [assertion]
+      early skip of rewriting module: typing_extensions [assertion]
+      early skip of rewriting module: pydantic.errors [assertion]
+      early skip of rewriting module: typing_inspection [assertion]
+      early skip of rewriting module: typing_inspection.introspection [assertion]
+      early skip of rewriting module: typing_inspection.typing_objects [assertion]
+      early skip of rewriting module: pydantic._internal [assertion]
+      early skip of rewriting module: pydantic._internal._repr [assertion]
+      early skip of rewriting module: pydantic._internal._typing_extra [assertion]
+      early skip of rewriting module: pydantic._internal._namespace_utils [assertion]
+      early skip of rewriting module: pydantic.main [assertion]
+      early skip of rewriting module: pydantic.warnings [assertion]
+      early skip of rewriting module: pydantic._internal._config [assertion]
+      early skip of rewriting module: pydantic.aliases [assertion]
+      early skip of rewriting module: pydantic._internal._internal_dataclass [assertion]
+      early skip of rewriting module: pydantic.config [assertion]
+      early skip of rewriting module: pydantic._internal._decorators [assertion]
+      early skip of rewriting module: pydantic._internal._core_utils [assertion]
+      early skip of rewriting module: pydantic._internal._utils [assertion]
+      early skip of rewriting module: pydantic._internal._import_utils [assertion]
+      early skip of rewriting module: pydantic._internal._fields [assertion]
+      early skip of rewriting module: pydantic._internal._generics [assertion]
+      early skip of rewriting module: pydantic._internal._forward_ref [assertion]
+      early skip of rewriting module: pydantic._internal._docs_extraction [assertion]
+      early skip of rewriting module: pydantic._internal._mock_val_ser [assertion]
+      early skip of rewriting module: pydantic.plugin [assertion]
+      early skip of rewriting module: pydantic.plugin._schema_validator [assertion]
+      early skip of rewriting module: pydantic._internal._model_construction [assertion]
+      early skip of rewriting module: pydantic._internal._generate_schema [assertion]
+      early skip of rewriting module: fractions [assertion]
+      early skip of rewriting module: zoneinfo [assertion]
+      early skip of rewriting module: zoneinfo._tzpath [assertion]
+      early skip of rewriting module: sysconfig [assertion]
+      early skip of rewriting module: _sysconfig [assertion]
+      early skip of rewriting module: zoneinfo._common [assertion]
+      early skip of rewriting module: _zoneinfo [assertion]
+      early skip of rewriting module: pydantic.annotated_handlers [assertion]
+      early skip of rewriting module: pydantic.functional_validators [assertion]
+      early skip of rewriting module: pydantic.json_schema [assertion]
+      early skip of rewriting module: pydantic._internal._core_metadata [assertion]
+      early skip of rewriting module: pydantic._internal._schema_generation_shared [assertion]
+      early skip of rewriting module: pydantic._internal._discriminated_union [assertion]
+      early skip of rewriting module: pydantic._internal._known_annotated_metadata [assertion]
+      early skip of rewriting module: pydantic._internal._schema_gather [assertion]
+      early skip of rewriting module: pydantic._internal._signature [assertion]
+      early skip of rewriting module: starlette.exceptions [assertion]
+      early skip of rewriting module: http [assertion]
+      early skip of rewriting module: pydantic.fields [assertion]
+      early skip of rewriting module: annotated_types [assertion]
+      early skip of rewriting module: pydantic._internal._validators [assertion]
+      early skip of rewriting module: pydantic.types [assertion]
+      early skip of rewriting module: pydantic.plugin._loader [assertion]
+      early skip of rewriting module: fastapi.types [assertion]
+      early skip of rewriting module: starlette.datastructures [assertion]
+      early skip of rewriting module: starlette.concurrency [assertion]
+      early skip of rewriting module: starlette.types [assertion]
+      early skip of rewriting module: pydantic.type_adapter [assertion]
+      early skip of rewriting module: fastapi.logger [assertion]
+      early skip of rewriting module: pydantic.networks [assertion]
+      early skip of rewriting module: email_validator [assertion]
+      early skip of rewriting module: email_validator.exceptions_types [assertion]
+      early skip of rewriting module: email_validator.validate_email [assertion]
+      early skip of rewriting module: email_validator.syntax [assertion]
+      early skip of rewriting module: email_validator.rfc_constants [assertion]
+      early skip of rewriting module: idna [assertion]
+      early skip of rewriting module: idna.core [assertion]
+      early skip of rewriting module: idna.idnadata [assertion]
+      early skip of rewriting module: idna.intranges [assertion]
+      early skip of rewriting module: idna.package_data [assertion]
+      early skip of rewriting module: email_validator.version [assertion]
+      early skip of rewriting module: fastapi.datastructures [assertion]
+      early skip of rewriting module: fastapi.dependencies [assertion]
+      early skip of rewriting module: fastapi.dependencies.models [assertion]
+      early skip of rewriting module: fastapi.security [assertion]
+      early skip of rewriting module: fastapi.security.api_key [assertion]
+      early skip of rewriting module: fastapi.security.base [assertion]
+      early skip of rewriting module: starlette.requests [assertion]
+      early skip of rewriting module: http.cookies [assertion]
+      early skip of rewriting module: starlette._utils [assertion]
+      early skip of rewriting module: starlette.formparsers [assertion]
+      early skip of rewriting module: python_multipart [assertion]
+      early skip of rewriting module: python_multipart.multipart [assertion]
+      early skip of rewriting module: python_multipart.decoders [assertion]
+      early skip of rewriting module: python_multipart.exceptions [assertion]
+      early skip of rewriting module: fastapi.security.http [assertion]
+      early skip of rewriting module: fastapi.security.utils [assertion]
+      early skip of rewriting module: fastapi.security.oauth2 [assertion]
+      early skip of rewriting module: fastapi.param_functions [assertion]
+      early skip of rewriting module: fastapi.security.open_id_connect_url [assertion]
+      early skip of rewriting module: fastapi.dependencies.utils [assertion]
+      early skip of rewriting module: fastapi.background [assertion]
+      early skip of rewriting module: starlette.background [assertion]
+      early skip of rewriting module: fastapi.concurrency [assertion]
+      early skip of rewriting module: fastapi.utils [assertion]
+      early skip of rewriting module: starlette.responses [assertion]
+      early skip of rewriting module: hashlib [assertion]
+      early skip of rewriting module: _hashlib [assertion]
+      early skip of rewriting module: _blake2 [assertion]
+      early skip of rewriting module: mimetypes [assertion]
+      early skip of rewriting module: secrets [assertion]
+      early skip of rewriting module: hmac [assertion]
+      early skip of rewriting module: starlette.websockets [assertion]
+      early skip of rewriting module: fastapi.encoders [assertion]
+      early skip of rewriting module: pydantic.color [assertion]
+      early skip of rewriting module: colorsys [assertion]
+      early skip of rewriting module: starlette.routing [assertion]
+      early skip of rewriting module: starlette._exception_handler [assertion]
+      early skip of rewriting module: starlette.convertors [assertion]
+      early skip of rewriting module: starlette.middleware [assertion]
+      early skip of rewriting module: fastapi.exception_handlers [assertion]
+      early skip of rewriting module: fastapi.websockets [assertion]
+      early skip of rewriting module: fastapi.openapi.docs [assertion]
+      early skip of rewriting module: fastapi.openapi.utils [assertion]
+      early skip of rewriting module: http.client [assertion]
+      early skip of rewriting module: fastapi.openapi.constants [assertion]
+      early skip of rewriting module: fastapi.responses [assertion]
+      early skip of rewriting module: ujson [assertion]
+      early skip of rewriting module: orjson [assertion]
+      early skip of rewriting module: starlette.applications [assertion]
+      early skip of rewriting module: starlette.middleware.base [assertion]
+      early skip of rewriting module: starlette.middleware.errors [assertion]
+      early skip of rewriting module: html [assertion]
+      early skip of rewriting module: html.entities [assertion]
+      early skip of rewriting module: starlette.middleware.exceptions [assertion]
+      early skip of rewriting module: fastapi.requests [assertion]
+      early skip of rewriting module: fastapi.testclient [assertion]
+      early skip of rewriting module: starlette.testclient [assertion]
+      early skip of rewriting module: httpx [assertion]
+      early skip of rewriting module: httpx.__version__ [assertion]
+      early skip of rewriting module: httpx._api [assertion]
+      early skip of rewriting module: httpx._client [assertion]
+      early skip of rewriting module: httpx._auth [assertion]
+      early skip of rewriting module: urllib.request [assertion]
+      early skip of rewriting module: urllib.error [assertion]
+      early skip of rewriting module: urllib.response [assertion]
+      early skip of rewriting module: nturl2path [assertion]
+      early skip of rewriting module: httpx._exceptions [assertion]
+      early skip of rewriting module: httpx._models [assertion]
+      early skip of rewriting module: http.cookiejar [assertion]
+      early skip of rewriting module: calendar [assertion]
+      early skip of rewriting module: httpx._content [assertion]
+      early skip of rewriting module: httpx._multipart [assertion]
+      early skip of rewriting module: httpx._types [assertion]
+      early skip of rewriting module: httpx._utils [assertion]
+      early skip of rewriting module: httpx._decoders [assertion]
+      early skip of rewriting module: brotli [assertion]
+      early skip of rewriting module: brotlicffi [assertion]
+      early skip of rewriting module: zstandard [assertion]
+      early skip of rewriting module: httpx._status_codes [assertion]
+      early skip of rewriting module: httpx._urls [assertion]
+      early skip of rewriting module: httpx._urlparse [assertion]
+      early skip of rewriting module: httpx._config [assertion]
+      early skip of rewriting module: httpx._transports [assertion]
+      early skip of rewriting module: httpx._transports.asgi [assertion]
+      early skip of rewriting module: httpx._transports.base [assertion]
+      early skip of rewriting module: httpx._transports.default [assertion]
+      early skip of rewriting module: httpx._transports.mock [assertion]
+      early skip of rewriting module: httpx._transports.wsgi [assertion]
+      early skip of rewriting module: httpx._main [assertion]
+      early skip of rewriting module: click [assertion]
+      early skip of rewriting module: click.core [assertion]
+      early skip of rewriting module: click.types [assertion]
+      early skip of rewriting module: click._compat [assertion]
+      early skip of rewriting module: click._winconsole [assertion]
+      early skip of rewriting module: click.exceptions [assertion]
+      early skip of rewriting module: click.globals [assertion]
+      early skip of rewriting module: click.utils [assertion]
+      early skip of rewriting module: click.formatting [assertion]
+      early skip of rewriting module: click.parser [assertion]
+      early skip of rewriting module: click.termui [assertion]
+      early skip of rewriting module: click.decorators [assertion]
+      early skip of rewriting module: rich [assertion]
+      early skip of rewriting module: sqlalchemy [assertion]
+      early skip of rewriting module: sqlalchemy.util [assertion]
+      early skip of rewriting module: sqlalchemy.util.preloaded [assertion]
+      early skip of rewriting module: sqlalchemy.util._collections [assertion]
+      early skip of rewriting module: sqlalchemy.util._has_cy [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension.collections [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension.immutabledict [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension.processors [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension.resultproxy [assertion]
+      early skip of rewriting module: sqlalchemy.cyextension.util [assertion]
+      early skip of rewriting module: sqlalchemy.exc [assertion]
+      early skip of rewriting module: sqlalchemy.util.compat [assertion]
+      early skip of rewriting module: sqlalchemy.util.typing [assertion]
+      early skip of rewriting module: sqlalchemy.util.concurrency [assertion]
+      early skip of rewriting module: greenlet [assertion]
+      early skip of rewriting module: greenlet._greenlet [assertion]
+      early skip of rewriting module: sqlalchemy.util._concurrency_py3k [assertion]
+      early skip of rewriting module: sqlalchemy.util.langhelpers [assertion]
+      early skip of rewriting module: sqlalchemy.util.deprecations [assertion]
+      early skip of rewriting module: sqlalchemy.engine [assertion]
+      early skip of rewriting module: sqlalchemy.engine.events [assertion]
+      early skip of rewriting module: sqlalchemy.engine.base [assertion]
+      early skip of rewriting module: sqlalchemy.engine.interfaces [assertion]
+      early skip of rewriting module: sqlalchemy.event [assertion]
+      early skip of rewriting module: sqlalchemy.event.api [assertion]
+      early skip of rewriting module: sqlalchemy.event.base [assertion]
+      early skip of rewriting module: sqlalchemy.event.attr [assertion]
+      early skip of rewriting module: sqlalchemy.event.legacy [assertion]
+      early skip of rewriting module: sqlalchemy.event.registry [assertion]
+      early skip of rewriting module: sqlalchemy.pool [assertion]
+      early skip of rewriting module: sqlalchemy.pool.events [assertion]
+      early skip of rewriting module: sqlalchemy.pool.base [assertion]
+      early skip of rewriting module: sqlalchemy.log [assertion]
+      early skip of rewriting module: sqlalchemy.pool.impl [assertion]
+      early skip of rewriting module: sqlalchemy.util.queue [assertion]
+      early skip of rewriting module: sqlalchemy.sql [assertion]
+      early skip of rewriting module: sqlalchemy.sql._typing [assertion]
+      early skip of rewriting module: sqlalchemy.sql.roles [assertion]
+      early skip of rewriting module: sqlalchemy.inspection [assertion]
+      early skip of rewriting module: sqlalchemy.sql.base [assertion]
+      early skip of rewriting module: sqlalchemy.sql.visitors [assertion]
+      early skip of rewriting module: sqlalchemy.sql.cache_key [assertion]
+      early skip of rewriting module: sqlalchemy.sql.traversals [assertion]
+      early skip of rewriting module: sqlalchemy.sql.operators [assertion]
+      early skip of rewriting module: sqlalchemy.sql.compiler [assertion]
+      early skip of rewriting module: sqlalchemy.sql.coercions [assertion]
+      early skip of rewriting module: sqlalchemy.sql.crud [assertion]
+      early skip of rewriting module: sqlalchemy.sql.dml [assertion]
+      early skip of rewriting module: sqlalchemy.sql.util [assertion]
+      early skip of rewriting module: sqlalchemy.sql.annotation [assertion]
+      early skip of rewriting module: sqlalchemy.sql.ddl [assertion]
+      early skip of rewriting module: sqlalchemy.sql.elements [assertion]
+      early skip of rewriting module: sqlalchemy.sql.type_api [assertion]
+      early skip of rewriting module: sqlalchemy.util.topological [assertion]
+      early skip of rewriting module: sqlalchemy.sql.schema [assertion]
+      early skip of rewriting module: sqlalchemy.sql.selectable [assertion]
+      early skip of rewriting module: sqlalchemy.sql.sqltypes [assertion]
+      early skip of rewriting module: pickle [assertion]
+      early skip of rewriting module: _compat_pickle [assertion]
+      early skip of rewriting module: _pickle [assertion]
+      early skip of rewriting module: sqlalchemy.engine.processors [assertion]
+      early skip of rewriting module: sqlalchemy.engine._py_processors [assertion]
+      early skip of rewriting module: sqlalchemy.sql.functions [assertion]
+      early skip of rewriting module: sqlalchemy.sql.expression [assertion]
+      early skip of rewriting module: sqlalchemy.sql._dml_constructors [assertion]
+      early skip of rewriting module: sqlalchemy.sql._elements_constructors [assertion]
+      early skip of rewriting module: sqlalchemy.sql._selectable_constructors [assertion]
+      early skip of rewriting module: sqlalchemy.sql.lambdas [assertion]
+      early skip of rewriting module: sqlalchemy.sql.default_comparator [assertion]
+      early skip of rewriting module: sqlalchemy.sql.naming [assertion]
+      early skip of rewriting module: sqlalchemy.sql.events [assertion]
+      early skip of rewriting module: sqlalchemy.engine.util [assertion]
+      early skip of rewriting module: sqlalchemy.engine.create [assertion]
+      early skip of rewriting module: sqlalchemy.engine.url [assertion]
+      early skip of rewriting module: sqlalchemy.dialects [assertion]
+      early skip of rewriting module: sqlalchemy.engine.mock [assertion]
+      early skip of rewriting module: sqlalchemy.engine.cursor [assertion]
+      early skip of rewriting module: sqlalchemy.engine.result [assertion]
+      early skip of rewriting module: sqlalchemy.engine.row [assertion]
+      early skip of rewriting module: sqlalchemy.engine.reflection [assertion]
+      early skip of rewriting module: sqlalchemy.schema [assertion]
+      early skip of rewriting module: sqlalchemy.types [assertion]
+      early skip of rewriting module: sqlalchemy.engine.default [assertion]
+      early skip of rewriting module: sqlalchemy.engine.characteristics [assertion]
+      early skip of rewriting module: sqlalchemy.orm [assertion]
+      early skip of rewriting module: sqlalchemy.orm.exc [assertion]
+      early skip of rewriting module: sqlalchemy.orm.util [assertion]
+      early skip of rewriting module: sqlalchemy.orm.attributes [assertion]
+      early skip of rewriting module: sqlalchemy.orm.collections [assertion]
+      early skip of rewriting module: sqlalchemy.orm.base [assertion]
+      early skip of rewriting module: sqlalchemy.orm._typing [assertion]
+      early skip of rewriting module: sqlalchemy.sql._orm_types [assertion]
+      early skip of rewriting module: sqlalchemy.orm.mapped_collection [assertion]
+      early skip of rewriting module: sqlalchemy.orm.interfaces [assertion]
+      early skip of rewriting module: sqlalchemy.orm.path_registry [assertion]
+      early skip of rewriting module: sqlalchemy.orm.mapper [assertion]
+      early skip of rewriting module: sqlalchemy.orm.instrumentation [assertion]
+      early skip of rewriting module: sqlalchemy.orm.state [assertion]
+      early skip of rewriting module: sqlalchemy.orm.loading [assertion]
+      early skip of rewriting module: sqlalchemy.orm.context [assertion]
+      early skip of rewriting module: sqlalchemy.future [assertion]
+      early skip of rewriting module: sqlalchemy.future.engine [assertion]
+      early skip of rewriting module: sqlalchemy.orm.properties [assertion]
+      early skip of rewriting module: sqlalchemy.orm.strategy_options [assertion]
+      early skip of rewriting module: sqlalchemy.orm.descriptor_props [assertion]
+      early skip of rewriting module: sqlalchemy.orm.relationships [assertion]
+      early skip of rewriting module: sqlalchemy.orm._orm_constructors [assertion]
+      early skip of rewriting module: sqlalchemy.orm.query [assertion]
+      early skip of rewriting module: sqlalchemy.orm.session [assertion]
+      early skip of rewriting module: sqlalchemy.orm.bulk_persistence [assertion]
+      early skip of rewriting module: sqlalchemy.orm.evaluator [assertion]
+      early skip of rewriting module: sqlalchemy.orm.persistence [assertion]
+      early skip of rewriting module: sqlalchemy.orm.sync [assertion]
+      early skip of rewriting module: sqlalchemy.orm.identity [assertion]
+      early skip of rewriting module: sqlalchemy.orm.state_changes [assertion]
+      early skip of rewriting module: sqlalchemy.orm.unitofwork [assertion]
+      early skip of rewriting module: sqlalchemy.orm.decl_api [assertion]
+      early skip of rewriting module: sqlalchemy.orm.clsregistry [assertion]
+      early skip of rewriting module: sqlalchemy.orm.decl_base [assertion]
+      early skip of rewriting module: sqlalchemy.orm.dynamic [assertion]
+      early skip of rewriting module: sqlalchemy.orm.writeonly [assertion]
+      early skip of rewriting module: sqlalchemy.orm.strategies [assertion]
+      early skip of rewriting module: sqlalchemy.orm.events [assertion]
+      early skip of rewriting module: sqlalchemy.orm.scoping [assertion]
+      early skip of rewriting module: sqlalchemy.orm.dependency [assertion]
+      early skip of rewriting module: foodtracker_app [assertion]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/tests' lenresult=0 outcome='failed'> [hook]
+      pytest_exception_interact [hook]
+          node: <Package tests>
+          call: <CallInfo when='collect' excinfo=<ExceptionInfo ConftestImportFailure(WindowsPath('C:/Users/nowyf/FoodTracker/pythonProject/foodtracker/foodtracker_app/tests/conftest.py')) tblen=4>>
+          report: <CollectReport 'foodtracker/foodtracker_app/tests' lenresult=0 outcome='failed'>
+      finish pytest_exception_interact --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/tests' lenresult=0 outcome='failed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir uploads> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir uploads>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir uploads>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars
+            parent: <Dir uploads>
+        finish pytest_collect_directory --> <Dir avatars> [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/uploads' lenresult=1 outcome='passed'> [hook]
+    genitems <Dir avatars> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir avatars>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir avatars>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_41.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_41.jpg
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir avatars>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_41.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_41.jpg
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.jpg
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir avatars>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.jpg
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.png
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.png
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir avatars>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.png
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\uploads\avatars\user_43.png
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/uploads/avatars' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/uploads/avatars' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/uploads' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir utils> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir utils>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir utils>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\__pycache__
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\email_utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\email_utils.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir utils>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\email_utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\email_utils.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\recaptcha.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\recaptcha.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir utils>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\recaptcha.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\recaptcha.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\template_utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\template_utils.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir utils>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\template_utils.py
+            path: C:\Users\nowyf\FoodTracker\pythonProject\foodtracker\foodtracker_app\utils\template_utils.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'foodtracker/foodtracker_app/utils' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app/utils' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker/foodtracker_app' lenresult=13 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'foodtracker' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir frontend> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir frontend>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir frontend>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\.gitignore
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\.gitignore
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\.gitignore
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\.gitignore
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\README.md
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\README.md
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\README.md
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\README.md
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\eslint.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\eslint.config.js
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\eslint.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\eslint.config.js
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\index.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\index.html
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\index.html
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\index.html
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\node_modules
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\node_modules
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package-lock.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package-lock.json
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package-lock.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package-lock.json
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package.json
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\package.json
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\postcss.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\postcss.config.js
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\postcss.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\postcss.config.js
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public
+            parent: <Dir frontend>
+        finish pytest_collect_directory --> <Dir public> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src
+            parent: <Dir frontend>
+        finish pytest_collect_directory --> <Dir src> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tailwind.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tailwind.config.js
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tailwind.config.js
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tailwind.config.js
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.app.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.app.json
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.app.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.app.json
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.json
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.json
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.node.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.node.json
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.node.json
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\tsconfig.node.json
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\vite.config.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\vite.config.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir frontend>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\vite.config.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\vite.config.ts
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend' lenresult=2 outcome='passed'> [hook]
+    genitems <Dir public> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir public>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir public>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\login-bg.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\login-bg.jpg
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir public>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\login-bg.jpg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\login-bg.jpg
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\vite.svg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\vite.svg
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir public>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\vite.svg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\public\vite.svg
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/public' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/public' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir src> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir src>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir src>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.css
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.css
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir src>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.css
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.css
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir src>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\App.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir assets> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir components> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir context> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\index.css
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\index.css
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir src>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\index.css
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\index.css
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\main.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\main.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir src>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\main.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\main.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir pages> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir routes> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir services> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\styles
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\styles
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\styles
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir styles> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils
+            parent: <Dir src>
+        finish pytest_collect_directory --> <Dir utils> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\vite-env.d.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\vite-env.d.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir src>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\vite-env.d.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\vite-env.d.ts
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src' lenresult=8 outcome='passed'> [hook]
+    genitems <Dir assets> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir assets>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir assets>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets\react.svg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets\react.svg
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir assets>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets\react.svg
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\assets\react.svg
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/assets' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/assets' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir components> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir components>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir components>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Achievements.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Achievements.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Achievements.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Achievements.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar
+            parent: <Dir components>
+        finish pytest_collect_directory --> <Dir Calendar> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\ExpiringSoonPanel.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\ExpiringSoonPanel.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\ExpiringSoonPanel.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\ExpiringSoonPanel.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Header.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Header.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Header.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Header.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\SocialCallback.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\SocialCallback.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\SocialCallback.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\SocialCallback.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Sparkline.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Sparkline.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Sparkline.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Sparkline.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\StatsChart.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\StatsChart.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\StatsChart.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\StatsChart.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\TrendChart.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\TrendChart.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir components>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\TrendChart.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\TrendChart.tsx
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/components' lenresult=1 outcome='passed'> [hook]
+    genitems <Dir Calendar> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir Calendar>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir Calendar>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\AddProductModal.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\AddProductModal.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir Calendar>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\AddProductModal.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\AddProductModal.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\FancyCalendar.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\FancyCalendar.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir Calendar>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\FancyCalendar.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\FancyCalendar.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductCalendar.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductCalendar.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir Calendar>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductCalendar.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductCalendar.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductModal.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductModal.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir Calendar>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductModal.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\ProductModal.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\useProductCalendarLogic.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\useProductCalendarLogic.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir Calendar>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\useProductCalendarLogic.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\components\Calendar\useProductCalendarLogic.ts
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/components/Calendar' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/components/Calendar' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/components' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir context> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir context>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir context>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context\AuthContext.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context\AuthContext.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir context>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context\AuthContext.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\context\AuthContext.tsx
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/context' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/context' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir pages> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir pages>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir pages>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\DashboardPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\DashboardPage.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\DashboardPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\DashboardPage.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\EmailVerificationSent.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\EmailVerificationSent.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\EmailVerificationSent.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\EmailVerificationSent.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ForgotPassword.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ForgotPassword.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ForgotPassword.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ForgotPassword.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\LoginPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\LoginPage.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\LoginPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\LoginPage.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\RegisterPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\RegisterPage.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\RegisterPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\RegisterPage.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ResetPassword.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ResetPassword.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ResetPassword.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\ResetPassword.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\StatsPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\StatsPage.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\StatsPage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\StatsPage.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\UserProfilePage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\UserProfilePage.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\UserProfilePage.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\UserProfilePage.tsx
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\VerifyAccount.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\VerifyAccount.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir pages>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\VerifyAccount.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\pages\VerifyAccount.tsx
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/pages' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/pages' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir routes> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir routes>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir routes>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes\RequireAuth.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes\RequireAuth.tsx
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir routes>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes\RequireAuth.tsx
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\routes\RequireAuth.tsx
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/routes' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/routes' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir services> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir services>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir services>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\api.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\api.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir services>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\api.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\api.ts
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\productService.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\productService.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir services>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\productService.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\productService.ts
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\statsService.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\statsService.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir services>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\statsService.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\services\statsService.ts
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/services' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/services' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir styles> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir styles>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir styles>
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/styles' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/styles' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir utils> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir utils>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir utils>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            collection_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils\localStorage.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils\localStorage.ts
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir utils>
+            file_path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils\localStorage.ts
+            path: C:\Users\nowyf\FoodTracker\pythonProject\frontend\src\utils\localStorage.ts
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'frontend/src/utils' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src/utils' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend/src' lenresult=8 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'frontend' lenresult=2 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport '.' lenresult=2 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collection_modifyitems [hook]
+          session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=1 testscollected=0>
+          config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+          items: []
+      finish pytest_collection_modifyitems --> [] [hook]
+      pytest_collection_finish [hook]
+          session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=1 testscollected=0>
+        pytest_report_collectionfinish [hook]
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+            items: []
+            start_path: C:\Users\nowyf\FoodTracker\pythonProject
+            startdir: C:\Users\nowyf\FoodTracker\pythonProject
+        finish pytest_report_collectionfinish --> [] [hook]
+      finish pytest_collection_finish --> [] [hook]
+    finish pytest_collection --> None [hook]
+    pytest_runtestloop [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=1 testscollected=0>
+    pytest_keyboard_interrupt [hook]
+        excinfo: <ExceptionInfo Interrupted('1 error during collection') tblen=15>
+    finish pytest_keyboard_interrupt --> [] [hook]
+    pytest_sessionfinish [hook]
+        session: <Session  exitstatus=<ExitCode.INTERRUPTED: 2> testsfailed=1 testscollected=0>
+        exitstatus: 2
+      pytest_terminal_summary [hook]
+          terminalreporter: <_pytest.terminal.TerminalReporter object at 0x000001BFAA285D30>
+          exitstatus: 2
+          config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+        pytest_report_teststatus [hook]
+            report: <CollectReport 'foodtracker/foodtracker_app/tests' lenresult=0 outcome='failed'>
+            config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+        finish pytest_report_teststatus --> ('error', 'E', 'ERROR') [hook]
+      finish pytest_terminal_summary --> [] [hook]
+    finish pytest_sessionfinish --> [] [hook]
+    pytest_unconfigure [hook]
+        config: <_pytest.config.Config object at 0x000001BFA7DCF380>
+    finish pytest_unconfigure --> [] [hook]
