@@ -37,13 +37,19 @@ Aplikacja oferuje szeroki zakres funkcjonalności, które odzwierciedlają realn
 - **Wizualizacja Danych:** Zbudowałem endpointy do generowania wykresów trendów, które poprawnie obsługują strefy czasowe, aby dane zawsze były spójne dla użytkownika.
 - **System Osiągnięć:** Zaprojektowałem i wdrożyłem ponad 20 różnych osiągnięć, aby motywować użytkowników poprzez gamifikację.
 
+## 📱 Design i User Experience (UI/UX)
+
+- **Pełna responsywność (RWD):** Interfejs użytkownika został zaprojektowany w podejściu **Mobile-First**. Aplikacja jest w pełni użyteczna i komfortowa w obsłudze zarówno na dużych ekranach desktopowych, jak i na tabletach i smartfonach.
+- **Nowoczesny Design:** Do budowy UI wykorzystałem **Tailwind CSS**, co pozwoliło na szybkie tworzenie spójnego i estetycznego designu.
+- **Wsparcie AI w UI:** W celu maksymalizacji efektywności i skupienia się na logice backendowej, UI/UX frontendu było częściowo konsultowane i prototypowane przy wsparciu AI, co pozwoliło na szybkie stworzenie w pełni funkcjonalnej "witryny" dla potężnego API.
+
 ## 🛡️ Architektura i Rozwiązania Techniczne (Backend Deep Dive)
 
 Projektując architekturę backendu, postawiłem sobie kilka kluczowych celów: **bezpieczeństwo, wydajność i skalowalność**. Poniżej przedstawiam najważniejsze decyzje techniczne, które podjąłem, aby je osiągnąć:
 
 -   **API Design (FastAPI):** Wybrałem asynchroniczny framework **FastAPI**, aby zapewnić ekstremalnie wysoką wydajność i niskie opóźnienia, nawet pod dużym obciążeniem. Wykorzystałem wbudowany mechanizm **Dependency Injection** do zarządzania sesjami bazy danych i weryfikacji tożsamości użytkownika.
 
--   **Uwierzytelnianie i Bezpieczeństwo:** Zaimplementowałem stanowe uwierzytelnianie oparte na **tokenach JWT**. Długożyjący `refresh_token` przechowuję w bezpiecznym ciasteczku **`HttpOnly`**, co stanowi branżowy standard ochrony przed atakami **XSS**. Hasła użytkowników są chronione za pomocą silnego, adaptacyjnego algorytmu **bcrypt**.
+-   **Uwierzytelnianie i Bezpieczeństwo:** Zaimplementowałem uwierzytelnianie oparte na **tokenach JWT**. Długożyjący `refresh_token` przechowuję w bezpiecznym ciasteczku **`HttpOnly`**, co stanowi branżowy standard ochrony przed atakami **XSS**. Hasła użytkowników są chronione za pomocą silnego, adaptacyjnego algorytmu **bcrypt**.
 
 -   **Asynchroniczne Zadania w Tle (Celery):** Wysyłkę maili i cykliczne sprawdzanie dat ważności oddelegowałem do asynchronicznych zadań **Celery**. Dzięki temu API pozostaje responsywne. **Celery Beat** działa jako wbudowany harmonogram, gwarantując automatyzację kluczowych procesów.
 
@@ -58,9 +64,9 @@ Wierzę, że solidne testy to fundament niezawodnego oprogramowania. Dlatego stw
 -   **Izolacja:** Testy uruchamiane są w całkowicie izolowanym środowisku, z tymczasową bazą danych **SQLite w pamięci**, co zapewnia szybkość i powtarzalność wyników.
 -   **Zakres:** Testy API weryfikują całe przepływy biznesowe, walidację danych wejściowych (zarówno poprawne, jak i błędne przypadki) oraz krytyczne aspekty bezpieczeństwa, takie jak weryfikacja, czy jeden użytkownik nie ma dostępu do danych innego.
 
-## 🚀 Uruchomienie Projektu
+## 🚀 Uruchomienie Projektu (One-Click Setup)
 
-Dzięki konteneryzacji, uruchomienie projektu jest niezwykle proste.
+Dzięki pełnej konteneryzacji, cały projekt (backend, baza danych, Redis, Celery oraz serwer deweloperski frontendu) można uruchomić za pomocą jednej komendy.
 
 1.  **Sklonuj repozytorium:**
     ```bash
@@ -69,9 +75,9 @@ Dzięki konteneryzacji, uruchomienie projektu jest niezwykle proste.
     ```
 
 2.  **Skonfiguruj zmienne środowiskowe:**
-    Stwórz pliki `.env` w folderach `foodtracker/` oraz `frontend/` na podstawie plików `.env.example`. Uzupełnij je wymaganymi kluczami.
+    Stwórz pliki `.env` w folderach `foodtracker/` oraz `frontend/` na podstawie znajdujących się tam plików `.env.example`. Uzupełnij je wymaganymi kluczami.
 
-3.  **Zbuduj i uruchom kontenery:**
+3.  **Zbuduj i uruchom całą aplikację:**
     ```bash
     docker-compose up --build
     ```
@@ -82,7 +88,7 @@ Dzięki konteneryzacji, uruchomienie projektu jest niezwykle proste.
 
 ## 🖼️ Galeria
 
-*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację.)*
+*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację. Zastąp linki na swoje)*
 
 ![Panel Główny](https://i.imgur.com/e4c9de.png)
 _Panel główny aplikacji z wykresem trendów._
