@@ -1,61 +1,66 @@
-# 🍲 Food Tracker - Zaawansowana Aplikacja Full-Stack
+# 🍲 Food Tracker - Moje rozwiązanie problemu marnowania żywności
 
 ![Python](https://img.shields.io/badge/python-3.13-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green.svg)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Celery](https://img.shields.io/badge/Celery-37782A?style=for-the-badge&logo=celery&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Pytest](https://img.shields.io/badge/pytest-✓-green.svg)
 
-Food Tracker to więcej niż prosta aplikacja do śledzenia jedzenia. To w pełni funkcjonalny, bezpieczny i skalowalny system webowy, zaprojektowany z myślą o najlepszych praktykach inżynierii oprogramowania. Projekt ten demonstruje kompleksowe umiejętności w zakresie tworzenia nowoczesnych aplikacji backendowych, od architektury i bezpieczeństwa, po asynchroniczność i konteneryzację.
+## 🎯 Misja Projektu
 
-## 🌟 Główne Funkcjonalności
+Każdego roku w Polsce marnuje się blisko 5 milionów ton żywności. Wyrzucamy jedzenie, bo zapominamy o terminach ważności, kupujemy za dużo, źle planujemy. Postanowiłem wykorzystać swoje umiejętności techniczne, aby stworzyć narzędzie, które realnie pomaga walczyć z tym wszechobecnym problemem na poziomie każdego z nas.
 
-- **Zaawansowany system uwierzytelniania:** Rejestracja, logowanie, weryfikacja email, resetowanie hasła.
-- **Logowanie przez serwisy zewnętrzne:** Pełna integracja z Google i GitHub przy użyciu protokołu OAuth2.
-- **Zarządzanie produktami (CRUD):** Pełna obsługa dodawania, edytowania, usuwania i przeglądania produktów.
-- **Inteligentne daty ważności:** System sugeruje datę ważności dla produktów świeżych na podstawie daty zakupu.
-- **Asynchroniczne powiadomienia email:** Codzienne, automatyczne powiadomienia o produktach, których termin ważności wkrótce upływa, realizowane za pomocą Celery i Redis.
-- **Dashboard użytkownika:** Dynamiczny panel z listą produktów wymagających uwagi.
-- **Statystyki i analityka:** Śledzenie oszczędzonych i zmarnowanych pieniędzy oraz wykresy trendów pokazujące wzorce dodawania produktów z uwzględnieniem strefy czasowej użytkownika.
-- **System osiągnięć:** Gamifikacja motywująca użytkowników do niemarnowania żywności.
+**Food Tracker** to moja odpowiedź na to wyzwanie. To w pełni funkcjonalna aplikacja webowa, którą zaprojektowałem i zbudowałem od podstaw, aby dać użytkownikom prosty i skuteczny sposób na zarządzanie domową spiżarnią, oszczędzanie pieniędzy i dbanie o naszą planetę.
 
-## 🛠️ Stos Technologiczny
+To repozytorium to nie tylko kod – to demonstracja mojego podejścia do tworzenia kompleksowych, bezpiecznych i wydajnych systemów backendowych.
 
-| Kategoria | Technologia | Opis |
-| :--- | :--- | :--- |
-| **Backend** | Python 3.13, FastAPI | Nowoczesny, asynchroniczny framework do budowy wysokowydajnego API. |
-| | PostgreSQL, SQLAlchemy | Niezawodna, relacyjna baza danych z asynchronicznym ORM. |
-| | Alembic | Narzędzie do zarządzania migracjami schematu bazy danych. |
-| | Pydantic | Walidacja danych i zarządzanie konfiguracją z plików `.env`. |
-| | Celery, Redis, Celery Beat | System do obsługi zadań w tle i planowania (scheduling). |
-| | JWT (Access & Refresh Tokens) | Standard branżowy do bezpiecznej autoryzacji w aplikacjach webowych. |
-| **Frontend**| React 19, TypeScript | Budowa interaktywnego i bezpiecznego typowo interfejsu użytkownika. |
-| | Vite | Nowoczesne narzędzie do budowania i serwowania aplikacji frontendowych. |
-| | Tailwind CSS | Framework CSS typu utility-first do szybkiego prototypowania UI. |
-| | Axios | Klient HTTP z interceptorami do obsługi odświeżania tokenów. |
-| **Infrastruktura** | Docker, Docker Compose | Pełna konteneryzacja aplikacji z podziałem na środowisko deweloperskie i produkcyjne. |
+## 🌟 Co Zaimplementowałem? Główne Funkcjonalności
 
-## 🛡️ Architektura i Aspekty Bezpieczeństwa
+Aplikacja oferuje szeroki zakres funkcjonalności, które odzwierciedlają realne potrzeby i motywują do działania:
 
-Ta aplikacja została zbudowana z silnym naciskiem na bezpieczeństwo i solidną architekturę.
+#### Zarządzanie Użytkownikiem
+- **Pełen cykl życia konta:** Od rejestracji, przez weryfikację email, logowanie, po bezpieczną zmianę i resetowanie hasła.
+- **Logowanie przez OAuth2:** Zaimplementowałem wygodne logowanie przez konta Google i GitHub.
+- **Bezpieczeństwo sesji:** Stworzyłem system oparty na tokenach JWT z mechanizmem Access i Refresh Token.
 
-- **Uwierzytelnianie JWT:** System wykorzystuje parę tokenów: krótkożyjący `access_token` i długożyjący `refresh_token`. `refresh_token` jest przechowywany w bezpiecznym ciasteczku **`HttpOnly`**, co uniemożliwia jego odczytanie przez skrypty JavaScript i chroni przed atakami XSS.
-- **Bezpieczeństwo Haseł:** Hasła użytkowników są hashowane za pomocą silnego, adaptacyjnego algorytmu **bcrypt**.
-- **Ochrona API:** Endpointy są zabezpieczone przed atakami typu brute-force za pomocą **rate-limitingu** opartego na Redis (`slowapi`).
-- **Konfiguracja CORS:** Precyzyjnie skonfigurowana polityka CORS zezwala na komunikację tylko z zaufanym adresem aplikacji frontendowej.
-- **Konteneryzacja zorientowana na bezpieczeństwo:** Aplikacja w kontenerze Docker działa jako **użytkownik bez uprawnień roota**, co znacznie ogranicza potencjalne szkody w przypadku kompromitacji.
-- **Separacja Konfiguracji:** Ścisłe oddzielenie konfiguracji od kodu. Wrażliwe dane (klucze API, hasła) są ładowane ze zmiennych środowiskowych (`.env`) i nigdy nie są częścią repozytorium.
-- **Gotowość produkcyjna:** Projekt posiada osobne konfiguracje `docker-compose.yml` dla developmentu (z live-reloading) i `docker-compose.prod.yml` dla produkcji (zoptymalizowany pod kątem wydajności i bezpieczeństwa).
+#### Logika Biznesowa Aplikacji
+- **Inteligentne Zarządzanie Produktami (CRUD):** Pełna obsługa dodawania, edytowania i usuwania produktów spożywczych.
+- **Asynchroniczne Powiadomienia:** Zaprojektowałem automatyczny system codziennych powiadomień email o produktach, których termin ważności wkrótce upływa, wykorzystując do tego Celery.
+- **Obsługa Produktów Świeżych:** Aplikacja potrafi sugerować datę ważności dla produktów bez etykiety (np. warzyw) na podstawie daty ich zakupu.
 
-### 🤖 Frontend jako wizytówka dla API
+#### Analityka i Gamifikacja
+- **Statystyki Finansowe:** Użytkownik może śledzić realne oszczędności wynikające z niemarnowania kupionej żywności.
+- **Wizualizacja Danych:** Zbudowałem endpointy do generowania wykresów trendów, które poprawnie obsługują strefy czasowe, aby dane zawsze były spójne dla użytkownika.
+- **System Osiągnięć:** Zaprojektowałem i wdrożyłem ponad 20 różnych osiągnięć, aby motywować użytkowników poprzez gamifikację.
 
-Frontend tej aplikacji, stworzony w React i TypeScript, został zaprojektowany jako rozbudowany, ale wciąż tylko klient dla potężnego i bezpiecznego API backendowego. Jego głównym celem jest demonstracja wszystkich możliwości, jakie oferuje backend. W celu maksymalizacji efektywności i skupienia się na logice serwerowej, UI/UX frontendu było częściowo konsultowane i generowane przy wsparciu AI, co pozwoliło na szybkie stworzenie w pełni funkcjonalnej "witryny" dla API.
+## 🛡️ Architektura i Rozwiązania Techniczne (Backend Deep Dive)
+
+Projektując architekturę backendu, postawiłem sobie kilka kluczowych celów: **bezpieczeństwo, wydajność i skalowalność**. Poniżej przedstawiam najważniejsze decyzje techniczne, które podjąłem, aby je osiągnąć:
+
+-   **API Design (FastAPI):** Wybrałem asynchroniczny framework **FastAPI**, aby zapewnić ekstremalnie wysoką wydajność i niskie opóźnienia, nawet pod dużym obciążeniem. Wykorzystałem wbudowany mechanizm **Dependency Injection** do zarządzania sesjami bazy danych i weryfikacji tożsamości użytkownika.
+
+-   **Uwierzytelnianie i Bezpieczeństwo:** Zaimplementowałem stanowe uwierzytelnianie oparte na **tokenach JWT**. Długożyjący `refresh_token` przechowuję w bezpiecznym ciasteczku **`HttpOnly`**, co stanowi branżowy standard ochrony przed atakami **XSS**. Hasła użytkowników są chronione za pomocą silnego, adaptacyjnego algorytmu **bcrypt**.
+
+-   **Asynchroniczne Zadania w Tle (Celery):** Wysyłkę maili i cykliczne sprawdzanie dat ważności oddelegowałem do asynchronicznych zadań **Celery**. Dzięki temu API pozostaje responsywne. **Celery Beat** działa jako wbudowany harmonogram, gwarantując automatyzację kluczowych procesów.
+
+-   **Baza Danych (PostgreSQL & SQLAlchemy):** Postawiłem na w pełni **asynchroniczny stos bazodanowy** z `asyncpg` i `AsyncSession` w SQLAlchemy. Do zarządzania zmianami w schemacie bazy użyłem **Alembic**, co zapewnia wersjonowanie i bezpieczeństwo migracji. Wartości finansowe przechowuję jako precyzyjny typ **`Decimal`**, aby uniknąć błędów zaokrągleń.
+
+-   **Konteneryzacja i Środowiska (Docker):** Cała aplikacja została zamknięta w kontenerach **Docker**, z osobnymi, zoptymalizowanymi konfiguracjami dla środowiska deweloperskiego (`docker-compose.yml`) i produkcyjnego (`docker-compose.prod.yml`). Dla zwiększenia bezpieczeństwa, procesy w kontenerach działają jako **użytkownik bez uprawnień roota**.
+
+## 🧪 Strategia Testowania
+
+Wierzę, że solidne testy to fundament niezawodnego oprogramowania. Dlatego stworzyłem rozbudowany zestaw **testów automatycznych** napisanych przy użyciu `pytest`.
+
+-   **Izolacja:** Testy uruchamiane są w całkowicie izolowanym środowisku, z tymczasową bazą danych **SQLite w pamięci**, co zapewnia szybkość i powtarzalność wyników.
+-   **Zakres:** Testy API weryfikują całe przepływy biznesowe, walidację danych wejściowych (zarówno poprawne, jak i błędne przypadki) oraz krytyczne aspekty bezpieczeństwa, takie jak weryfikacja, czy jeden użytkownik nie ma dostępu do danych innego.
 
 ## 🚀 Uruchomienie Projektu
 
-Projekt jest w pełni skonteneryzowany i najprostszym sposobem na jego uruchomienie jest Docker Compose.
+Dzięki konteneryzacji, uruchomienie projektu jest niezwykle proste.
 
 1.  **Sklonuj repozytorium:**
     ```bash
@@ -64,7 +69,7 @@ Projekt jest w pełni skonteneryzowany i najprostszym sposobem na jego uruchomie
     ```
 
 2.  **Skonfiguruj zmienne środowiskowe:**
-    Stwórz pliki `.env` w folderach `foodtracker/` oraz `frontend/` na podstawie znajdujących się tam plików `.env.example`. Uzupełnij je wymaganymi kluczami (baza danych, klucze API dla Google/GitHub/reCAPTCHA, klucze SMTP).
+    Stwórz pliki `.env` w folderach `foodtracker/` oraz `frontend/` na podstawie plików `.env.example`. Uzupełnij je wymaganymi kluczami.
 
 3.  **Zbuduj i uruchom kontenery:**
     ```bash
@@ -72,20 +77,20 @@ Projekt jest w pełni skonteneryzowany i najprostszym sposobem na jego uruchomie
     ```
 
 4.  **Gotowe!**
-    - Aplikacja frontendowa jest dostępna pod adresem: `http://localhost:5173`
-    - Backend API jest dostępne pod adresem: `http://localhost:8000/docs` (interaktywna dokumentacja Swagger UI)
+    -   Aplikacja frontendowa jest dostępna pod adresem: `http://localhost:5173`
+    -   Interaktywna dokumentacja API (Swagger UI) pod: `http://localhost:8000/docs`
 
 ## 🖼️ Galeria
 
-*Tutaj wklej zrzuty ekranu swojej aplikacji!*
+*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację.)*
 
-![Dashboard](https://via.placeholder.com/800x400.png?text=Zrzut+Ekranu+Panelu+Głównego)
-_Panel główny aplikacji_
+![Panel Główny](https://i.imgur.com/e4c9de.png)
+_Panel główny aplikacji z wykresem trendów._
 
-![Statystyki](https://via.placeholder.com/800x400.png?text=Zrzut+Ekranu+Statystyk)
-_Strona ze statystykami i wykresem trendów_
-
+![Logowanie](https://i.imgur.com/e464a1.jpg)
+_Strona logowania z opcjami OAuth._
 
 ## 👤 Autor
 
-Stworzone przez **Michał Jamros** - [michu1810](https://github.com/michu1810)
+Projekt stworzony przeze mnie od A do Z. <br>
+**Michał Jamros** - [github.com/michu1810](https://github.com/michu1810)
