@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     REDIS_URL: str
 
     SKIP_REDIS: bool = False
-    TESTING: bool = bool(os.getenv("TESTING", False))
+    TESTING: bool = os.getenv("TESTING", "false").lower() == "true"
 
     IS_PRODUCTION: bool = os.getenv("IS_PRODUCTION", "false").lower() == "true"
 

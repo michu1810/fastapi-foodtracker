@@ -211,11 +211,14 @@ async def create_product(
 	final_expiration_date = product_data.expiration_date
 	if product_data.is_fresh_product:
 		if not product_data.purchase_date:
-			raise HTTPException(status_code=400, detail="Brakuje daty zakupu dla świeżego produktu.")
+			raise HTTPException(status_code=422, detail="Brakuje daty zakupu dla świeżego produktu.")
 		final_expiration_date = product_data.purchase_date + timedelta(days=product_data.shelf_life_days or 5)
 
 	if not final_expiration_date:
-		raise HTTPException(status_code=400, detail="Data ważności jest wymagana dla tego typu produktu.")
+		raise HTTPException(status_code=422, detail="Data ważności jest wymagana dla tego typu produktu.")
+
+	if final_expiration_date < date.today():
+		raise HTTPException(status_code=422, detail="Data ważności nie może być z przeszłości.")
 
 	new_product = Product(
 		name=product_data.name,
