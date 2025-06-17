@@ -44,4 +44,9 @@ jobs:
           TESTING: true
           IS_PRODUCTION: false
         run: |
-          pytest -q
+          pytest --cov=foodtracker_app --cov-report=xml
+
+          - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v3
+          with:
+          token: ${{ secrets.CODECOV_TOKEN }}
