@@ -1,5 +1,6 @@
 import pytest
-from fastapi.testclient import TestClient
+import pytest_asyncio
+from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -28,19 +29,18 @@ TestingSessionLocal = sessionmaker(
 
 
 async def override_get_async_session():
-	"""Nadpisuje zależność get_async_session, aby testy używały testowej bazy danych w pamięci."""
 	async with TestingSessionLocal() as session:
 		yield session
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 async def client():
-	"""Główna fixtura tworząca klienta testowego i zarządzająca bazą danych."""
+	"""Główna fixtura tworząca asynchronicznego klienta i zarządzająca bazą danych."""
 	app.dependency_overrides[get_async_session] = override_get_async_session
 	async with engine.begin() as conn:
 		await conn.run_sync(Base.metadata.create_all)
 
-	with TestClient(app) as c:
+	async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
 		yield c
 
 	async with engine.begin() as conn:
@@ -49,57 +49,51 @@ async def client():
 
 
 @pytest.fixture
-def authenticated_client_factory(client: TestClient):
-	"""
-    Zwraca asynchroniczną funkcję (fabrykę) do tworzenia
-    i logowania nowych użytkowników na potrzeby testów.
-    """
+async def authenticated_client_factory(client: AsyncClient):
+	"""Zwraca asynchroniczną fabrykę do tworzenia i logowania użytkowników."""
 
 	async def _factory(email, password):
 		async with TestingSessionLocal() as session:
-			test_user = User(
-				email=email,
-				hashed_password=hash_password(password),
-				is_verified=True
-			)
+			test_user = User(email=email, hashed_password=hash_password(password), is_verified=True)
 			session.add(test_user)
 			await session.commit()
 
 		login_payload = {"email": email, "password": password}
-		response = client.post("/auth/login", json=login_payload)
+		# Dodajemy 'await', ponieważ klient jest teraz asynchroniczny
+		response = await client.post("/auth/login", json=login_payload)
 
 		assert response.status_code == 200, f"Logowanie w teście jako {email} nie powiodło się: {response.text}"
 
 		token = response.json()["access_token"]
-
 		client.headers["Authorization"] = f"Bearer {token}"
 		return client
 
 	return _factory
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def authenticated_client(authenticated_client_factory):
-	"""
-    Zwraca klienta uwierzytelnionego jako domyślny użytkownik testowy.
-    """
+	"""Zwraca klienta uwierzytelnionego jako domyślny użytkownik testowy."""
 	client = await authenticated_client_factory("default.user@example.com", "password123")
 	return client
 
 
 @pytest.fixture
-async def product_in_db(authenticated_client: TestClient):
-	"""
-    Fixtura tworząca domyślny produkt w bazie danych i zwracająca jego dane.
-    """
-	# Zaktualizowany payload, zgodny z API
+def fixed_date():
+	"""Zwraca stałą datę, aby testy były deterministyczne."""
+	return date(2025, 6, 17)
+
+
+@pytest_asyncio.fixture
+async def product_in_db(authenticated_client: AsyncClient, fixed_date: date):
+	"""Fixtura tworząca domyślny produkt w bazie danych i zwracająca jego dane."""
 	payload = {
 		"name": "Produkt testowy",
-		"expiration_date": str(date.today() + timedelta(days=7)),
+		"expiration_date": str(fixed_date + timedelta(days=7)),
 		"price": 9.99,
 		"unit": "szt.",
 		"initial_amount": 5
 	}
-	response = authenticated_client.post("/products/create", json=payload)
+	response = await authenticated_client.post("/products/create", json=payload)
 	assert response.status_code == 201, f"Tworzenie produktu w teście nie powiodło się: {response.text}"
 	return response.json()
