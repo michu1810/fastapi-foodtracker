@@ -12,7 +12,11 @@ __pycache__/
 
 # Celery state files
 celerybeat-schedule*
-beat_db.sqlite3
+
+# Testy i logi
+.pytest_cache/
+pytestdebug.log
+*.log
 
 # Node / Frontend
 node_modules/
@@ -22,7 +26,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# IDE / OS files
+# Pliki IDE
 .idea/
 .vscode/
+
+# Pliki systemowe
 *.DS_Store
+Thumbs.db
