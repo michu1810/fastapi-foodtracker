@@ -47,8 +47,6 @@ jobs:
           IS_PRODUCTION: false
         run: |
           pytest foodtracker_app/tests --cov=foodtracker_app --cov-report=term-missing --cov-report=xml
-          coverage combine
-          coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
