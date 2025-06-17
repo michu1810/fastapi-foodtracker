@@ -1,28 +1,31 @@
 # 🍲 Food Tracker - Moje rozwiązanie problemu marnowania żywności
 
-![MIT License](https://img.shields.io/github/license/michu1810/fastapi-foodtracker)
-![Tests](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/michu1810/fastapi-foodtracker/graph/badge.svg?token=87SFXHBP46)](https://codecov.io/gh/michu1810/fastapi-foodtracker)
+<!-- Licencja i statusy testów -->
+![MIT License](https://img.shields.io/github/license/michu1810/fastapi-foodtracker?style=flat-square)
+![Tests](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/tests.yml/badge.svg?style=flat-square)
+[![codecov](https://codecov.io/gh/michu1810/fastapi-foodtracker/branch/main/graph/badge.svg?token=87SFXHBP46)](https://codecov.io/gh/michu1810/fastapi-foodtracker)
 
-![Python](https://img.shields.io/badge/python-3.13-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green.svg)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Celery](https://img.shields.io/badge/Celery-37782A?style=for-the-badge&logo=celery&logoColor=white)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![Pytest](https://img.shields.io/badge/pytest-✓-green.svg)
+<!-- Technologie -->
+![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?style=flat-square)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red?style=flat-square)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat-square&logo=docker&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=flat-square&logo=postgresql&logoColor=white)
+![Celery](https://img.shields.io/badge/Celery-37782A?style=flat-square&logo=celery&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat-square&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
+![Pytest](https://img.shields.io/badge/pytest-✓-green?style=flat-square)
 
-![Issues](https://img.shields.io/github/issues/michu1810/fastapi-foodtracker)
-![Forks](https://img.shields.io/github/forks/michu1810/fastapi-foodtracker?style=social)
-![Stars](https://img.shields.io/github/stars/michu1810/fastapi-foodtracker?style=social)
-![Last Commit](https://img.shields.io/github/last-commit/michu1810/fastapi-foodtracker)
-![Maintained](https://img.shields.io/maintenance/yes/2025)
-![Ruff Lint](https://github.com/twoj-user/twoj-repo/actions/workflows/ruff.yml/badge.svg)
-![Dependabot Status](https://img.shields.io/badge/dependencies-up--to--date-brightgreen)
+<!-- Statystyki repozytorium -->
+![Issues](https://img.shields.io/github/issues/michu1810/fastapi-foodtracker?style=flat-square)
+![Forks](https://img.shields.io/github/forks/michu1810/fastapi-foodtracker?style=flat-square)
+![Stars](https://img.shields.io/github/stars/michu1810/fastapi-foodtracker?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/michu1810/fastapi-foodtracker?style=flat-square)
+![Maintained](https://img.shields.io/maintenance/yes/2025?style=flat-square)
+![Dependabot Status](https://img.shields.io/badge/dependencies-up--to--date-brightgreen?style=flat-square)
 
-
+<!-- Ruff Lint - popraw link do Twojego workflow w repo -->
+![Ruff Lint](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/ruff.yml/badge.svg?style=flat-square)
 ## 🎯 Misja Projektu
 
 Każdego roku w Polsce marnuje się blisko 5 milionów ton żywności. Wyrzucamy jedzenie, bo zapominamy o terminach ważności, kupujemy za dużo, źle planujemy. Postanowiłem wykorzystać swoje umiejętności techniczne, aby stworzyć narzędzie, które realnie pomaga walczyć z tym wszechobecnym problemem na poziomie każdego z nas.
