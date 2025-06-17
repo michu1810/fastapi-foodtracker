@@ -62,24 +62,32 @@ async def client():
 
 @pytest.fixture
 async def authenticated_client_factory(client: AsyncClient):
-    async def _factory(email: str, password: str):
+    async def _factory(
+        email: str, password: str, is_verified: bool = True, login: bool = True
+    ):
         async with TestingSessionLocal() as session:
-            user_exists = await session.execute(select(User).where(User.email == email))
-            if not user_exists.scalar_one_or_none():
+            result = await session.execute(select(User).where(User.email == email))
+            user = result.scalar_one_or_none()
+            if not user:
                 user = User(
                     email=email,
                     hashed_password=hash_password(password),
-                    is_verified=True,
+                    is_verified=is_verified,
                     social_provider="password",
                 )
                 session.add(user)
                 await session.commit()
+            else:
+                # Na wypadek, gdyby is_verified trzeba było nadpisać istniejącemu userowi (opcjonalnie)
+                user.is_verified = is_verified
+                await session.commit()
 
-        resp = await client.post(
-            "/auth/login", json={"email": email, "password": password}
-        )
-        assert resp.status_code == 200, resp.text
-        client.headers["Authorization"] = f"Bearer {resp.json()['access_token']}"
+        if login:
+            resp = await client.post(
+                "/auth/login", json={"email": email, "password": password}
+            )
+            assert resp.status_code == 200, resp.text
+            client.headers["Authorization"] = f"Bearer {resp.json()['access_token']}"
         return client
 
     return _factory
