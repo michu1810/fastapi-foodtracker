@@ -10,24 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Pobranie kodu
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      # Zależności
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r foodtracker/requirements.txt
 
-      # Testy + coverage
       - name: Run tests with coverage
+        working-directory: ./foodtracker  # ważne!
         env:
           SECRET_KEY: test
           DATABASE_URL: "sqlite+aiosqlite:///:memory:"
@@ -49,10 +46,12 @@ jobs:
           TESTING: true
           IS_PRODUCTION: false
         run: |
-          pytest --cov=foodtracker_app --cov-report=xml
+          pytest foodtracker_app/tests --cov=foodtracker_app --cov-report=term-missing
+          coverage combine
+          coverage xml
 
-      # Upload do Codecov
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./foodtracker/coverage.xml
