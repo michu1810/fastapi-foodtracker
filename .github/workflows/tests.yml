@@ -25,8 +25,7 @@ jobs:
       - name: Run tests
         env:
           SECRET_KEY: test
-          DATABASE_URL:
-          sqlite+aiosqlite:///:memory:
+          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           SMTP_HOST: localhost
           SMTP_PORT: 587
           SMTP_USER: test@test.com
