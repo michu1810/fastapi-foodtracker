@@ -18,3 +18,5 @@ async def drop_all_tables():
 
 if __name__ == "__main__":
     asyncio.run(drop_all_tables())
+
+# UWAGA TEN SKRYPT ZERUJE CALA BAZE DANYCH USUWAJAC Z NIEJ WSZYSTKO !!!!

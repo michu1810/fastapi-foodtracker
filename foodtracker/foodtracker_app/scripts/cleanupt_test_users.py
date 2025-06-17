@@ -20,3 +20,6 @@ async def delete_test_users():
 
 if __name__ == "__main__":
     asyncio.run(delete_test_users())
+
+
+# UWAGA TEN SKRYPT USUWA WSZYSTKICH UZYTKOWNIKOW Z BAZY DANYCH Z PRZEDROSTKIEM TEST W MAILU !!!!

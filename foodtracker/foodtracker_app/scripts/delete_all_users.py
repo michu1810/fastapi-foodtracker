@@ -20,3 +20,6 @@ async def delete_all_users_and_products():
 
 if __name__ == "__main__":
     asyncio.run(delete_all_users_and_products())
+
+
+# UWAGA TEN SKRYPT USUWA WSZYSTKICH UZYTKOWNIKOW Z BAZY DANYCH ORAZ WSZYSTKO CO JEST DO NICH PRZYPISANE !!!!
