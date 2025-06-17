@@ -26,3 +26,4 @@ aiosqlite
 python-magic
 slowapi
 pytest-cov
+pytest-mock

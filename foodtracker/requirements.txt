@@ -218,6 +218,7 @@ zope-event==5.0
 zope-interface==7.2
     # via gevent
 pytest-cov
+pytest-mock
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

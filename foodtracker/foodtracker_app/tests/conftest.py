@@ -4,6 +4,7 @@ from datetime import date, timedelta
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -16,7 +17,9 @@ from foodtracker_app.db.database import Base, get_async_session  # noqa: E402
 from foodtracker_app.main import app  # noqa: E402
 from foodtracker_app.models.user import User  # noqa: E402
 
-SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+from foodtracker_app import models  # noqa: F401, E402
+
+SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -40,8 +43,9 @@ async def override_get_async_session():
 
 @pytest_asyncio.fixture()
 async def client():
-    """Główna fixtura tworząca asynchronicznego klienta i zarządzająca bazą danych."""
+    """Główna fixtura testowa z lokalną bazą i nadpisaniem zależności."""
     app.dependency_overrides[get_async_session] = override_get_async_session
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -52,31 +56,30 @@ async def client():
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+
     app.dependency_overrides.clear()
 
 
 @pytest.fixture
 async def authenticated_client_factory(client: AsyncClient):
-    """Zwraca asynchroniczną fabrykę do tworzenia i logowania użytkowników."""
-
-    async def _factory(email, password):
+    async def _factory(email: str, password: str):
         async with TestingSessionLocal() as session:
-            test_user = User(
-                email=email, hashed_password=hash_password(password), is_verified=True
-            )
-            session.add(test_user)
-            await session.commit()
+            user_exists = await session.execute(select(User).where(User.email == email))
+            if not user_exists.scalar_one_or_none():
+                user = User(
+                    email=email,
+                    hashed_password=hash_password(password),
+                    is_verified=True,
+                    social_provider="password",
+                )
+                session.add(user)
+                await session.commit()
 
-        login_payload = {"email": email, "password": password}
-        # Dodajemy 'await', ponieważ klient jest teraz asynchroniczny
-        response = await client.post("/auth/login", json=login_payload)
-
-        assert (
-            response.status_code == 200
-        ), f"Logowanie w teście jako {email} nie powiodło się: {response.text}"
-
-        token = response.json()["access_token"]
-        client.headers["Authorization"] = f"Bearer {token}"
+        resp = await client.post(
+            "/auth/login", json={"email": email, "password": password}
+        )
+        assert resp.status_code == 200, resp.text
+        client.headers["Authorization"] = f"Bearer {resp.json()['access_token']}"
         return client
 
     return _factory
@@ -84,22 +87,16 @@ async def authenticated_client_factory(client: AsyncClient):
 
 @pytest_asyncio.fixture
 async def authenticated_client(authenticated_client_factory):
-    """Zwraca klienta uwierzytelnionego jako domyślny użytkownik testowy."""
-    client = await authenticated_client_factory(
-        "default.user@example.com", "password123"
-    )
-    return client
+    return await authenticated_client_factory("default.user@example.com", "password123")
 
 
 @pytest.fixture
 def fixed_date():
-    """Zwraca stałą datę, aby testy były deterministyczne."""
     return date(2025, 6, 17)
 
 
 @pytest_asyncio.fixture
 async def product_in_db(authenticated_client: AsyncClient, fixed_date: date):
-    """Fixtura tworząca domyślny produkt w bazie danych i zwracająca jego dane."""
     payload = {
         "name": "Produkt testowy",
         "expiration_date": str(fixed_date + timedelta(days=7)),
@@ -107,8 +104,6 @@ async def product_in_db(authenticated_client: AsyncClient, fixed_date: date):
         "unit": "szt.",
         "initial_amount": 5,
     }
-    response = await authenticated_client.post("/products/create", json=payload)
-    assert (
-        response.status_code == 201
-    ), f"Tworzenie produktu w teście nie powiodło się: {response.text}"
-    return response.json()
+    resp = await authenticated_client.post("/products/create", json=payload)
+    assert resp.status_code == 201, resp.text
+    return resp.json()
