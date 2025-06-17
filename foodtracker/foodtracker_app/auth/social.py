@@ -1,13 +1,12 @@
-from fastapi import APIRouter, Request, Depends, HTTPException
-from starlette.responses import RedirectResponse
 from authlib.integrations.starlette_client import OAuth
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-
+from fastapi import APIRouter, Depends, HTTPException, Request
+from foodtracker_app.auth.utils import create_access_token, create_refresh_token
 from foodtracker_app.db.database import get_async_session
 from foodtracker_app.models.user import User
-from foodtracker_app.auth.utils import create_access_token, create_refresh_token
 from foodtracker_app.settings import settings
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from starlette.responses import RedirectResponse
 
 router = APIRouter()
 
@@ -15,22 +14,22 @@ oauth = OAuth()
 
 # Google
 oauth.register(
-    name='google',
+    name="google",
     client_id=settings.GOOGLE_CLIENT_ID,
     client_secret=settings.GOOGLE_CLIENT_SECRET,
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={'scope': 'openid email profile'}
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={"scope": "openid email profile"},
 )
 
 # GitHub
 oauth.register(
-    name='github',
+    name="github",
     client_id=settings.GITHUB_CLIENT_ID,
     client_secret=settings.GITHUB_CLIENT_SECRET,
-    access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize',
-    api_base_url='https://api.github.com/',
-    client_kwargs={'scope': 'user:email'}
+    access_token_url="https://github.com/login/oauth/access_token",
+    authorize_url="https://github.com/login/oauth/authorize",
+    api_base_url="https://api.github.com/",
+    client_kwargs={"scope": "user:email"},
 )
 
 
@@ -48,7 +47,7 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
             email=email,
             hashed_password="social",
             social_provider=provider,
-            is_verified=True
+            is_verified=True,
         )
         db.add(user)
         await db.commit()
@@ -58,27 +57,29 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
 
 async def resolve_user_data(response) -> dict:
     try:
-       return await response.json()
+        return await response.json()
     except TypeError:
-       try:
-          return response.json()
-       except Exception:
-          pass
+        try:
+            return response.json()
+        except Exception:
+            pass
     except AttributeError:
-       pass
+        pass
     if isinstance(response, dict):
-       return response
+        return response
     raise TypeError(f"Nieobsługiwany typ odpowiedzi: {type(response)}")
 
 
 @router.get("/google/login")
 async def google_login(request: Request):
-    redirect_url = request.url_for('google_callback')
+    redirect_url = request.url_for("google_callback")
     return await oauth.google.authorize_redirect(request, redirect_url)
 
 
 @router.get("/google/callback")
-async def google_callback(request: Request, db: AsyncSession = Depends(get_async_session)):
+async def google_callback(
+    request: Request, db: AsyncSession = Depends(get_async_session)
+):
     try:
         token = await oauth.google.authorize_access_token(request)
     except Exception as e:
@@ -92,37 +93,41 @@ async def google_callback(request: Request, db: AsyncSession = Depends(get_async
 
     user = await get_or_create_user(db, email, provider="google")
 
-    ### ⬇️ KLUCZOWE ZMIANY ⬇️ ###
-
     # 1. Tworzymy OBA tokeny, tak jak przy standardowym logowaniu
-    access_token = create_access_token({"sub": user.email, "provider": user.social_provider})
-    refresh_token = create_refresh_token({"sub": user.email, "provider": user.social_provider})
+    access_token = create_access_token(
+        {"sub": user.email, "provider": user.social_provider}
+    )
+    refresh_token = create_refresh_token(
+        {"sub": user.email, "provider": user.social_provider}
+    )
 
     # 2. Tworzymy odpowiedź przekierowującą
-    response = RedirectResponse(url=f"{settings.FRONTEND_URL}/google/callback?token={access_token}")
+    response = RedirectResponse(
+        url=f"{settings.FRONTEND_URL}/google/callback?token={access_token}"
+    )
 
-    # 3. USTAWIAMY CIASTECZKO z refresh tokenem na tej odpowiedzi
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=settings.IS_PRODUCTION, # Na produkcji będzie True, jeśli DEMO_MODE=False
+        secure=settings.IS_PRODUCTION,  # Na produkcji będzie True, jeśli DEMO_MODE=False
         samesite="strict",
-        path="/auth"
+        path="/auth",
     )
-    ### ⬆️ KONIEC ZMIAN ⬆️ ###
 
     return response
 
 
 @router.get("/github/login")
 async def github_login(request: Request):
-    redirect_url = request.url_for('github_callback')
+    redirect_url = request.url_for("github_callback")
     return await oauth.github.authorize_redirect(request, redirect_url)
 
 
 @router.get("/github/callback")
-async def github_callback(request: Request, db: AsyncSession = Depends(get_async_session)):
+async def github_callback(
+    request: Request, db: AsyncSession = Depends(get_async_session)
+):
     try:
         token_response = await oauth.github.authorize_access_token(request)
     except Exception as e:
@@ -134,26 +139,30 @@ async def github_callback(request: Request, db: AsyncSession = Depends(get_async
     email = user_data.get("email")
 
     if not email:
-       emails_resp = await oauth.github.get("user/emails", token=token_response)
-       emails_data = await resolve_user_data(emails_resp)
-       email = next(
-          (e["email"] for e in emails_data if e.get("primary") and e.get("verified")),
-          None
-       )
+        emails_resp = await oauth.github.get("user/emails", token=token_response)
+        emails_data = await resolve_user_data(emails_resp)
+        email = next(
+            (e["email"] for e in emails_data if e.get("primary") and e.get("verified")),
+            None,
+        )
 
     if not email:
-       raise HTTPException(status_code=400, detail="Email not found from GitHub.")
+        raise HTTPException(status_code=400, detail="Email not found from GitHub.")
 
     user = await get_or_create_user(db, email, provider="github")
 
-    ### ⬇️ KLUCZOWE ZMIANY ⬇️ ###
-
     # 1. Tworzymy OBA tokeny
-    access_token = create_access_token({"sub": user.email, "provider": user.social_provider})
-    refresh_token = create_refresh_token({"sub": user.email, "provider": user.social_provider})
+    access_token = create_access_token(
+        {"sub": user.email, "provider": user.social_provider}
+    )
+    refresh_token = create_refresh_token(
+        {"sub": user.email, "provider": user.social_provider}
+    )
 
     # 2. Tworzymy odpowiedź przekierowującą
-    response = RedirectResponse(url=f"{settings.FRONTEND_URL}/github/callback?token={access_token}")
+    response = RedirectResponse(
+        url=f"{settings.FRONTEND_URL}/github/callback?token={access_token}"
+    )
 
     # 3. USTAWIAMY CIASTECZKO z refresh tokenem na tej odpowiedzi
     response.set_cookie(
@@ -162,8 +171,7 @@ async def github_callback(request: Request, db: AsyncSession = Depends(get_async
         httponly=True,
         secure=settings.IS_PRODUCTION,
         samesite="strict",
-        path="/auth"
+        path="/auth",
     )
-    ### ⬆️ KONIEC ZMIAN ⬆️ ###
 
     return response

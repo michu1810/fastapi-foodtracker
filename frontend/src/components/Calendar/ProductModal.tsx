@@ -28,9 +28,9 @@ const ProductModal: React.FC<ProductModalProps> = ({ date, products, onClose, on
         if (!editingProduct) return;
         try {
             // Ta funkcja używa 'productsService', 'formData' i 'onUpdate', więc błędy znikną
-            const updatedProduct = await productsService.updateProduct(editingProduct.id, { 
-                name: formData.name, 
-                expiration_date: formData.expiration_date 
+            const updatedProduct = await productsService.updateProduct(editingProduct.id, {
+                name: formData.name,
+                expiration_date: formData.expiration_date
             });
             onUpdate(updatedProduct); // `onUpdate` jest teraz używane
             setEditingProduct(null);
@@ -46,22 +46,22 @@ const ProductModal: React.FC<ProductModalProps> = ({ date, products, onClose, on
             <div className="space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Nazwa produktu</label>
-                    <input 
-                        type="text" 
-                        name="name" 
+                    <input
+                        type="text"
+                        name="name"
                         value={formData.name} // `formData` jest teraz używane do odczytu
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md" 
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                     />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Data ważności</label>
-                    <input 
-                        type="date" 
-                        name="expiration_date" 
+                    <input
+                        type="date"
+                        name="expiration_date"
                         value={formData.expiration_date} // `formData` jest teraz używane do odczytu
-                        onChange={(e) => setFormData({ ...formData, expiration_date: e.target.value })} 
-                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md" 
+                        onChange={(e) => setFormData({ ...formData, expiration_date: e.target.value })}
+                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                     />
                 </div>
             </div>

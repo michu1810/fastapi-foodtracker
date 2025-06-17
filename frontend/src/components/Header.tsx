@@ -35,12 +35,12 @@ export default function Header() {
 
   return (
     <Disclosure as="header" className={`sticky top-0 z-50 bg-white transition-shadow ${scrolled ? 'shadow-lg' : ''}`}>
-      {({ open }) => ( 
+      {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              
-             
+
+
               <nav className="hidden md:flex space-x-8 items-center">
                 <h1 className="text-xl font-bold text-gray-800">Food Tracker</h1>
                 {navLinks.map(({ path, label }) => {
@@ -88,7 +88,7 @@ export default function Header() {
                       </Menu.Items>
                     </Transition>
                   </Menu>
-                  
+
                   <div className="flex items-center md:hidden">
                     <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                       <span className="sr-only">Otwórz menu</span>
@@ -99,7 +99,7 @@ export default function Header() {
               )}
             </div>
           </div>
-          
+
           <Disclosure.Panel className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map(({ path, label }) => (

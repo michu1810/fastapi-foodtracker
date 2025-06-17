@@ -9,7 +9,7 @@ const FinancialBarChart: React.FC<{ data: FinancialStats }> = ({ data }) => {
     ];
 
     const formatCurrency = (value: number) => `${value.toFixed(2)} zł`;
-    
+
     return (
         <div className="w-full h-full">
             <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Wizualizacja Finansów</h3>
@@ -17,16 +17,16 @@ const FinancialBarChart: React.FC<{ data: FinancialStats }> = ({ data }) => {
                 {/* ZMIANA: Zwiększone marginesy i szerokość osi Y, aby tekst się nie ucinał */}
                 <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 65, left: 20, bottom: 5 }}>
                     <XAxis type="number" hide />
-                    <YAxis 
-                        type="category" 
-                        dataKey="name" 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fill: '#4B5563', fontWeight: '600' }} 
-                        width={110} 
+                    <YAxis
+                        type="category"
+                        dataKey="name"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#4B5563', fontWeight: '600' }}
+                        width={110}
                     />
-                    <Tooltip 
-                        cursor={{ fill: 'rgba(229, 231, 235, 0.5)' }} 
+                    <Tooltip
+                        cursor={{ fill: 'rgba(229, 231, 235, 0.5)' }}
                         contentStyle={{ backgroundColor: '#fff', borderRadius: '0.5rem', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                         formatter={(value: number) => [formatCurrency(value), 'Wartość']}
                     />

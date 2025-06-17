@@ -1,7 +1,7 @@
-from aiosmtplib import SMTP
 from email.message import EmailMessage
-from foodtracker_app.settings import settings
 
+from aiosmtplib import SMTP
+from foodtracker_app.settings import settings
 
 SMTP_HOST = settings.SMTP_HOST
 SMTP_PORT = settings.SMTP_PORT

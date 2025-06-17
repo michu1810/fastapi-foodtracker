@@ -22,7 +22,7 @@ const ConsumptionModal: React.FC<ConsumptionModalProps> = ({ product, actionType
 
     const handleConfirm = (valueToConfirm: number | string) => {
         setError(null);
-        
+
         const numericValue = typeof valueToConfirm === 'string' ? parseFloat(valueToConfirm) : valueToConfirm;
 
         if (isNaN(numericValue) || numericValue <= 0) {
@@ -33,7 +33,7 @@ const ConsumptionModal: React.FC<ConsumptionModalProps> = ({ product, actionType
             setError(`Nie można ${verb} więcej niż posiadasz (${product.current_amount} ${product.unit}).`);
             return;
         }
-        
+
         onConfirm(product.id, numericValue);
     };
 

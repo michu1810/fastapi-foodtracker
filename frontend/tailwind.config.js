@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
        backgroundImage: {
-        'login-bg': "url('/public/login-bg.jpg')", 
+        'login-bg': "url('/public/login-bg.jpg')",
       },
       transitionProperty: {
         scale: 'transform'
@@ -13,7 +13,7 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out both',
         'fade-in-up': 'fadeInUp 0.4s ease-out both',
-        'fade-in-smooth': 'fadeInSmooth 0.6s ease-out both', 
+        'fade-in-smooth': 'fadeInSmooth 0.6s ease-out both',
         'breathe': 'breathe 4s ease-in-out infinite',
       },
       keyframes: {
@@ -25,7 +25,7 @@ export default {
           '0%': { opacity: 0, transform: 'translateY(6px)' },
           '100%': { opacity: 1, transform: 'translateY(0)' },
         },
-        fadeInSmooth: {   
+        fadeInSmooth: {
           '0%': { opacity: 0, transform: 'scale(0.98)' },
           '100%': { opacity: 1, transform: 'scale(1)' },
         },

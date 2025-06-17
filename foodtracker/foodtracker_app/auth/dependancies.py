@@ -1,25 +1,27 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from foodtracker_app.auth.utils import decode_token
 from foodtracker_app.db.database import async_session_maker, get_async_session
 from foodtracker_app.models.user import User
-from foodtracker_app.auth.utils import decode_token
+from jose import JWTError
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+
 class TokenData(BaseModel):
     email: str | None = None
+
 
 async def get_db():
     async with async_session_maker() as session:
         yield session
 
+
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_async_session)
+    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_async_session)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

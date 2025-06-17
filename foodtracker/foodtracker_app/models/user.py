@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.sql import func
 from foodtracker_app.db.database import Base
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+
 
 class User(Base):
     __tablename__ = "users"
@@ -22,8 +23,12 @@ class User(Base):
 
     social_provider = Column(String, nullable=True)
 
-    products = relationship('Product', back_populates='user', cascade="all, delete-orphan")
-    financial_stat = relationship('FinancialStat', uselist=False, back_populates='user', cascade="all, delete-orphan")
-
-
-from foodtracker_app.models.product import Product
+    products = relationship(
+        "Product", back_populates="user", cascade="all, delete-orphan"
+    )
+    financial_stat = relationship(
+        "FinancialStat",
+        uselist=False,
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )

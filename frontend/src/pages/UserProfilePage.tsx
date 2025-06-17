@@ -19,7 +19,7 @@ const UserProfilePage = () => {
 
   const navigate = useNavigate();
 
-  
+
   const isPasswordUser = user?.provider === 'password';
 
   const changePw = async (e: React.FormEvent) => {

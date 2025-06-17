@@ -1,15 +1,19 @@
-from celery import Celery
-from celery.schedules import crontab
 import os
 import time
+
 import redis
+from celery import Celery
+from celery.schedules import crontab
+from foodtracker_app.models.financial_stats import FinancialStat  # noqa: F401
+from foodtracker_app.models.product import Product  # noqa: F401
+from foodtracker_app.models.user import User  # noqa: F401
 from foodtracker_app.settings import settings
 
 celery_app = Celery(
     "foodtracker",
     broker=os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0"),
     backend=os.getenv("CELERY_BACKEND_URL", "redis://redis:6379/1"),
-    include=["foodtracker_app.notifications.tasks"]
+    include=["foodtracker_app.notifications.tasks"],
 )
 
 celery_app.conf.timezone = "UTC"
@@ -39,6 +43,7 @@ def wait_for_redis(host="redis", port=6379, retries=10, delay=2):
             print("⏳ Waiting for Redis...")
             time.sleep(delay)
     raise RuntimeError("❌ Redis not available after retries")
+
 
 if not settings.TESTING:
     wait_for_redis()

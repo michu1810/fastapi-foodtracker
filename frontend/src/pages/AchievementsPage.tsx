@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import useSWR from 'swr';
-import { getAchievements } from '../services/statsService'; 
+import { getAchievements } from '../services/statsService';
 import type { Achievement } from '../services/statsService';
-import Achievements from '../components/Achievements'; 
+import Achievements from '../components/Achievements';
 
 const AchievementsPage: React.FC = () => {
     // Używamy SWR do pobierania danych, co daje nam darmowe odświeżanie i cache'owanie

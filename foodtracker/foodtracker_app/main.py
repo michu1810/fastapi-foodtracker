@@ -1,21 +1,21 @@
-from fastapi import FastAPI
-from fastapi.openapi.utils import get_openapi
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
-from fastapi.staticfiles import StaticFiles
+import os
+from pathlib import Path
 
 from dotenv import load_dotenv
-from pathlib import Path
-import os
-
-from foodtracker_app.auth.routes import auth_router, product_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
+from fastapi.staticfiles import StaticFiles
 from foodtracker_app.auth import social
-from foodtracker_app.notifications.routes import router as notifications_router
+from foodtracker_app.auth.routes import auth_router, product_router
 from foodtracker_app.calendar_view.routes import router as calendar_router
 from foodtracker_app.external.routes import router as external_router
+from foodtracker_app.notifications.routes import router as notifications_router
 from foodtracker_app.settings import settings
-from rate_limiter import limiter, RateLimitExceeded, _rate_limit_exceeded_handler
-
+from rate_limiter import limiter
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from starlette.middleware.sessions import SessionMiddleware
 
 env_path = Path(__file__).resolve().parents[1] / ".env"
 
@@ -75,6 +75,7 @@ def custom_openapi():
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
+
 app.openapi = custom_openapi
 
 
@@ -83,4 +84,6 @@ app.include_router(product_router, prefix="/products", tags=["Products"])
 app.include_router(social.router, tags=["Social login"])
 app.include_router(calendar_router, tags=["Calendar"])
 app.include_router(external_router, tags=["External"])
-app.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
+app.include_router(
+    notifications_router, prefix="/notifications", tags=["Notifications"]
+)

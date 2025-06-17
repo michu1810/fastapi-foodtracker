@@ -66,7 +66,7 @@ class ProductsService {
         });
         return response.data;
     }
-    
+
     async wasteProduct(productId: number, amountToWaste: number): Promise<ProductActionResponse> {
         const response = await apiClient.post<ProductActionResponse>(`/products/waste/${productId}`, {
             amount: amountToWaste,
@@ -93,7 +93,7 @@ class ProductsService {
         const response = await apiClient.get<ExpiringProduct[]>('/products/expiring-soon');
         return response.data;
     }
-    
+
     async sendTestNotification(): Promise<{ message: string }> {
         const response = await apiClient.post<{ message: string }>('/notifications/send-test');
         return response.data;

@@ -3,6 +3,7 @@ from foodtracker_app.settings import settings
 
 RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
+
 async def verify_recaptcha(token: str) -> bool:
     payload = {
         "secret": settings.RECAPTCHA_SECRET_KEY,

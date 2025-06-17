@@ -15,7 +15,7 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
       </div>
     );
   }
-  
+
   return user ? <>{children}</> : <Navigate to="/login" replace />;
 };
 

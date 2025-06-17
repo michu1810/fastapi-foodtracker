@@ -18,9 +18,9 @@ interface FancyCalendarProps {
 const FancyCalendar: React.FC<FancyCalendarProps> = ({ productsByDate, onDateClick, createdAt }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [hoveredDate, setHoveredDate] = useState<string | null>(null);
-    
+
     const today = new Date();
-    
+
     const userStartMonth = createdAt
         ? new Date(createdAt.getFullYear(), createdAt.getMonth(), 1)
         : new Date(today.getFullYear(), today.getMonth(), 1);
@@ -54,10 +54,10 @@ const FancyCalendar: React.FC<FancyCalendarProps> = ({ productsByDate, onDateCli
             const pureDate = new Date(day.getFullYear(), day.getMonth(), day.getDate());
 
             const allProducts = productsByDate[formattedDate] || [];
-            
+
             // ZMIANA: Używamy nowego pola 'current_amount' zamiast 'quantity_current'
             const activeProducts = allProducts.filter(p => p.current_amount > 0);
-            
+
             const showExpanded = hoveredDate === formattedDate;
 
             const hasTodayExpiry = activeProducts.some(product => {

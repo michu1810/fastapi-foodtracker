@@ -27,7 +27,7 @@ const CATEGORY_NAMES: { [key: string]: string } = {
 
 // ZMIANA: Aktualizujemy kolejność i dodajemy nowe typy
 const CATEGORY_ORDER = [
-    'saved_products', 
+    'saved_products',
     'efficiency_rate',
     'money_saved',
     'active_value',
@@ -47,7 +47,7 @@ const Achievements: React.FC<AchievementsProps> = ({ list }) => {
   const groupedAchievements = useMemo(() => {
     if (!list) return {};
     const groups: { [key: string]: {name: string, achievements: Achievement[]} } = {};
-    
+
     // Używamy zdefiniowanej mapy, aby uniknąć duplikatów kategorii
     list.forEach(ach => {
       const categoryName = CATEGORY_NAMES[ach.type] || 'Inne';
@@ -61,7 +61,7 @@ const Achievements: React.FC<AchievementsProps> = ({ list }) => {
     for(const categoryName in groups) {
         groups[categoryName].achievements.sort((a, b) => (a.total_progress ?? 0) - (b.total_progress ?? 0));
     }
-    
+
     return groups;
   }, [list]);
 
@@ -101,7 +101,7 @@ const AchievementCard: React.FC<{ achievement: Achievement, index: number }> = (
     const current = current_progress ?? 0;
     const total = total_progress ?? 1;
     const progress = total > 0 ? Math.min((current / total) * 100, 100) : 0;
-    
+
     const isLocked = !achieved && current === 0 && total > 1;
 
     // Funkcja do formatowania wartości (szczególnie dla pieniędzy)
@@ -133,7 +133,7 @@ const AchievementCard: React.FC<{ achievement: Achievement, index: number }> = (
             className={`p-4 rounded-xl border-2 flex flex-col transition-all duration-300 h-44 relative overflow-hidden group ${cardClasses}`}
         >
             {isLocked && <div className="absolute inset-0 bg-gray-500/10 backdrop-blur-[1px] z-10"></div>}
-            
+
             <div className="flex items-center mb-2">
                 <div className={`text-5xl mr-4 transition-transform duration-300 ${!isLocked && 'group-hover:scale-110'}`}>{icon}</div>
                 <div className="flex-1">

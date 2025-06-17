@@ -1,20 +1,23 @@
-from pydantic import BaseModel, EmailStr, Field
 from datetime import date, datetime
-from pydantic import field_validator, constr, ConfigDict
-from typing import Optional, List, Literal
+from typing import List, Literal, Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, constr, field_validator
 
 
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class ChangePasswordRequest(BaseModel):
     old_password: str
     new_password: str
+
 
 class UserProfile(BaseModel):
     id: int
@@ -34,7 +37,7 @@ class ProductBase(BaseModel):
 class ProductCreate(BaseModel):
     name: constr(strip_whitespace=True, min_length=2, max_length=100)
     price: float = Field(gt=0)
-    unit: Literal['szt.', 'g', 'kg', 'ml', 'l']
+    unit: Literal["szt.", "g", "kg", "ml", "l"]
     initial_amount: float = Field(gt=0)
     is_fresh_product: Optional[bool] = False
     purchase_date: Optional[date] = None
@@ -42,7 +45,7 @@ class ProductCreate(BaseModel):
     expiration_date: Optional[date] = None
     external_id: Optional[str] = None
 
-    @field_validator('expiration_date', 'is_fresh_product')
+    @field_validator("expiration_date", "is_fresh_product")
     def validate_dates(cls, v, values):
         # Tutaj możesz w przyszłości dodać logikę walidacji
         return v

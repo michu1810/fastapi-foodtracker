@@ -40,7 +40,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
     const [results, setResults] = useState<ExternalProduct[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const debouncedQuery = useDebounce(query, 400);
-    
+
     // Stany formularza
     const [productName, setProductName] = useState('');
     const [expirationDate, setExpirationDate] = useState(
@@ -53,11 +53,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
 
     // --- NOWE STANY DLA NOWEGO, HYBRYDOWEGO FORMULARZA ---
     // przechowuje informację, czy produkt jest na sztuki czy na wagę
-    const [productType, setProductType] = useState<'szt.' | 'g'>('szt.'); 
+    const [productType, setProductType] = useState<'szt.' | 'g'>('szt.');
     // przechowuje cenę całkowitą
-    const [price, setPrice] = useState(''); 
+    const [price, setPrice] = useState('');
     // przechowuje ilość w sztukach
-    const [quantity, setQuantity] = useState('1'); 
+    const [quantity, setQuantity] = useState('1');
     // przechowuje wagę w gramach
     const [weight, setWeight] = useState('');
 
@@ -81,10 +81,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
 
     const handleSubmit = async () => {
         // --- NOWA LOGIKA WYSYŁANIA FORMULARZA ---
-        
+
         // 1. ustalamy, jaka jest faktyczna ilość/waga produktu
         const amount = productType === 'szt.' ? parseFloat(quantity) : parseFloat(weight);
-        
+
         // 2. prosta walidacja
         if (!productName || !price || !amount || amount <= 0) {
             setError('Nazwa, cena i poprawna ilość/waga są wymagane.');
@@ -103,7 +103,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
 
         setError(null);
         setIsSubmitting(true);
-        
+
         // 3. budujemy obiekt danych zgodny z nowym API
         const newProductData: CreateProductRequest = {
             name: productName,
@@ -174,7 +174,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 </h2>
                 <div className="p-6 space-y-4">
                     {error && <div className="bg-red-100 text-red-700 px-4 py-3 rounded">{error}</div>}
-                    
+
                     {/* Nazwa produktu - bez zmian */}
                     <div>
                         <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-1">Nazwa produktu *</label>
@@ -207,7 +207,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                                 <input id="weight" type="number" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="np. 500" required min="1" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                         )}
-                        
+
                         {/* --- NOWE POLE: CENA --- */}
                         <div>
                             <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Cena za całość (zł) *</label>

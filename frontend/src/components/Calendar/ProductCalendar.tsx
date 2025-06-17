@@ -23,7 +23,7 @@ const ProductCalendar: React.FC = () => {
     const {
         productsByDate, selectedDate, isProductModalOpen, isAddModalOpen, createdAt,
         handleDayClick, handleCloseProductModal, handleOpenAddModal, handleCloseAddModal,
-        handleProductAdded, onUseProduct, handleDeleteProduct, handleProductUpdate, 
+        handleProductAdded, onUseProduct, handleDeleteProduct, handleProductUpdate,
         getVisibleProductsForDate, onWasteProduct, onHideProduct,
         showConfetti,
         recycleConfetti
@@ -61,7 +61,7 @@ const ProductCalendar: React.FC = () => {
                 {totalProductsCount === 0 && user && <OnboardingGuide />}
                 {showConfetti && <Confetti recycle={recycleConfetti} />}
                 <FancyCalendar productsByDate={productsByDate} onDateClick={handleDayClick} createdAt={createdAt} />
-                
+
                 <div className="bg-white rounded-lg p-4 shadow-md text-center animate-fade-in">
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">📊 Statystyki ogólne</h3>
                     <p className="text-gray-600 text-sm mb-3">Sprawdź ile produktów masz aktywnych, wyrzuconych lub oznaczonych jako zużyte.</p>

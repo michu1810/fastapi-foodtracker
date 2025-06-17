@@ -13,7 +13,7 @@ export default function DashboardPage() {
         >
             <div className="max-w-7xl w-full space-y-6 md:space-y-10">
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-                    
+
                     {/* Kolumna z Kalendarzem (lewa strona) - teraz zawiera tylko jeden komponent */}
                     <div className="lg:col-span-2 space-y-6">
                         <ProductCalendar />

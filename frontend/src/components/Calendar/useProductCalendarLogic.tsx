@@ -19,14 +19,14 @@ export const useProductCalendarLogic = () => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    
+
     const [hiddenProductIds, setHiddenProductIds] = useState<number[]>(
         () => loadFromStorage<number[]>(HIDDEN_PRODUCTS_STORAGE_KEY, [])
     );
 
     const [showConfetti, setShowConfetti] = useState(false);
     const [recycleConfetti, setRecycleConfetti] = useState(true);
-    
+
     const createdAt = user?.createdAt ? new Date(user.createdAt) : null;
 
     // ... (funkcje od `fetchProducts` do `handleProductAdded` bez zmian) ...
@@ -56,7 +56,7 @@ export const useProductCalendarLogic = () => {
     const handleCloseProductModal = () => setIsProductModalOpen(false);
     const handleOpenAddModal = () => { setIsProductModalOpen(false); setIsAddModalOpen(true); };
     const handleCloseAddModal = () => setIsAddModalOpen(false);
-    
+
     const handleProductAdded = useCallback(() => {
         setIsAddModalOpen(false);
         toast.success("Dodano produkt!");
@@ -67,11 +67,11 @@ export const useProductCalendarLogic = () => {
     const handleAction = useCallback(async (action: 'use' | 'waste', productId: number, amount: number) => {
         const serviceAction = action === 'use' ? productsService.useProduct : productsService.wasteProduct;
         const verb = action === 'use' ? 'Zużyto' : 'Wyrzucono';
-        
+
         try {
             const response = await serviceAction(productId, amount);
             const updatedProduct = response.product;
-            
+
             toast.success(`${verb} ${amount} ${updatedProduct.unit} produktu "${updatedProduct.name}"`);
             revalidateAllData();
 
@@ -99,8 +99,8 @@ export const useProductCalendarLogic = () => {
                                       </svg>
                                     </button>
                                 </div>
-                            ), 
-                            { 
+                            ),
+                            {
                                 duration: 10000, // Dłuższy czas, bo jest przycisk
                                 // Stylizacja samego kontenera powiadomienia
                                 style: {
@@ -128,13 +128,13 @@ export const useProductCalendarLogic = () => {
     // ... (reszta hooka od `handleUseProduct` do końca bez zmian) ...
     const handleUseProduct = (productId: number, amount: number) => handleAction('use', productId, amount);
     const handleWasteProduct = (productId: number, amount: number) => handleAction('waste', productId, amount);
-    
+
     const handleDeleteProduct = useCallback(async (product: Product) => {
         await productsService.deleteProduct(product.id);
         toast.success("Produkt usunięty");
         revalidateAllData();
     }, [revalidateAllData]);
-    
+
     const handleHideProduct = useCallback((productToHide: Product) => {
         const newHiddenIds = [...new Set([...hiddenProductIds, productToHide.id])];
         saveToStorage(HIDDEN_PRODUCTS_STORAGE_KEY, newHiddenIds);
@@ -157,11 +157,11 @@ export const useProductCalendarLogic = () => {
     return {
         productsByDate, selectedDate, isProductModalOpen, isAddModalOpen, createdAt,
         handleDayClick, handleCloseProductModal, handleOpenAddModal, handleCloseAddModal,
-        handleProductAdded, 
-        onUseProduct: handleUseProduct, 
+        handleProductAdded,
+        onUseProduct: handleUseProduct,
         handleDeleteProduct,
-        handleProductUpdate, 
-        getVisibleProductsForDate, 
+        handleProductUpdate,
+        getVisibleProductsForDate,
         onWasteProduct: handleWasteProduct,
         onHideProduct: handleHideProduct,
         showConfetti,
