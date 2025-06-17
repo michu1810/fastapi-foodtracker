@@ -12,6 +12,8 @@ async def send_email_reminder(to_email: str, products: list):
         f"- {p.name} (do {p.expiration_date})" for p in products
     )
 
-    html = render_template("email_reminder.html", email=to_email, products=products)
+    html = await render_template(
+        "email_reminder.html", email=to_email, products=products
+    )
 
     await send_email_async(to_email, subject, body, html)

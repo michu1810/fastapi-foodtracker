@@ -125,7 +125,7 @@ async def sync_check_and_notify():
         result = await session.execute(
             select(Product, User).join(User).where(Product.expiration_date <= soon)
         )
-        rows = result.all()
+        rows = await result.all()
 
         users = {}
         for product, user in rows:
