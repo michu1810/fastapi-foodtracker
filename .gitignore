@@ -36,3 +36,5 @@ Thumbs.db
 
 test.db
 .coverage
+
+beat_db.sqlite3
