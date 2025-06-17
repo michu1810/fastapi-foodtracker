@@ -14,6 +14,15 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Pytest](https://img.shields.io/badge/pytest-✓-green.svg)
 
+![Issues](https://img.shields.io/github/issues/michu1810/fastapi-foodtracker)
+![Forks](https://img.shields.io/github/forks/michu1810/fastapi-foodtracker?style=social)
+![Stars](https://img.shields.io/github/stars/michu1810/fastapi-foodtracker?style=social)
+![Last Commit](https://img.shields.io/github/last-commit/michu1810/fastapi-foodtracker)
+![Maintained](https://img.shields.io/maintenance/yes/2025)
+![Ruff Lint](https://github.com/twoj-user/twoj-repo/actions/workflows/ruff.yml/badge.svg)
+![Dependabot Status](https://img.shields.io/badge/dependencies-up--to--date-brightgreen)
+
+
 ## 🎯 Misja Projektu
 
 Każdego roku w Polsce marnuje się blisko 5 milionów ton żywności. Wyrzucamy jedzenie, bo zapominamy o terminach ważności, kupujemy za dużo, źle planujemy. Postanowiłem wykorzystać swoje umiejętności techniczne, aby stworzyć narzędzie, które realnie pomaga walczyć z tym wszechobecnym problemem na poziomie każdego z nas.
