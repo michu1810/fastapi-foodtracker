@@ -24,7 +24,7 @@ jobs:
           pip install -r foodtracker/requirements.txt
 
       - name: Run tests with coverage
-        working-directory: ./foodtracker  # ważne!
+        working-directory: ./foodtracker
         env:
           SECRET_KEY: test
           DATABASE_URL: "sqlite+aiosqlite:///:memory:"
@@ -46,7 +46,7 @@ jobs:
           TESTING: true
           IS_PRODUCTION: false
         run: |
-          pytest foodtracker_app/tests --cov=foodtracker_app --cov-report=term-missing
+          pytest foodtracker_app/tests --cov=foodtracker_app --cov-report=term-missing --cov-report=xml
           coverage combine
           coverage xml
 
