@@ -25,3 +25,4 @@ pytest-dotenv
 aiosqlite
 python-magic
 slowapi
+pytest-cov
