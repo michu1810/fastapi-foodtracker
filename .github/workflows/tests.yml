@@ -43,5 +43,6 @@ jobs:
           REDIS_URL: redis://localhost:6379
           SKIP_REDIS: true
           TESTING: true
+          IS_PRODUCTION: true
         run: |
           pytest -q
