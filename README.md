@@ -24,8 +24,6 @@
 ![Maintained](https://img.shields.io/maintenance/yes/2025?style=flat-square)
 ![Dependabot Status](https://img.shields.io/badge/dependencies-up--to--date-brightgreen?style=flat-square)
 
-<!-- Ruff Lint - popraw link do Twojego workflow w repo -->
-![Ruff Lint](https://github.com/michu1810/fastapi-foodtracker/.pre-commit-config.yaml/badge.svg?style=flat-square)
 ## 🎯 Misja Projektu
 
 Każdego roku w Polsce marnuje się blisko 5 milionów ton żywności. Wyrzucamy jedzenie, bo zapominamy o terminach ważności, kupujemy za dużo, źle planujemy. Postanowiłem wykorzystać swoje umiejętności techniczne, aby stworzyć narzędzie, które realnie pomaga walczyć z tym wszechobecnym problemem na poziomie każdego z nas.
