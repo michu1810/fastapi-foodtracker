@@ -61,12 +61,23 @@ Projektując architekturę backendu, postawiłem sobie kilka kluczowych celów: 
 
 -   **Konteneryzacja i Środowiska (Docker):** Cała aplikacja została zamknięta w kontenerach **Docker**, z osobnymi, zoptymalizowanymi konfiguracjami dla środowiska deweloperskiego (`docker-compose.yml`) i produkcyjnego (`docker-compose.prod.yml`). Dla zwiększenia bezpieczeństwa, procesy w kontenerach działają jako **użytkownik bez uprawnień roota**.
 
-## 🧪 Strategia Testowania
+---
 
-Wierzę, że solidne testy to fundament niezawodnego oprogramowania. Dlatego stworzyłem rozbudowany zestaw **testów automatycznych** napisanych przy użyciu `pytest`.
+## 🧪 Testy Automatyczne – Solidna Podstawa
 
--   **Izolacja:** Testy uruchamiane są w całkowicie izolowanym środowisku, z tymczasową bazą danych **SQLite w pamięci**, co zapewnia szybkość i powtarzalność wyników.
--   **Zakres:** Testy API weryfikują całe przepływy biznesowe, walidację danych wejściowych (zarówno poprawne, jak i błędne przypadki) oraz krytyczne aspekty bezpieczeństwa, takie jak weryfikacja, czy jeden użytkownik nie ma dostępu do danych innego.
+Testy są fundamentem jakości projektu:
+
+- **Pokrycie:** Obecnie około 79% kodu, z dążeniem do 80%+.
+- **Typy testów:**
+  - Testy jednostkowe logiki biznesowej.
+  - Testy integracyjne API z izolowaną bazą SQLite w pamięci.
+  - Mockowanie usług asynchronicznych (np. wysyłka maili, Celery).
+- **Izolacja:** Każdy test uruchamiany w czystym środowisku, gwarantując powtarzalność.
+- **Automatyzacja:** Integracja z GitHub Actions zapewnia automatyczne uruchamianie testów i pomiar pokrycia.
+
+Testy te pozwalają mi szybko reagować na zmiany i utrzymywać stabilność aplikacji w miarę rozwoju funkcjonalności.
+
+---
 
 ## 🚀 Uruchomienie Projektu (One-Click Setup)
 
