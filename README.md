@@ -1,5 +1,8 @@
 # 🍲 Food Tracker - Moje rozwiązanie problemu marnowania żywności
 
+![MIT License](https://img.shields.io/github/license/michu1810/fastapi-foodtracker)
+![Tests](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/tests.yml/badge.svg)
+
 ![Python](https://img.shields.io/badge/python-3.13-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green.svg)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)
