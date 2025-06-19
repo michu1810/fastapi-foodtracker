@@ -17,7 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY foodtracker/ .
 
 COPY start.sh .
-COPY test_db.py .
 
 RUN chown -R appuser:appuser /app
 
