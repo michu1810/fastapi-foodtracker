@@ -1,3 +1,3 @@
 #!/bin/bash
-alembic upgrade head
+alembic -c foodtracker_app/alembic.ini upgrade head
 exec "$@"
