@@ -2,9 +2,11 @@ from logging.config import fileConfig
 
 from alembic import context
 from foodtracker_app.db.database import Base
-from foodtracker_app.settings import settings
+
+# from foodtracker_app.settings import settings
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine.url import make_url
+import os
 
 
 # this is the Alembic Config object, which provides
@@ -26,9 +28,16 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-raw_url = settings.DATABASE_URL
+raw_url = os.getenv("DATABASE_URL")
+if not raw_url:
+    raise ValueError(
+        "BŁĄD KRYTYCZNY: Zmienna środowiskowa DATABASE_URL nie jest ustawiona!"
+    )
+
 sync_url = str(make_url(raw_url).set(drivername="postgresql"))
-print("▶ DEBUG ALEMBIC - DATABASE_URL:", raw_url)
+print(
+    "▶ DEBUG ALEMBIC - DATABASE_URL (z os.getenv):", raw_url
+)  # Zmieniony tekst dla jasności
 print("▶ DEBUG ALEMBIC - SYNC_URL:", sync_url)
 config.set_main_option("sqlalchemy.url", sync_url)
 
