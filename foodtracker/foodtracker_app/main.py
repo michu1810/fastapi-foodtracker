@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
@@ -86,3 +86,13 @@ app.include_router(external_router, tags=["External"])
 app.include_router(
     notifications_router, prefix="/notifications", tags=["Notifications"]
 )
+
+health_router = APIRouter()
+
+
+@health_router.get("/health", include_in_schema=False)
+def health_check():
+    return {"status": "ok"}
+
+
+app.include_router(health_router)

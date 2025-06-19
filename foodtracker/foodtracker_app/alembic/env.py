@@ -4,12 +4,12 @@ from alembic import context
 from foodtracker_app.db.database import Base
 from foodtracker_app.settings import settings
 from sqlalchemy import engine_from_config, pool
+from sqlalchemy.engine.url import make_url
 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -26,6 +26,9 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+raw_url = settings.DATABASE_URL
+sync_url = str(make_url(raw_url).set(drivername="postgresql"))  # ← NEW
+config.set_main_option("sqlalchemy.url", sync_url)
 
 
 def run_migrations_offline() -> None:
