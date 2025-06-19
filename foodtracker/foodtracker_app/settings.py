@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -39,8 +38,6 @@ class Settings(BaseSettings):
     IS_PRODUCTION: bool = os.getenv("IS_PRODUCTION", "false").lower() == "true"
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).resolve().parent.parent / ".env",
-        env_file_encoding="utf-8",
         extra="allow",
     )
 
