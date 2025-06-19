@@ -20,4 +20,4 @@ RUN chown -R appuser:appuser /app
 
 USER appuser
 
-CMD ["uvicorn", "foodtracker_app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["bash", "start.sh", "uvicorn", "foodtracker_app.main:app", "--host", "0.0.0.0", "--port", "8000"]
