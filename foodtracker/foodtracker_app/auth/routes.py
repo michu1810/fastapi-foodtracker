@@ -41,7 +41,6 @@ from foodtracker_app.models.user import User
 from foodtracker_app.services import achievement_service
 from foodtracker_app.settings import settings
 from foodtracker_app.utils.recaptcha import verify_recaptcha
-from jose import JWTError
 from rate_limiter import limiter
 from sqlalchemy import Date, case, cast, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -713,11 +712,12 @@ async def refresh_token(refresh_token: str = Cookie(None)):
 
     try:
         payload = decode_token(refresh_token)
-        email = payload.get("sub")
-        if not email:
-            raise HTTPException(status_code=401, detail="Brak sub w refresh tokenie")
-    except JWTError:
+    except Exception:
         raise HTTPException(status_code=401, detail="Refresh token niepoprawny")
+
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=401, detail="Brak sub w refresh tokenie")
 
     new_access_token = create_access_token({"sub": email})
     return {"access_token": new_access_token, "token_type": "bearer"}

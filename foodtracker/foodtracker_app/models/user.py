@@ -1,7 +1,8 @@
-from foodtracker_app.db.database import Base
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+
+from foodtracker_app.db.database import Base, TZDateTime
 
 
 class User(Base):
@@ -13,14 +14,16 @@ class User(Base):
 
     is_verified = Column(Boolean, default=False)
     verification_token = Column(String, nullable=True)
-    token_expires_at = Column(DateTime(timezone=True), nullable=True)
+
+    token_expires_at = Column(TZDateTime, nullable=True)
 
     reset_password_token = Column(String, nullable=True)
-    reset_password_expires_at = Column(DateTime(timezone=True), nullable=True)
 
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    reset_password_expires_at = Column(TZDateTime, nullable=True)
+
+    created_at = Column(TZDateTime, server_default=func.now())
+
     avatar_url = Column(String, nullable=True)
-
     social_provider = Column(String, nullable=True)
 
     products = relationship(

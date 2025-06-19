@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 
 import pytest
 
@@ -37,7 +37,7 @@ async def test_create_product_with_past_expiration(authenticated_client, fixed_d
         "/products/create",
         json={
             "name": "stare jajko",
-            "expiration_date": str(fixed_date - timedelta(days=1)),
+            "expiration_date": str((date.today() - timedelta(days=1))),
             "price": 1.0,
             "unit": "szt.",
             "initial_amount": 1,

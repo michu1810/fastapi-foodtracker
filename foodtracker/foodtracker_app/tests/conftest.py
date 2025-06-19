@@ -1,6 +1,5 @@
 import os
 from datetime import date, timedelta
-
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -78,7 +77,6 @@ async def authenticated_client_factory(client: AsyncClient):
                 session.add(user)
                 await session.commit()
             else:
-                # Na wypadek, gdyby is_verified trzeba było nadpisać istniejącemu userowi (opcjonalnie)
                 user.is_verified = is_verified
                 await session.commit()
 
@@ -100,7 +98,7 @@ async def authenticated_client(authenticated_client_factory):
 
 @pytest.fixture
 def fixed_date():
-    return date(2025, 6, 17)
+    return date.today() + timedelta(days=30)
 
 
 @pytest_asyncio.fixture
