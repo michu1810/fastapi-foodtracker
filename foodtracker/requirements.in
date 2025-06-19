@@ -27,4 +27,5 @@ python-magic
 slowapi
 pytest-cov
 pytest-mock
+pytest-httpx
 respx

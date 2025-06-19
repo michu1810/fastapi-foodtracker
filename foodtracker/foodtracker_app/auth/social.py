@@ -58,15 +58,15 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
 async def resolve_user_data(response) -> dict:
     try:
         return await response.json()
-    except TypeError:
+    except Exception:
         try:
             return response.json()
         except Exception:
             pass
-    except AttributeError:
-        pass
+
     if isinstance(response, dict):
         return response
+
     raise TypeError(f"Nieobsługiwany typ odpowiedzi: {type(response)}")
 
 
@@ -93,7 +93,6 @@ async def google_callback(
 
     user = await get_or_create_user(db, email, provider="google")
 
-    # 1. Tworzymy OBA tokeny, tak jak przy standardowym logowaniu
     access_token = create_access_token(
         {"sub": user.email, "provider": user.social_provider}
     )
@@ -101,7 +100,6 @@ async def google_callback(
         {"sub": user.email, "provider": user.social_provider}
     )
 
-    # 2. Tworzymy odpowiedź przekierowującą
     response = RedirectResponse(
         url=f"{settings.FRONTEND_URL}/google/callback?token={access_token}"
     )
@@ -151,7 +149,6 @@ async def github_callback(
 
     user = await get_or_create_user(db, email, provider="github")
 
-    # 1. Tworzymy OBA tokeny
     access_token = create_access_token(
         {"sub": user.email, "provider": user.social_provider}
     )
@@ -159,12 +156,10 @@ async def github_callback(
         {"sub": user.email, "provider": user.social_provider}
     )
 
-    # 2. Tworzymy odpowiedź przekierowującą
     response = RedirectResponse(
         url=f"{settings.FRONTEND_URL}/github/callback?token={access_token}"
     )
 
-    # 3. USTAWIAMY CIASTECZKO z refresh tokenem na tej odpowiedzi
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
