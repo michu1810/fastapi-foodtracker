@@ -77,16 +77,16 @@ Projektując architekturę backendu, postawiłem sobie kilka kluczowych celów: 
 
 Testy są fundamentem jakości projektu:
 
-- **Pokrycie:** Obecnie około 79% kodu, z dążeniem do 80%+.
+- **Pokrycie Kodu (Coverage):** Obecnie około 87% kodu aplikacji jest objęte testami, ze szczególnym naciskiem na 100% pokrycia dla kluczowych modułów, takich jak uwierzytelnianie.
+- **Framework:** Cały zestaw testów oparty jest na Pytest, z wykorzystaniem jego zaawansowanych funkcji, takich jak fixtury i parametryzacja.
 - **Typy testów:**
-  - Testy jednostkowe logiki biznesowej.
-  - Testy integracyjne API z izolowaną bazą SQLite w pamięci.
+  - Testy jednostkowe dla logiki biznesowej (np. system osiągnięć, funkcje pomocnicze).
+  - Testy integracyjne API z izolowaną, w pełni funkcjonalną bazą danych SQLite w pamięci, co zapewnia szybkość i powtarzalność.
   - Mockowanie usług asynchronicznych (np. wysyłka maili, Celery).
 - **Izolacja:** Każdy test uruchamiany w czystym środowisku, gwarantując powtarzalność.
-- **Automatyzacja:** Integracja z GitHub Actions zapewnia automatyczne uruchamianie testów i pomiar pokrycia.
+- **Automatyzacja:** Proces CI/CD z użyciem GitHub Actions automatycznie uruchamia cały zestaw testów po każdym commicie, zapewniając stałą kontrolę jakości i mierząc pokrycie kodu za pomocą Codecov.
 
-Testy te pozwalają mi szybko reagować na zmiany i utrzymywać stabilność aplikacji w miarę rozwoju funkcjonalności.
-
+    Dzięki takiemu podejściu mogę szybko i bezpiecznie rozwijać aplikację, mając pewność, że jej fundamenty są solidne i niezawodne.
 ---
 
 ## 🚀 Uruchomienie Projektu (One-Click Setup)
