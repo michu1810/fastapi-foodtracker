@@ -27,9 +27,11 @@ class Settings(BaseSettings):
     GITHUB_CLIENT_SECRET: str
 
     RECAPTCHA_SECRET_KEY: str
+    CORS_ORIGINS: list[str] = []
 
     FRONTEND_URL: str
     REDIS_URL: str
+    UPLOADS_DIR: str = "uploads"
 
     SKIP_REDIS: bool = False
     TESTING: bool = os.getenv("TESTING", "false").lower() == "true"

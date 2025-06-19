@@ -46,7 +46,7 @@ from sqlalchemy import Date, case, cast, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-MEDIA_DIR = Path(__file__).resolve().parent.parent / "uploads" / "avatars"
+MEDIA_DIR = Path(settings.UPLOADS_DIR) / "avatars"
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 MEDIA_URL = "/uploads/avatars/"
 
