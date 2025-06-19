@@ -27,7 +27,9 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 raw_url = settings.DATABASE_URL
-sync_url = str(make_url(raw_url).set(drivername="postgresql"))  # ← NEW
+sync_url = str(make_url(raw_url).set(drivername="postgresql"))
+print("▶ DEBUG ALEMBIC - DATABASE_URL:", raw_url)
+print("▶ DEBUG ALEMBIC - SYNC_URL:", sync_url)
 config.set_main_option("sqlalchemy.url", sync_url)
 
 
