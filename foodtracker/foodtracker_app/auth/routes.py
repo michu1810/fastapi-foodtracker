@@ -68,7 +68,7 @@ async def upload_avatar(
 
     public_id = f"user_{user.id}"
 
-    avatar_url = upload_image(file.file, public_id)
+    avatar_url = upload_image(file_content, public_id)
 
     if not avatar_url:
         raise HTTPException(status_code=500, detail="Nie udało się wgrać obrazka.")
