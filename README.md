@@ -35,23 +35,23 @@ Food Tracker is a full-stack web application designed and built from the ground 
 ### 🌟 Key Features
 
 * **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
-* **Secure JWT Authentication:** A robust system based on JWT `access` and `refresh` tokens, with the refresh token stored securely in an `HttpOnly` cookie to prevent XSS attacks.
+* **Modern Authentication:** JWT-based system with `access` and `refresh` tokens, stored securely in `HttpOnly` cookies.
 * **Product Management (CRUD):** Full control over the home pantry with smart expiration date suggestions for fresh, unlabeled products.
+* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggest product details.
 * **Automated Notifications:** Daily, asynchronous email notifications for expiring products, powered by **Celery Beat** and background workers.
-* **Analytics & Data Visualization:** Advanced financial statistics, trend charts with proper timezone handling, and savings forecasts.
-* **Gamification System:** Over 20 unlockable achievements to motivate users and encourage consistent engagement.
+* **Data Analytics & Gamification:** Financial statistics, data visualization charts with proper timezone handling, and an achievement system to boost user engagement.
 * **Modern & Responsive UI:** A **Mobile-First** design approach ensures the application is fully functional and beautiful on any device.
 
 ### 🛠️ Tech Stack
 
 | Category | Technologies |
 | :--- | :--- |
-| **Backend** | Python 3.13, FastAPI (Async), SQLAlchemy 2.0 (Async), Celery, Pydantic |
+| **Backend** | Python 3.13, FastAPI (Async), PostgreSQL, SQLAlchemy 2.0 (Async), Celery, Pydantic |
 | **Frontend** | React, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
 | **Database** | PostgreSQL, Redis (for Celery), Alembic (for migrations) |
 | **Testing** | Pytest, Pytest-asyncio, HTTPX, Codecov |
 | **DevOps** | Docker, Docker Compose, GitHub Actions (CI/CD) |
-| **Services** | OAuth2 (Google & GitHub), JWT, Bcrypt, Cloudinary |
+| **Services** | OAuth2 (Google & GitHub), JWT, Bcrypt, Cloudinary, Ruff |
 
 ---
 
@@ -99,23 +99,27 @@ When designing the backend architecture, I set several key goals: **security, pe
 
 -   **Authentication and Security:** I implemented authentication based on **JWTs**. The long-lived `refresh_token` is stored in a secure **`HttpOnly` cookie**, which is an industry standard for protection against **XSS** attacks. User passwords are protected with the strong, adaptive **bcrypt** algorithm.
 
+-   **API Rate Limiting:** Implemented request throttling using **`slowapi`** to protect endpoints against brute-force attacks and denial-of-service (DoS) attempts, enhancing application security and stability.
+
 -   **Asynchronous Background Tasks (Celery):** Sending emails and periodically checking expiration dates are delegated to **Celery** asynchronous tasks. This ensures the API remains responsive at all times. **Celery Beat** acts as a built-in scheduler, guaranteeing the automation of key processes.
 
 -   **Database (PostgreSQL & SQLAlchemy):** I opted for a fully **asynchronous database stack** with `asyncpg` and `AsyncSession` in SQLAlchemy. To manage database schema changes, I used **Alembic**, which provides versioning and ensures safe migrations. Financial values are stored using the precise **`Decimal`** type to avoid rounding errors.
 
 -   **Containerization (Docker):** The entire application is containerized using **Docker**, with separate, optimized configurations for development (`docker-compose.yml`) and production (`docker-compose.prod.yml`). For enhanced security, the processes inside the containers run as a **non-root user**.
 
--   **File Storage (Cloudinary):** User avatars are uploaded to and served from **Cloudinary**, an external, scalable object storage service. This offloads the application server and ensures fast media delivery.
+-   **Secure File Storage (Cloudinary):** User avatars are validated on the backend by their **MIME type** (using `python-magic`) before being uploaded to **Cloudinary**, an external, scalable object storage service. This offloads the application server and ensures fast, secure media delivery.
 </details>
 
 ### <details><summary>🧪 Automated Testing - A Solid Foundation (Click to expand)</summary>
+
+-   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. This ensures high code quality, consistency, and adherence to best practices across the project.
 -   **Code Coverage:** I aim for the highest possible code coverage (currently around 85-90%), with a strong focus on achieving 100% coverage for critical modules like authentication.
 -   **Framework:** The entire test suite is based on **Pytest**, leveraging its advanced features like fixtures and parametrization.
 -   **Test Types:**
     -   **Unit tests** for business logic (e.g., the achievement system, helper functions).
     -   **Integration tests** for the API, using an isolated, in-memory SQLite database for speed and reliability.
     -   **Mocking** of external and asynchronous services (e.g., email dispatch, Cloudinary API, Celery tasks).
--   **Automation (CI/CD):** A process using **GitHub Actions** automatically runs the entire test suite after every commit, ensuring constant quality control and measuring code coverage with **Codecov**.
+-   **Automation (CI/CD):** A process using **GitHub Actions** automatically runs the linter (`ruff check`) and the entire test suite after every commit, ensuring constant quality control and measuring code coverage with **Codecov**.
 
 This comprehensive testing approach allows me to develop the application quickly and safely, confident that its foundations are solid and reliable.
 </details>
@@ -126,5 +130,11 @@ This comprehensive testing approach allows me to develop the application quickly
 
 Crafted with passion from A to Z by **Michał Jamros**.
 
-[![github](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/michu1810)
-[![linkedin](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/michal-jamros/)
+<p align="center">
+    <a href="https://github.com/michu1810" target="_blank">
+        <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+    </a>
+    <a href="https://www.linkedin.com/in/michal-jamros/" target="_blank">
+        <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+    </a>
+</p>
