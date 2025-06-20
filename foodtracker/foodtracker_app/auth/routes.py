@@ -582,8 +582,8 @@ async def get_product_trends(
     user: User = Depends(get_current_user),
 ):
     """
-    Zwraca dzienne trendy dodawania produktów na podstawie sumy ich ilości,
-    z poprawną obsługą lokalnej strefy czasowej (Europe/Warsaw).
+    Zwraca dzienne trendy dodawania produktów, poprawnie obsługując
+    jednostki (sztuki vs. waga/objętość) oraz strefy czasowe.
     """
     warsaw_tz = ZoneInfo("Europe/Warsaw")
     end_date = datetime.now(warsaw_tz).date()
@@ -594,7 +594,15 @@ async def get_product_trends(
     query = (
         select(
             cast(local_created_at, Date).label("day"),
-            coalesce(func.sum(Product.initial_amount), 0).label("total_quantity"),
+            coalesce(
+                func.sum(
+                    case(
+                        (Product.unit == "szt.", Product.initial_amount),
+                        else_=1,
+                    )
+                ),
+                0,
+            ).label("total_items"),
         )
         .where(Product.user_id == user.id)
         .where(cast(local_created_at, Date) >= start_date)
@@ -603,17 +611,17 @@ async def get_product_trends(
     )
 
     result = await db.execute(query)
-    db_data = {row.day: row.total_quantity for row in result.all()}
+    db_data = {row.day: row.total_items for row in result.all()}
 
     trends: List[TrendData] = []
     for i in range(range_days):
         current_date = start_date + timedelta(days=i)
-        quantity_added = db_data.get(current_date, 0)
+        items_added = db_data.get(current_date, 0)
 
         trends.append(
             TrendData(
                 period=current_date.strftime("%d.%m"),
-                added=int(quantity_added),
+                added=int(items_added),
                 used=0,
                 wasted=0,
             )
