@@ -1,11 +1,9 @@
-# 🍲 Food Tracker - Moje rozwiązanie problemu marnowania żywności
+# 🍲 Food Tracker – Reducing Food Waste with Code
 
-<!-- Licencja i statusy testów -->
 ![MIT License](https://img.shields.io/github/license/michu1810/fastapi-foodtracker?style=flat-square)
 ![Tests](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/tests.yml/badge.svg?style=flat-square)
 [![codecov](https://codecov.io/gh/michu1810/fastapi-foodtracker/branch/main/graph/badge.svg?token=87SFXHBP46)](https://codecov.io/gh/michu1810/fastapi-foodtracker)
 
-<!-- Technologie -->
 ![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?style=flat-square)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red?style=flat-square)
@@ -16,120 +14,119 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
 ![Pytest](https://img.shields.io/badge/pytest-✓-green?style=flat-square)
 
-<!-- Statystyki repozytorium -->
-![Issues](https://img.shields.io/github/issues/michu1810/fastapi-foodtracker?style=flat-square)
-![Forks](https://img.shields.io/github/forks/michu1810/fastapi-foodtracker?style=flat-square)
-![Stars](https://img.shields.io/github/stars/michu1810/fastapi-foodtracker?style=flat-square)
-![Last Commit](https://img.shields.io/github/last-commit/michu1810/fastapi-foodtracker?style=flat-square)
-![Maintained](https://img.shields.io/maintenance/yes/2025?style=flat-square)
-![Dependabot Status](https://img.shields.io/badge/dependencies-up--to--date-brightgreen?style=flat-square)
+# 🍲 Food Tracker – An Application to Combat Food Waste
 
-## 🎯 Misja Projektu
+Food Tracker is a full-stack web application designed and built from the ground up to help users reduce food waste, manage their home pantry, and save money.
 
-Każdego roku w Polsce marnuje się blisko 5 milionów ton żywności. Wyrzucamy jedzenie, bo zapominamy o terminach ważności, kupujemy za dużo, źle planujemy. Postanowiłem wykorzystać swoje umiejętności techniczne, aby stworzyć narzędzie, które realnie pomaga walczyć z tym wszechobecnym problemem na poziomie każdego z nas.
-
-**Food Tracker** to moja odpowiedź na to wyzwanie. To w pełni funkcjonalna aplikacja webowa, którą zaprojektowałem i zbudowałem od podstaw, aby dać użytkownikom prosty i skuteczny sposób na zarządzanie domową spiżarnią, oszczędzanie pieniędzy i dbanie o naszą planetę.
-
-To repozytorium to nie tylko kod – to demonstracja mojego podejścia do tworzenia kompleksowych, bezpiecznych i wydajnych systemów backendowych.
-
-## 🌟 Co Zaimplementowałem? Główne Funkcjonalności
-
-Aplikacja oferuje szeroki zakres funkcjonalności, które odzwierciedlają realne potrzeby i motywują do działania:
-
-#### Zarządzanie Użytkownikiem
-- **Pełen cykl życia konta:** Od rejestracji, przez weryfikację email, logowanie, po bezpieczną zmianę i resetowanie hasła.
-- **Logowanie przez OAuth2:** Zaimplementowałem wygodne logowanie przez konta Google i GitHub.
-- **Bezpieczeństwo sesji:** Stworzyłem system oparty na tokenach JWT z mechanizmem Access i Refresh Token.
-
-#### Logika Biznesowa Aplikacji
-- **Inteligentne Zarządzanie Produktami (CRUD):** Pełna obsługa dodawania, edytowania i usuwania produktów spożywczych.
-- **Asynchroniczne Powiadomienia:** Zaprojektowałem automatyczny system codziennych powiadomień email o produktach, których termin ważności wkrótce upływa, wykorzystując do tego Celery.
-- **Obsługa Produktów Świeżych:** Aplikacja potrafi sugerować datę ważności dla produktów bez etykiety (np. warzyw) na podstawie daty ich zakupu.
-
-#### Analityka i Gamifikacja
-- **Statystyki Finansowe:** Użytkownik może śledzić realne oszczędności wynikające z niemarnowania kupionej żywności.
-- **Wizualizacja Danych:** Zbudowałem endpointy do generowania wykresów trendów, które poprawnie obsługują strefy czasowe, aby dane zawsze były spójne dla użytkownika.
-- **System Osiągnięć:** Zaprojektowałem i wdrożyłem ponad 20 różnych osiągnięć, aby motywować użytkowników poprzez gamifikację.
-
-## 📱 Design i User Experience (UI/UX)
-
-- **Pełna responsywność (RWD):** Interfejs użytkownika został zaprojektowany w podejściu **Mobile-First**. Aplikacja jest w pełni użyteczna i komfortowa w obsłudze zarówno na dużych ekranach desktopowych, jak i na tabletach i smartfonach.
-- **Nowoczesny Design:** Do budowy UI wykorzystałem **Tailwind CSS**, co pozwoliło na szybkie tworzenie spójnego i estetycznego designu.
-- **Wsparcie AI w UI:** W celu maksymalizacji efektywności i skupienia się na logice backendowej, UI/UX frontendu było częściowo konsultowane i prototypowane przy wsparciu AI, co pozwoliło na szybkie stworzenie w pełni funkcjonalnej "witryny" dla potężnego API.
-
-## 🛡️ Architektura i Rozwiązania Techniczne (Backend Deep Dive)
-
-Projektując architekturę backendu, postawiłem sobie kilka kluczowych celów: **bezpieczeństwo, wydajność i skalowalność**. Poniżej przedstawiam najważniejsze decyzje techniczne, które podjąłem, aby je osiągnąć:
-
--   **API Design (FastAPI):** Wybrałem asynchroniczny framework **FastAPI**, aby zapewnić ekstremalnie wysoką wydajność i niskie opóźnienia, nawet pod dużym obciążeniem. Wykorzystałem wbudowany mechanizm **Dependency Injection** do zarządzania sesjami bazy danych i weryfikacji tożsamości użytkownika.
-
--   **Uwierzytelnianie i Bezpieczeństwo:** Zaimplementowałem uwierzytelnianie oparte na **tokenach JWT**. Długożyjący `refresh_token` przechowuję w bezpiecznym ciasteczku **`HttpOnly`**, co stanowi branżowy standard ochrony przed atakami **XSS**. Hasła użytkowników są chronione za pomocą silnego, adaptacyjnego algorytmu **bcrypt**.
-
--   **Asynchroniczne Zadania w Tle (Celery):** Wysyłkę maili i cykliczne sprawdzanie dat ważności oddelegowałem do asynchronicznych zadań **Celery**. Dzięki temu API pozostaje responsywne. **Celery Beat** działa jako wbudowany harmonogram, gwarantując automatyzację kluczowych procesów.
-
--   **Baza Danych (PostgreSQL & SQLAlchemy):** Postawiłem na w pełni **asynchroniczny stos bazodanowy** z `asyncpg` i `AsyncSession` w SQLAlchemy. Do zarządzania zmianami w schemacie bazy użyłem **Alembic**, co zapewnia wersjonowanie i bezpieczeństwo migracji. Wartości finansowe przechowuję jako precyzyjny typ **`Decimal`**, aby uniknąć błędów zaokrągleń.
-
--   **Konteneryzacja i Środowiska (Docker):** Cała aplikacja została zamknięta w kontenerach **Docker**, z osobnymi, zoptymalizowanymi konfiguracjami dla środowiska deweloperskiego (`docker-compose.yml`) i produkcyjnego (`docker-compose.prod.yml`). Dla zwiększenia bezpieczeństwa, procesy w kontenerach działają jako **użytkownik bez uprawnień roota**.
+<p align="center">
+  <a href="https://fastapi-foodtracker.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Launch%20Live%20Demo-007ACC?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo"/>
+  </a>
+</p>
 
 ---
 
-## 🧪 Testy Automatyczne – Solidna Podstawa
+### 🖼️ Application Gallery
 
-Testy są fundamentem jakości projektu:
+| Login & Registration | Main Dashboard | Statistics | Achievements |
+| :---: | :---: | :---: | :---: |
+| ![Login Page](https://imgur.com/FF3zlVz.png) | ![Main Dashboard](https://imgur.com/3ciOqZF.png) | ![Statistics Page](https://imgur.com/xAzbQE2.png) | ![Achievements Page](https://imgur.com/JnkB6KY.png) |
 
-- **Pokrycie Kodu (Coverage):** Obecnie około 87% kodu aplikacji jest objęte testami, ze szczególnym naciskiem na 100% pokrycia dla kluczowych modułów, takich jak uwierzytelnianie.
-- **Framework:** Cały zestaw testów oparty jest na Pytest, z wykorzystaniem jego zaawansowanych funkcji, takich jak fixtury i parametryzacja.
-- **Typy testów:**
-  - Testy jednostkowe dla logiki biznesowej (np. system osiągnięć, funkcje pomocnicze).
-  - Testy integracyjne API z izolowaną, w pełni funkcjonalną bazą danych SQLite w pamięci, co zapewnia szybkość i powtarzalność.
-  - Mockowanie usług asynchronicznych (np. wysyłka maili, Celery).
-- **Izolacja:** Każdy test uruchamiany w czystym środowisku, gwarantując powtarzalność.
-- **Automatyzacja:** Proces CI/CD z użyciem GitHub Actions automatycznie uruchamia cały zestaw testów po każdym commicie, zapewniając stałą kontrolę jakości i mierząc pokrycie kodu za pomocą Codecov.
-
-    Dzięki takiemu podejściu mogę szybko i bezpiecznie rozwijać aplikację, mając pewność, że jej fundamenty są solidne i niezawodne.
 ---
 
-## 🚀 Uruchomienie Projektu (One-Click Setup)
+### 🌟 Key Features
 
-Dzięki pełnej konteneryzacji, cały projekt (backend, baza danych, Redis, Celery oraz serwer deweloperski frontendu) można uruchomić za pomocą jednej komendy.
+* **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
+* **Secure JWT Authentication:** A robust system based on JWT `access` and `refresh` tokens, with the refresh token stored securely in an `HttpOnly` cookie to prevent XSS attacks.
+* **Product Management (CRUD):** Full control over the home pantry with smart expiration date suggestions for fresh, unlabeled products.
+* **Automated Notifications:** Daily, asynchronous email notifications for expiring products, powered by **Celery Beat** and background workers.
+* **Analytics & Data Visualization:** Advanced financial statistics, trend charts with proper timezone handling, and savings forecasts.
+* **Gamification System:** Over 20 unlockable achievements to motivate users and encourage consistent engagement.
+* **Modern & Responsive UI:** A **Mobile-First** design approach ensures the application is fully functional and beautiful on any device.
 
-1.  **Sklonuj repozytorium:**
+### 🛠️ Tech Stack
+
+| Category | Technologies |
+| :--- | :--- |
+| **Backend** | Python 3.13, FastAPI (Async), SQLAlchemy 2.0 (Async), Celery, Pydantic |
+| **Frontend** | React, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
+| **Database** | PostgreSQL, Redis (for Celery), Alembic (for migrations) |
+| **Testing** | Pytest, Pytest-asyncio, HTTPX, Codecov |
+| **DevOps** | Docker, Docker Compose, GitHub Actions (CI/CD) |
+| **Services** | OAuth2 (Google & GitHub), JWT, Bcrypt, Cloudinary |
+
+---
+
+### 🚀 Running Locally
+
+The entire project is containerized, allowing for a one-command setup.
+
+#### Prerequisites
+* [Git](https://git-scm.com/)
+* [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
+
+#### Steps
+1.  **Clone the repository:**
     ```bash
     git clone [https://github.com/michu1810/fastapi-foodtracker.git](https://github.com/michu1810/fastapi-foodtracker.git)
     cd fastapi-foodtracker
     ```
 
-2.  **Skonfiguruj zmienne środowiskowe:**
-    Stwórz pliki `.env` w folderach `foodtracker/` oraz `frontend/` na podstawie znajdujących się tam plików `.env.example`. Uzupełnij je wymaganymi kluczami.
+2.  **Configure environment variables:**
+    Create `.env` files in the `foodtracker/` and `frontend/` directories based on the `.env.example` files found there. Fill them with the required keys (e.g., for OAuth2, database, Cloudinary).
 
-3.  **Zbuduj i uruchom całą aplikację:**
+3.  **Build and run the application:**
     ```bash
     docker-compose up --build
     ```
 
-4.  **Gotowe!**
-    -   Aplikacja frontendowa jest dostępna pod adresem: `http://localhost:5173`
-    -   Interaktywna dokumentacja API (Swagger UI) pod: `http://localhost:8000/docs`
+4.  **Ready to Go! The application is available at:**
+    * 🚀 **Frontend:** `http://localhost:5173`
+    * 📚 **API Documentation (Swagger UI):** `http://localhost:8000/docs`
 
-## 🖼️ Galeria
+---
 
-*(Poniżej znajdują się zrzuty ekranu prezentujące aplikację.)*
+### <details><summary>🎯 Project Mission (Click to expand)</summary>
 
-![Logowanie](https://imgur.com/FF3zlVz.png)
-_Strona logowania z opcjami OAuth._
+Every year, millions of tons of food are wasted. In Poland alone, this figure is close to 5 million tons. We throw food away because we forget about expiration dates, buy too much, or plan poorly. I decided to leverage my technical skills to create a tool that actively helps combat this ubiquitous problem at the individual level.
 
-![Panel Glowny](https://imgur.com/3ciOqZF.png)
-_Panel główny aplikacji z kalendarzem, mini statystykami pod kalendarzem oraz panelem wkrótce wygasajacych produktów._
+**Food Tracker** is my answer to this challenge. It is a fully functional web application that I designed and built from scratch to give users a simple and effective way to manage their home pantry, save money, and care for our planet. This repository is not just code—it's a demonstration of my approach to building complex, secure, and efficient full-stack systems.
+</details>
 
-![Statystyki](https://imgur.com/xAzbQE2.png)
-_Strona ze statystykami gdzie można kontrolować to w jakim tempie ratujemy jedzenie oraz ile oszczędzamy dzięki aplikacji._
+### <details><summary>🛡️ Backend Architecture - A Deep Dive (Click to expand)</summary>
 
-![Osiagniecia](https://imgur.com/JnkB6KY.png)
-_Strona z osiągnięciami użytkownika motywująca do dalszego korzystania z aplikacji._
+When designing the backend architecture, I set several key goals: **security, performance, and scalability**. Below are the most important technical decisions I made to achieve them:
 
-![Profil uzytkownika](https://imgur.com/fl8mInj.png)
-_Strona profilu użytkownika z opcjami zmiany hasła, dodania zdjęcia profilowego oraz usunięcia konta._
-## 👤 Autor
+-   **API Design (FastAPI):** I chose the asynchronous framework **FastAPI** to ensure extremely high performance and low latency, even under heavy load. I utilized the built-in **Dependency Injection** system to manage database sessions and user authentication.
 
-Projekt stworzony przeze mnie od A do Z. <br>
-**Michał Jamros** - [github.com/michu1810](https://github.com/michu1810)
+-   **Authentication and Security:** I implemented authentication based on **JWTs**. The long-lived `refresh_token` is stored in a secure **`HttpOnly` cookie**, which is an industry standard for protection against **XSS** attacks. User passwords are protected with the strong, adaptive **bcrypt** algorithm.
+
+-   **Asynchronous Background Tasks (Celery):** Sending emails and periodically checking expiration dates are delegated to **Celery** asynchronous tasks. This ensures the API remains responsive at all times. **Celery Beat** acts as a built-in scheduler, guaranteeing the automation of key processes.
+
+-   **Database (PostgreSQL & SQLAlchemy):** I opted for a fully **asynchronous database stack** with `asyncpg` and `AsyncSession` in SQLAlchemy. To manage database schema changes, I used **Alembic**, which provides versioning and ensures safe migrations. Financial values are stored using the precise **`Decimal`** type to avoid rounding errors.
+
+-   **Containerization (Docker):** The entire application is containerized using **Docker**, with separate, optimized configurations for development (`docker-compose.yml`) and production (`docker-compose.prod.yml`). For enhanced security, the processes inside the containers run as a **non-root user**.
+
+-   **File Storage (Cloudinary):** User avatars are uploaded to and served from **Cloudinary**, an external, scalable object storage service. This offloads the application server and ensures fast media delivery.
+</details>
+
+### <details><summary>🧪 Automated Testing - A Solid Foundation (Click to expand)</summary>
+-   **Code Coverage:** I aim for the highest possible code coverage (currently around 85-90%), with a strong focus on achieving 100% coverage for critical modules like authentication.
+-   **Framework:** The entire test suite is based on **Pytest**, leveraging its advanced features like fixtures and parametrization.
+-   **Test Types:**
+    -   **Unit tests** for business logic (e.g., the achievement system, helper functions).
+    -   **Integration tests** for the API, using an isolated, in-memory SQLite database for speed and reliability.
+    -   **Mocking** of external and asynchronous services (e.g., email dispatch, Cloudinary API, Celery tasks).
+-   **Automation (CI/CD):** A process using **GitHub Actions** automatically runs the entire test suite after every commit, ensuring constant quality control and measuring code coverage with **Codecov**.
+
+This comprehensive testing approach allows me to develop the application quickly and safely, confident that its foundations are solid and reliable.
+</details>
+
+---
+
+### 👤 Author
+
+Crafted with passion from A to Z by **Michał Jamros**.
+
+[![github](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/michu1810)
+[![linkedin](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/michal-jamros/)
