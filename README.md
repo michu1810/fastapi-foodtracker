@@ -14,8 +14,6 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
 ![Pytest](https://img.shields.io/badge/pytest-✓-green?style=flat-square)
 
-# 🍲 Food Tracker – An Application to Combat Food Waste
-
 Food Tracker is a full-stack web application designed and built from the ground up to help users reduce food waste, manage their home pantry, and save money.
 
 <p align="center">
