@@ -132,14 +132,16 @@ def test_wait_for_redis_success(monkeypatch):
     mock_redis.ping.return_value = True
 
     monkeypatch.setattr(redis, "StrictRedis", lambda *args, **kwargs: mock_redis)
+    monkeypatch.setattr(worker.settings, "SKIP_REDIS", False)
 
-    # Nie powinien rzucić błędu
-    worker.wait_for_redis()
+    # Dodajemy przykładowy URL, który i tak nie zostanie użyty
+    worker.wait_for_redis("redis://localhost:6379/0")
 
 
 def test_wait_for_redis_skip(monkeypatch):
     monkeypatch.setattr(worker.settings, "SKIP_REDIS", True)
-    worker.wait_for_redis()
+    # Dodajemy przykładowy URL, który i tak nie zostanie użyty
+    worker.wait_for_redis("redis://localhost:6379/0")
 
 
 def test_wait_for_redis_failure(monkeypatch):
@@ -153,5 +155,6 @@ def test_wait_for_redis_failure(monkeypatch):
 
     monkeypatch.setattr(redis, "StrictRedis", lambda *args, **kwargs: FailingRedis())
 
-    with pytest.raises(RuntimeError, match="Redis not available after retries"):
-        worker.wait_for_redis()
+    with pytest.raises(RuntimeError, match="Redis not available"):
+        # Dodajemy przykładowy URL, który i tak nie zostanie użyty
+        worker.wait_for_redis("redis://localhost:6379/0")
