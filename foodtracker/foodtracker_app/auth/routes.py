@@ -1,4 +1,3 @@
-import shutil
 import uuid
 from datetime import UTC, date, datetime, timedelta, timezone
 from decimal import Decimal
@@ -40,6 +39,7 @@ from foodtracker_app.models.financial_stats import FinancialStat
 from foodtracker_app.models.product import Product
 from foodtracker_app.models.user import User
 from foodtracker_app.services import achievement_service
+from foodtracker_app.services.cloudinary_service import upload_image
 from foodtracker_app.settings import settings
 from foodtracker_app.utils.recaptcha import verify_recaptcha
 from rate_limiter import limiter
@@ -63,10 +63,7 @@ async def upload_avatar(
     db: AsyncSession = Depends(get_async_session),
 ):
     MAX_FILE_SIZE = 5 * 1024 * 1024
-
     file_content = await file.read()
-    await file.seek(0)
-
     if len(file_content) > MAX_FILE_SIZE:
         raise HTTPException(413, "Plik jest za duży. Maksymalny rozmiar to 5MB.")
 
@@ -74,14 +71,14 @@ async def upload_avatar(
     if mime_type not in {"image/png", "image/jpeg"}:
         raise HTTPException(400, "Niepoprawny typ MIME. Dozwolone: PNG, JPG.")
 
-    extension = ".jpg" if mime_type == "image/jpeg" else ".png"
-    filename = f"user_{user.id}{extension}"
-    path = MEDIA_DIR / filename
+    public_id = f"user_{user.id}"
 
-    with open(path, "wb") as out:
-        shutil.copyfileobj(file.file, out)
+    avatar_url = upload_image(file.file, public_id)
 
-    user.avatar_url = MEDIA_URL + filename
+    if not avatar_url:
+        raise HTTPException(status_code=500, detail="Nie udało się wgrać obrazka.")
+
+    user.avatar_url = avatar_url
     await db.commit()
 
     return {"avatar_url": user.avatar_url}
