@@ -9,9 +9,9 @@ uvicorn foodtracker_app.main:app --host 0.0.0.0 --port 8000 &
 UVICORN_PID=$!
 
 echo "▶️  Celery beat start…"
-celery -A foodtracker_app.celery_worker beat --loglevel=info &
+celery -A foodtracker_app.notifications.celery_worker beat --loglevel=info &
 
 echo "▶️  Celery worker start…"
-celery -A foodtracker_app.celery_worker worker --loglevel=info --concurrency=2
+celery -A foodtracker_app.notifications.celery_worker worker --loglevel=info --concurrency=2
 
 wait $UVICORN_PID
