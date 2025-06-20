@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = []
 
     FRONTEND_URL: str
+    BACKEND_URL: str
     REDIS_URL: str
     UPLOADS_DIR: str = "uploads"
 

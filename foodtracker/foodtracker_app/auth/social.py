@@ -63,16 +63,15 @@ async def resolve_user_data(response) -> dict:
             return response.json()
         except Exception:
             pass
-
     if isinstance(response, dict):
         return response
-
     raise TypeError(f"Nieobsługiwany typ odpowiedzi: {type(response)}")
 
 
 @router.get("/google/login")
 async def google_login(request: Request):
-    redirect_url = request.url_for("google_callback")
+    path = router.url_path_for("google_callback")
+    redirect_url = f"{settings.BACKEND_URL}{path}"
     return await oauth.google.authorize_redirect(request, redirect_url)
 
 
@@ -108,7 +107,7 @@ async def google_callback(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=settings.IS_PRODUCTION,  # Na produkcji będzie True, jeśli DEMO_MODE=False
+        secure=settings.IS_PRODUCTION,
         samesite="strict",
         path="/auth",
     )
@@ -118,7 +117,8 @@ async def google_callback(
 
 @router.get("/github/login")
 async def github_login(request: Request):
-    redirect_url = request.url_for("github_callback")
+    path = router.url_path_for("github_callback")
+    redirect_url = f"{settings.BACKEND_URL}{path}"
     return await oauth.github.authorize_redirect(request, redirect_url)
 
 
