@@ -1,9 +1,13 @@
 import os
 import time
 import redis
+from urllib.parse import urlparse
 from celery import Celery
 from celery.schedules import crontab
 from foodtracker_app.settings import settings
+from foodtracker_app.models.financial_stats import FinancialStat  # noqa
+from foodtracker_app.models.product import Product  # noqa
+from foodtracker_app.models.user import User  # noqa
 
 BROKER = os.getenv("CELERY_BROKER_URL", settings.REDIS_URL)
 BACKEND = os.getenv("CELERY_BACKEND_URL", settings.REDIS_URL)
@@ -21,8 +25,8 @@ celery_app.conf.update(
     beat_schedule={
         "run-expiration-check-daily": {
             "task": "foodtracker_app.notifications.tasks.notify_expiring_products",
-            "schedule": crontab(hour=8, minute=0),
-        },
+            "schedule": crontab(hour=8, minute=0),  # 08:00 UTC = 10:00 CET
+        }
     },
     broker_connection_retry_on_startup=True,
 )
@@ -32,11 +36,12 @@ def wait_for_redis(url: str, retries=5, delay=2):
     if settings.SKIP_REDIS:
         print("⏩ SKIPPING Redis check")
         return
-    from urllib.parse import urlparse
-
     u = urlparse(url)
     r = redis.StrictRedis(
-        host=u.hostname, port=u.port or 6379, ssl=u.scheme == "rediss"
+        host=u.hostname,
+        port=u.port or 6379,
+        ssl=u.scheme == "rediss",
+        password=u.password,
     )
     for _ in range(retries):
         try:
