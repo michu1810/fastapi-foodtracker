@@ -1,12 +1,11 @@
-FROM python:3.13
+FROM python:3.13-bookworm
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y libmagic1
-
+RUN apt-get update && apt-get install -y libmagic1 && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash appuser
 
@@ -15,11 +14,7 @@ COPY foodtracker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY foodtracker/ .
-
 COPY start.sh .
-COPY diagnostic_test.py .
-COPY neon_workaround_test.py .
-
 
 RUN chown -R appuser:appuser /app
 
