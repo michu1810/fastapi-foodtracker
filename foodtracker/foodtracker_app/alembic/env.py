@@ -1,11 +1,10 @@
 from logging.config import fileConfig
 import os
 import sys
-import time
 import psycopg2
 from alembic import context
 from foodtracker_app.db.database import Base
-from sqlalchemy import engine_from_config, pool, create_engine
+from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine.url import make_url
 
 config = context.config
@@ -14,65 +13,99 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
-def test_direct_connection():
-    """Test bezpośredniego połączenia psycopg2"""
+def test_neon_auth():
+    """Test różnych metod uwierzytelniania z Neon"""
     raw_url = os.getenv("DATABASE_URL")
     if not raw_url:
         print("❌ BŁĄD: DATABASE_URL nie jest ustawione")
-        return False
+        return None
 
+    print("🔍 TESTOWANIE RÓŻNYCH METOD UWIERZYTELNIANIA NEON")
+    print("=" * 60)
+
+    # Test 1: Oryginalny URL
+    print("Test 1: Oryginalny URL")
     try:
-        # Konwersja URL na komponenty
         parsed = make_url(raw_url)
         sync_url = str(parsed.set(drivername="postgresql"))
-
-        print("🔍 Testowanie bezpośredniego połączenia psycopg2...")
         print(f"   URL: {sync_url}")
-
-        # Test bezpośredniego połączenia
         conn = psycopg2.connect(sync_url)
-        cursor = conn.cursor()
-        cursor.execute("SELECT version();")
-        version = cursor.fetchone()
-        print(f"✅ Bezpośrednie połączenie OK: {version[0][:50]}...")
-        cursor.close()
+        print("   ✅ SUKCES!")
         conn.close()
-        return True
+        return sync_url
     except Exception as e:
-        print(f"❌ Bezpośrednie połączenie FAILED: {e}")
-        return False
+        print(f"   ❌ FAILED: {e}")
 
-
-def test_sqlalchemy_connection(url):
-    """Test połączenia przez SQLAlchemy"""
+    # Test 2: Z explicitnym portem 5432
+    print("\nTest 2: Z explicitnym portem 5432")
     try:
-        print("🔍 Testowanie połączenia SQLAlchemy...")
-        print(f"   URL: {url}")
-
-        # Test z różnymi konfiguracjami
-        configs_to_test = [
-            {},  # Domyślna konfiguracja
-            {"pool_pre_ping": True, "pool_recycle": 300},
-            {"pool_size": 1, "max_overflow": 0},
-            {"connect_args": {"sslmode": "require"}},
-        ]
-
-        for i, extra_config in enumerate(configs_to_test):
-            try:
-                print(f"   Test {i + 1}: {extra_config}")
-                engine = create_engine(url, poolclass=pool.NullPool, **extra_config)
-                with engine.connect() as conn:
-                    result = conn.execute("SELECT 1").fetchone()  # noqa
-                    print(f"   ✅ Test {i + 1} OK")
-                    return True
-            except Exception as e:
-                print(f"   ❌ Test {i + 1} FAILED: {e}")
-                continue
-
-        return False
+        parsed = make_url(raw_url)
+        sync_url = str(parsed.set(drivername="postgresql", port=5432))
+        print(f"   URL: {sync_url}")
+        conn = psycopg2.connect(sync_url)
+        print("   ✅ SUKCES!")
+        conn.close()
+        return sync_url
     except Exception as e:
-        print(f"❌ SQLAlchemy test FAILED: {e}")
-        return False
+        print(f"   ❌ FAILED: {e}")
+
+    # Test 3: Bez sslmode w URL (może być duplikowany w connect_args)
+    print("\nTest 3: Bez sslmode w URL")
+    try:
+        parsed = make_url(raw_url)
+        # Usuń sslmode z query string
+        new_query = {k: v for k, v in parsed.query.items() if k != "sslmode"}
+        sync_url = str(parsed.set(drivername="postgresql", query=new_query))
+        print(f"   URL: {sync_url}")
+        conn = psycopg2.connect(sync_url, sslmode="require")
+        print("   ✅ SUKCES!")
+        conn.close()
+        return sync_url
+    except Exception as e:
+        print(f"   ❌ FAILED: {e}")
+
+    # Test 4: Z connection pooler (-pooler w hostname)
+    print("\nTest 4: Z Neon connection pooler")
+    try:
+        parsed = make_url(raw_url)
+        pooler_host = parsed.host.replace(".aws.neon.tech", "-pooler.aws.neon.tech")
+        sync_url = str(parsed.set(drivername="postgresql", host=pooler_host, port=5432))
+        print(f"   URL: {sync_url}")
+        conn = psycopg2.connect(sync_url)
+        print("   ✅ SUKCES!")
+        conn.close()
+        return sync_url
+    except Exception as e:
+        print(f"   ❌ FAILED: {e}")
+
+    # Test 5: Sprawdź czy hasło nie ma ukrytych znaków
+    print("\nTest 5: Debug hasła")
+    try:
+        parsed = make_url(raw_url)
+        password = parsed.password
+        print(f"   Długość hasła: {len(password) if password else 'None'}")
+        print(
+            f"   Zawiera specjalne znaki: {any(c in password for c in '!@#$%^&*()[]{}|;:,.<>?' if password)}"
+        )
+        print("   Hasło (hex): " + password.encode().hex() if password else "None")
+
+        # Spróbuj z URL-encoded hasłem
+        from urllib.parse import quote_plus
+
+        if password:
+            encoded_password = quote_plus(password)
+            if encoded_password != password:
+                print("   Próba z URL-encoded hasłem...")
+                new_url = raw_url.replace(password, encoded_password)
+                sync_url = str(make_url(new_url).set(drivername="postgresql"))
+                conn = psycopg2.connect(sync_url)
+                print("   ✅ SUKCES z URL-encoded hasłem!")
+                conn.close()
+                return sync_url
+    except Exception as e:
+        print(f"   ❌ FAILED: {e}")
+
+    return None
 
 
 def run_migrations_offline() -> None:
@@ -100,77 +133,38 @@ def run_migrations_online() -> None:
         )
 
     print("=" * 80)
-    print("🚀 ROZSZERZONA DIAGNOSTYKA POŁĄCZENIA")
+    print("🚀 NEON DATABASE CONNECTION DIAGNOSTICS")
     print("=" * 80)
     print(f"📊 Python version: {sys.version}")
     print(f"📊 Working directory: {os.getcwd()}")
     print(f"📊 Process ID: {os.getpid()}")
-    print(f"📊 User: {os.getenv('USER', 'unknown')}")
 
-    # Test environment variables
-    print("\n🔍 ZMIENNE ŚRODOWISKOWE:")
-    for key in ["DATABASE_URL", "USER", "HOME", "PATH"]:
-        value = os.getenv(key, "NOT SET")
-        if key == "DATABASE_URL" and value != "NOT SET":
-            # Zamaskuj hasło
-            masked = value.replace(value.split(":")[2].split("@")[0], "***")
-            print(f"   {key}: {masked}")
-        else:
-            print(f"   {key}: {value}")
+    # Test różnych metod uwierzytelniania
+    working_url = test_neon_auth()
 
-    # Konwersja URL
-    try:
+    if not working_url:
+        print("\n💥 WSZYSTKIE TESTY UWIERZYTELNIANIA FAILED!")
+        print("🔧 MOŻLIWE PRZYCZYNY:")
+        print("   1. Hasło wygasło lub zostało zmienione")
+        print("   2. Neon database jest zatrzymany (hibernation)")
+        print("   3. Limit połączeń został przekroczony")
+        print("   4. Problem z siecią/DNS")
+        print("   5. Konto Neon zostało zawieszone")
+
+        # Próba z oryginalnym URL mimo wszystko
         parsed_url = make_url(raw_url)
-        sync_url = str(parsed_url.set(drivername="postgresql"))
-        print("\n📍 URL CONVERSION:")
-        print(f"   Raw URL: {raw_url}")
-        print(f"   Sync URL: {sync_url}")
-        print(f"   Host: {parsed_url.host}")
-        print(f"   Port: {parsed_url.port}")
-        print(f"   Database: {parsed_url.database}")
-        print(f"   Username: {parsed_url.username}")
-    except Exception as e:
-        print(f"❌ URL parsing error: {e}")
-        raise
-
-    # Test bezpośredniego połączenia
-    print("\n" + "=" * 50)
-    direct_success = test_direct_connection()
-
-    # Krótka pauza
-    print("\n⏳ Waiting 2 seconds...")
-    time.sleep(2)
-
-    # Test SQLAlchemy
-    print("\n" + "=" * 50)
-    sqlalchemy_success = test_sqlalchemy_connection(sync_url)
-
-    print("\n" + "=" * 80)
-    print("📊 PODSUMOWANIE TESTÓW:")
-    print(f"   Bezpośrednie psycopg2: {'✅ OK' if direct_success else '❌ FAILED'}")
-    print(f"   SQLAlchemy: {'✅ OK' if sqlalchemy_success else '❌ FAILED'}")
-    print("=" * 80)
-
-    if not sqlalchemy_success:
-        print("⚠️  SQLAlchemy test failed - kontynuacja z standardową konfiguracją...")
+        working_url = str(parsed_url.set(drivername="postgresql"))
+        print(f"\n⚠️  Kontynuacja z oryginalnym URL: {working_url}")
+    else:
+        print(f"\n🎉 ZNALEZIONO DZIAŁAJĄCY URL: {working_url}")
 
     # Ustawienie URL dla Alembic
-    config.set_main_option("sqlalchemy.url", sync_url)
+    config.set_main_option("sqlalchemy.url", working_url)
 
-    # Konfiguracja z dodatkowymi opcjami
-    configuration = config.get_section(config.config_ini_section, {})
-    configuration.update(
-        {
-            "sqlalchemy.pool_pre_ping": "true",
-            "sqlalchemy.pool_recycle": "300",
-            "sqlalchemy.pool_size": "1",
-            "sqlalchemy.max_overflow": "0",
-        }
-    )
-
+    # Prosta konfiguracja bez problematycznych opcji pool
     try:
         connectable = engine_from_config(
-            configuration,
+            config.get_section(config.config_ini_section, {}),
             prefix="sqlalchemy.",
             poolclass=pool.NullPool,
         )
@@ -187,7 +181,7 @@ def run_migrations_online() -> None:
         print(f"💥 BŁĄD PODCZAS MIGRACJI: {e}")
         print(f"   Typ błędu: {type(e).__name__}")
         if hasattr(e, "orig"):
-            print(f"   Oryginalny błąd: {e.orig}")
+            print(f"   Oryginalny błęd: {e.orig}")
         raise
 
 
