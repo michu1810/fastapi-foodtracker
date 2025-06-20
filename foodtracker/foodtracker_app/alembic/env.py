@@ -15,11 +15,11 @@ target_metadata = Base.metadata
 
 raw_url = settings.DATABASE_URL
 
-url = make_url(raw_url)
-
-url = url.set(drivername="postgresql")
-
-url = url.update_query_pairs([("sslmode", "require")])
+url = (
+    make_url(raw_url)
+    .set(drivername="postgresql")
+    .update_query_pairs([("sslmode", "require")])
+)
 
 sync_url = str(url)
 
