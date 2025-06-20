@@ -5,6 +5,7 @@ from foodtracker_app.db.database import Base
 from foodtracker_app.settings import settings
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine.url import make_url
+import os
 
 config = context.config
 
@@ -13,7 +14,7 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-raw_url = settings.DATABASE_URL
+raw_url = os.environ["DATABASE_URL"]
 
 url = (
     make_url(raw_url)
@@ -25,6 +26,9 @@ sync_url = str(url)
 
 print("▶ DEBUG ALEMBIC - DATABASE_URL (z settings):", raw_url)
 print("▶ DEBUG ALEMBIC - MODIFIED SYNC_URL:", sync_url)
+
+print("🔍 os.environ['DATABASE_URL'] =", os.environ.get("DATABASE_URL"))
+print("🔍 settings.DATABASE_URL =", settings.DATABASE_URL)
 
 config.set_main_option("sqlalchemy.url", sync_url)
 
