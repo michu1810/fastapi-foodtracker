@@ -26,9 +26,9 @@ Food Tracker is a full-stack web application designed and built from the ground 
 
 ### 🖼️ Application Gallery
 
-| Login & Registration | Main Dashboard | Statistics | Achievements |
-| :---: | :---: | :---: | :---: |
-| ![Login Page](https://imgur.com/FF3zlVz.png) | ![Main Dashboard](https://imgur.com/3ciOqZF.png) | ![Statistics Page](https://imgur.com/xAzbQE2.png) | ![Achievements Page](https://imgur.com/JnkB6KY.png) |
+|              Login & Registration              |                   Main Dashboard                   |                     Statistics                      |                     Achievements                      |
+|:----------------------------------------------:|:--------------------------------------------------:|:---------------------------------------------------:|:-----------------------------------------------------:|
+| ![Login Page](https://i.imgur.com/FF3zlVz.png) | ![Main Dashboard](https://i.imgur.com/3ciOqZF.png) | ![Statistics Page](https://i.imgur.com/xAzbQE2.png) | ![Achievements Page](https://i.imgur.com/JnkB6KY.png) |
 
 ---
 
