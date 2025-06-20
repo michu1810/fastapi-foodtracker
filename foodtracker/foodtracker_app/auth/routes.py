@@ -4,6 +4,7 @@ from datetime import UTC, date, datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 from typing import List
+from zoneinfo import ZoneInfo
 
 import magic
 from fastapi import APIRouter, Body, Cookie, Depends, File, HTTPException
@@ -45,6 +46,7 @@ from rate_limiter import limiter
 from sqlalchemy import Date, case, cast, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.sql.functions import coalesce
 
 MEDIA_DIR = Path(settings.UPLOADS_DIR) / "avatars"
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
@@ -579,9 +581,12 @@ async def get_product_trends(
     db: AsyncSession = Depends(get_async_session),
     user: User = Depends(get_current_user),
 ):
-    end_date = datetime.now(
-        timezone(timedelta(hours=2))
-    ).date()  # Zakładając CEST (UTC+2)
+    """
+    Zwraca dzienne trendy dodawania produktów na podstawie sumy ich ilości,
+    z poprawną obsługą lokalnej strefy czasowej (Europe/Warsaw).
+    """
+    warsaw_tz = ZoneInfo("Europe/Warsaw")
+    end_date = datetime.now(warsaw_tz).date()
     start_date = end_date - timedelta(days=range_days - 1)
 
     local_created_at = func.timezone("Europe/Warsaw", Product.created_at)
@@ -589,7 +594,7 @@ async def get_product_trends(
     query = (
         select(
             cast(local_created_at, Date).label("day"),
-            func.count(Product.id).label("added_count"),
+            coalesce(func.sum(Product.initial_amount), 0).label("total_quantity"),
         )
         .where(Product.user_id == user.id)
         .where(cast(local_created_at, Date) >= start_date)
@@ -598,17 +603,19 @@ async def get_product_trends(
     )
 
     result = await db.execute(query)
-    db_data = {row.day: row.added_count for row in result.all()}
+    db_data = {row.day: row.total_quantity for row in result.all()}
 
     trends: List[TrendData] = []
     for i in range(range_days):
         current_date = start_date + timedelta(days=i)
+        quantity_added = db_data.get(current_date, 0)
+
         trends.append(
             TrendData(
                 period=current_date.strftime("%d.%m"),
-                added=db_data.get(current_date, 0),
-                used=0,  # Można rozbudować tę logikę w przyszłości
-                wasted=0,  # Można rozbudować tę logikę w przyszłości
+                added=int(quantity_added),
+                used=0,
+                wasted=0,
             )
         )
 
