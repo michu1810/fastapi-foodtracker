@@ -14,15 +14,27 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 raw_url = settings.DATABASE_URL
-sync_url = str(make_url(raw_url).set(drivername="postgresql"))
+
+url = make_url(raw_url)
+
+url = url.set(drivername="postgresql")
+
+url = url.update_query_params(sslmode="require")
+
+sync_url = str(url)
 
 print("▶ DEBUG ALEMBIC - DATABASE_URL (z settings):", raw_url)
-print("▶ DEBUG ALEMBIC - SYNC_URL:", sync_url)
+print("▶ DEBUG ALEMBIC - MODIFIED SYNC_URL:", sync_url)
 
 config.set_main_option("sqlalchemy.url", sync_url)
 
 
 def run_migrations_offline() -> None:
+    """Uruchom migracje w trybie 'offline'.
+
+    To konfiguruje kontekst tylko z URL-em,
+    bez Engine. Skrypty są generowane do standardowego wyjścia.
+    """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -35,6 +47,11 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+    """Uruchom migracje w trybie 'online'.
+
+    W tym trybie tworzymy Engine i łączymy się z bazą danych,
+    a następnie przekazujemy to połączenie do kontekstu.
+    """
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
