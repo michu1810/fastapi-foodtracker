@@ -30,7 +30,7 @@ print("▶ DEBUG ALEMBIC - MODIFIED SYNC_URL:", sync_url)
 print("🔍 os.environ['DATABASE_URL'] =", os.environ.get("DATABASE_URL"))
 print("🔍 settings.DATABASE_URL =", settings.DATABASE_URL)
 
-config.set_main_option("sqlalchemy.url", sync_url)
+config.set_main_option("sqlalchemy.url", url.render_as_string(hide_password=False))
 
 
 def run_migrations_offline() -> None:
