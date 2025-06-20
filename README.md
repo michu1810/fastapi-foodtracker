@@ -85,7 +85,7 @@ The entire project is containerized, allowing for a one-command setup.
 ---
 
 <details>
-<summary><h3>🎯 Project Mission</h3></summary>
+<summary><h3>🎯 Project Mission (Click to expand)</h3></summary>
 
 <br>
 
