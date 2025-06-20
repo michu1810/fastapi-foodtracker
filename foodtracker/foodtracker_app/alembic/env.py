@@ -19,7 +19,7 @@ url = make_url(raw_url)
 
 url = url.set(drivername="postgresql")
 
-url = url.update_query_params(sslmode="require")
+url = url.update_query_pairs({"sslmode": "require"})
 
 sync_url = str(url)
 
