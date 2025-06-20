@@ -121,7 +121,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [navigate]);
 
   const socialLogin = useCallback((provider: 'google' | 'github') => {
-    window.location.href = `http://localhost:8000/${provider}/login`;
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    if (!apiUrl) {
+      console.error("VITE_API_BASE_URL is not set!");
+      setError("Błąd konfiguracji aplikacji. Prosimy o kontakt z administratorem.");
+      return;
+    }
+
+    window.location.href = `${apiUrl}/auth/${provider}/login`;
   }, []);
 
   const setTokenFromCallback = useCallback(async (cbToken: string) => {
