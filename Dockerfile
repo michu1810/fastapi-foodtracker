@@ -15,6 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY foodtracker/ .
 COPY start.sh .
+COPY start_celery.sh .
+RUN chmod +x start_celery.sh
 
 RUN chown -R appuser:appuser /app
 
