@@ -11,6 +11,9 @@ from sqlalchemy.pool import StaticPool
 os.environ["TESTING"] = "True"
 os.environ["SKIP_REDIS"] = "True"
 
+os.environ["BACKEND_URL"] = "http://test"
+
+
 from foodtracker_app.auth.utils import hash_password  # noqa: E402
 from foodtracker_app.db.database import Base, get_async_session  # noqa: E402
 from foodtracker_app.main import app  # noqa: E402
