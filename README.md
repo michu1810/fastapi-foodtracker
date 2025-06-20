@@ -84,14 +84,19 @@ The entire project is containerized, allowing for a one-command setup.
 
 ---
 
-### <details><summary>🎯 Project Mission (Click to expand)</summary>
+<details>
+<summary><h3>🎯 Project Mission</h3></summary>
+
+<br>
 
 Every year, millions of tons of food are wasted. In Poland alone, this figure is close to 5 million tons. We throw food away because we forget about expiration dates, buy too much, or plan poorly. I decided to leverage my technical skills to create a tool that actively helps combat this ubiquitous problem at the individual level.
 
 **Food Tracker** is my answer to this challenge. It is a fully functional web application that I designed and built from scratch to give users a simple and effective way to manage their home pantry, save money, and care for our planet. This repository is not just code—it's a demonstration of my approach to building complex, secure, and efficient full-stack systems.
+
 </details>
 
-### <details><summary>🛡️ Backend Architecture - A Deep Dive (Click to expand)</summary>
+<details>
+<summary><h3>🛡️ Backend Architecture - A Deep Dive (Click to expand)</h3></summary>
 
 When designing the backend architecture, I set several key goals: **security, performance, and scalability**. Below are the most important technical decisions I made to achieve them:
 
@@ -110,7 +115,8 @@ When designing the backend architecture, I set several key goals: **security, pe
 -   **Secure File Storage (Cloudinary):** User avatars are validated on the backend by their **MIME type** (using `python-magic`) before being uploaded to **Cloudinary**, an external, scalable object storage service. This offloads the application server and ensures fast, secure media delivery.
 </details>
 
-### <details><summary>🧪 Automated Testing - A Solid Foundation (Click to expand)</summary>
+<details>
+<summary><h3>🧪 Automated Testing - A Solid Foundation (Click to expand)</h3></summary>
 
 -   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. This ensures high code quality, consistency, and adherence to best practices across the project.
 -   **Code Coverage:** I aim for the highest possible code coverage (currently around 85-90%), with a strong focus on achieving 100% coverage for critical modules like authentication.
