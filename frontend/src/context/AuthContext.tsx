@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    window.location.href = `${apiUrl}${provider}/login`;
+    window.location.href = `${apiUrl}/${provider}/login`;
   }, []);
 
   const setTokenFromCallback = useCallback(async (cbToken: string) => {
