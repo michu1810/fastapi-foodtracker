@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
-from fastapi.staticfiles import StaticFiles
 from foodtracker_app.auth import social
 from foodtracker_app.auth.routes import auth_router, product_router
 from foodtracker_app.calendar_view.routes import router as calendar_router
@@ -45,11 +44,6 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,
 )
-
-
-uploads_path = Path(settings.UPLOADS_DIR)
-uploads_path.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 
 def custom_openapi():

@@ -19,6 +19,7 @@ from foodtracker_app.models.user import User
 from foodtracker_app.settings import settings
 from foodtracker_app.tests.conftest import TestingSessionLocal
 
+
 # ─────────────────────────  rejestracja  ─────────────────────────
 
 
@@ -353,14 +354,22 @@ async def test_logout_success(authenticated_client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_upload_avatar_valid(authenticated_client):
+    """--- ZMIANA --- Testuje pomyślny upload z mockowaniem Cloudinary."""
     mock_content = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
     file = {"file": ("avatar.png", io.BytesIO(mock_content), "image/png")}
+
+    # Mockujemy funkcję upload_image, aby nie łączyła się z prawdziwym Cloudinary
     with patch(
+        "foodtracker_app.auth.routes.upload_image",
+        return_value="http://fake-cloudinary.com/avatar.png",
+    ) as mock_upload, patch(
         "foodtracker_app.auth.routes.magic.from_buffer", return_value="image/png"
     ):
         response = await authenticated_client.post("/auth/me/avatar", files=file)
+
     assert response.status_code == 200
-    assert "avatar_url" in response.json()
+    assert response.json()["avatar_url"] == "http://fake-cloudinary.com/avatar.png"
+    mock_upload.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -398,35 +407,32 @@ async def test_upload_avatar_invalid_mime_type(authenticated_client: AsyncClient
 
 
 @pytest.mark.asyncio
-async def test_upload_avatar_success_with_db_update(
-    authenticated_client_factory, mocker
-):
-    """Testuje pomyślny upload avatara i aktualizację URL w bazie danych."""
+async def test_upload_avatar_success_with_db_update(authenticated_client_factory):
+    """--- ZMIANA --- Testuje pomyślny upload i aktualizację URL z mockowaniem Cloudinary."""
     user_email = "avatar_user_db@example.com"
     client = await authenticated_client_factory(user_email, "pwd")
-
     mock_content = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
-    file_data = io.BytesIO(mock_content)
-    file_data.name = "avatar.png"
-    file_data.seek(0)
+    file = {"file": ("avatar.png", io.BytesIO(mock_content), "image/png")}
+    fake_url = f"http://fake-cloudinary.com/{user_email}.png"
 
-    file = {"file": ("avatar.png", file_data, "image/png")}
-
+    # Mockujemy funkcję upload_image, aby nie łączyła się z prawdziwym Cloudinary
     with patch(
+        "foodtracker_app.auth.routes.upload_image", return_value=fake_url
+    ) as mock_upload, patch(
         "foodtracker_app.auth.routes.magic.from_buffer", return_value="image/png"
-    ), patch("foodtracker_app.auth.routes.shutil.copyfileobj", new=mocker.MagicMock()):
+    ):
         response = await client.post("/auth/me/avatar", files=file)
 
     assert response.status_code == 200
-    assert "avatar_url" in response.json()
-    assert response.json()["avatar_url"].startswith("/uploads/avatars/user_")
-    assert response.json()["avatar_url"].endswith(".png")
+    assert response.json()["avatar_url"] == fake_url
+    mock_upload.assert_called_once()
 
     # Sprawdzenie, czy URL avatara został zapisany w bazie
     async with TestingSessionLocal() as db:
         result = await db.execute(select(User).where(User.email == user_email))
         user = result.scalar_one_or_none()
-        assert user.avatar_url == response.json()["avatar_url"]
+        assert user is not None
+        assert user.avatar_url == fake_url
 
 
 # ─────────────────────────  request-password-reset  ─────────────────────────

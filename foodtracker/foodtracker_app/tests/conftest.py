@@ -12,6 +12,9 @@ os.environ["TESTING"] = "True"
 os.environ["SKIP_REDIS"] = "True"
 
 os.environ["BACKEND_URL"] = "http://test"
+os.environ["CLOUDINARY_API_SECRET"] = "SECRET"
+os.environ["CLOUDINARY_CLOUD_NAME"] = "NAMETEST"
+os.environ["CLOUDINARY_API_KEY"] = "TEST"
 
 
 from foodtracker_app.auth.utils import hash_password  # noqa: E402
