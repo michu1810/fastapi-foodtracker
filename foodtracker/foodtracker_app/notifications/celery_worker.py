@@ -9,8 +9,8 @@ from foodtracker_app.models.financial_stats import FinancialStat  # noqa
 from foodtracker_app.models.product import Product  # noqa
 from foodtracker_app.models.user import User  # noqa
 
-BROKER = os.getenv("CELERY_BROKER_URL", settings.REDIS_URL)
-BACKEND = os.getenv("CELERY_BACKEND_URL", settings.REDIS_URL)
+BROKER = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+BACKEND = os.getenv("CELERY_BACKEND_URL", "redis://localhost:6379/1")
 
 celery_app = Celery(
     "foodtracker",
