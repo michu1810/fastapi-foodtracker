@@ -1,10 +1,20 @@
 #!/bin/bash
-set -e # Przywracamy przerywanie skryptu w razie błędu
+set -e
 
-# Uruchom migracje bazy danych
-echo "▶️ Uruchamianie migracji bazy danych..."
-alembic -c foodtracker_app/alembic.ini upgrade head
+echo "================================================="
+echo "   ROZPOCZYNAM MISJĘ DIAGNOSTYCZNĄ NEON/RENDER   "
+echo "================================================="
 
-# Uruchom aplikację Uvicorn
-echo "▶️ Startowanie serwera Uvicorn..."
-exec "$@"
+echo -e "\n--- URUCHAMIAM diagnostic_test.py ---\n"
+python3 diagnostic_test.py
+
+echo -e "\n\n--- URUCHAMIAM neon_workaround_test.py ---\n"
+python3 neon_workaround_test.py
+
+echo -e "\n\n================================================="
+echo "     MISJA DIAGNOSTYCZNA ZAKOŃCZONA          "
+echo "  Sprawdź powyższe logi w poszukiwaniu ✅ SUCCESS   "
+echo "================================================="
+
+# Na razie zatrzymujemy dalsze wykonywanie, żeby nie zaśmiecać logów błędem Alembic
+exit 0

@@ -17,6 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY foodtracker/ .
 
 COPY start.sh .
+COPY diagnostic_test.py .
+COPY neon_workaround_test.py .
+
 
 RUN chown -R appuser:appuser /app
 
