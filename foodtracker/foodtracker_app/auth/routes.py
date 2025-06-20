@@ -1,7 +1,6 @@
 import uuid
 from datetime import UTC, date, datetime, timedelta, timezone
 from decimal import Decimal
-from pathlib import Path
 from typing import List
 from zoneinfo import ZoneInfo
 
@@ -47,10 +46,6 @@ from sqlalchemy import Date, case, cast, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.sql.functions import coalesce
-
-MEDIA_DIR = Path(settings.UPLOADS_DIR) / "avatars"
-MEDIA_DIR.mkdir(parents=True, exist_ok=True)
-MEDIA_URL = "/uploads/avatars/"
 
 auth_router = APIRouter()
 product_router = APIRouter()
