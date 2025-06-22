@@ -17,7 +17,7 @@
 Food Tracker is a full-stack web application designed and built from the ground up to help users reduce food waste, manage their home pantry, and save money.
 
 <p align="center">
-  <a href="https://fastapi-foodtracker.vercel.app" target="_blank">
+  <a href="https://food-tracker.pl" target="_blank">
     <img src="https://img.shields.io/badge/Launch%20Live%20Demo-007ACC?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo"/>
   </a>
 </p>
