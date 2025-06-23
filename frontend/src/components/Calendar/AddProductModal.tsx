@@ -206,12 +206,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 <h2 className="text-xl font-semibold text-gray-900">
                     {view === 'confirm' ? `Dodaj "${productName}"` : 'Dodaj produkt ręcznie'}
                 </h2>
-                <div className="p-6 space-y-4">
+                <div className="p-4 md:p-6 grid grid-cols-1 gap-y-5">
                     {error && <div className="bg-red-100 text-red-700 px-4 py-3 rounded">{error}</div>}
+
                     <div>
                         <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-1">Nazwa produktu *</label>
                         <input id="productName" type="text" value={productName} onChange={(e) => setProductName(e.target.value)} readOnly={view === 'confirm'} className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm ${view === 'confirm' ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-blue-500 focus:border-blue-500'}`} />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Typ produktu</label>
                         <div className="flex rounded-md shadow-sm">
@@ -223,7 +225,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                             </button>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {productType === 'szt.' ? (
                             <div>
                                 <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">Ilość (szt.) *</label>
@@ -240,12 +243,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                             <input id="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="np. 12.50" required min="0.01" step="0.01" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                         </div>
                     </div>
-                    <div className="md:col-span-3">
-                        <label className="inline-flex items-center">
-                            <input type="checkbox" checked={isFresh} onChange={(e) => setIsFresh(e.target.checked)} className="form-checkbox mr-2" />
-                            <span className="text-sm">Świeży produkt (warzywo/owoc – data przydatności liczona automatycznie)</span>
+
+                    <div>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" checked={isFresh} onChange={(e) => setIsFresh(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                            <span className="text-sm text-gray-700">Świeży produkt (np. warzywo, owoc)</span>
                         </label>
                     </div>
+
                     <div>
                         {isFresh ? (
                             <>
@@ -274,15 +279,15 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                     <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
                     <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
                         <div className="inline-block bg-white rounded-lg shadow-xl w-full max-w-lg text-left align-middle transition-all transform">
-                            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-start">
+                            <div className="px-4 md:px-6 py-4 border-b border-gray-200 flex justify-between items-start">
                                 <div className="flex-grow">
                                     {renderContent()}
                                 </div>
-                                <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors ml-4">
+                                <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors ml-4 -mt-2">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
-                            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+                            <div className="bg-gray-50 px-4 md:px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
                                 <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium">Anuluj</button>
                                 {(view === 'manual' || view === 'confirm') && (
                                     <button onClick={handleSubmit} disabled={isSubmitting} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium disabled:bg-blue-300">
@@ -295,7 +300,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 </div>
             </div>
 
-            {/* Poprawka: Użycie nowego komponentu skanera */}
             {isScannerVisible && (
                 <BarcodeScanner
                     onScan={handleScanSuccess}
