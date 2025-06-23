@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useZxing } from 'react-zxing';
+import clsx from 'clsx';
 
 interface BarcodeScannerProps {
   onScan: (result: string) => void;
@@ -7,14 +8,23 @@ interface BarcodeScannerProps {
 }
 
 export const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan, onClose }) => {
+  const [isCodeDetected, setIsCodeDetected] = useState(false);
+
   const { ref } = useZxing({
     constraints: { video: { facingMode: 'environment' } },
-
     onDecodeResult(result) {
-      onScan(result.getText());
+      if (!isCodeDetected) {
+        setIsCodeDetected(true);
+
+        if (navigator.vibrate) {
+          navigator.vibrate(200);
+        }
+
+        setTimeout(() => {
+          onScan(result.getText());
+        }, 300);
+      }
     },
-
-
     onError(error: unknown) {
         console.error("Błąd inicjalizacji kamery:", error);
         alert("Nie udało się uzyskać dostępu do kamery. Sprawdź uprawnienia w przeglądarce.");
@@ -34,7 +44,13 @@ export const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan, onClose 
             className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
             style={{ boxShadow: '0 0 0 4000px rgba(0, 0, 0, 0.5)' }}
           >
-            <div className="w-10/12 md:w-3/4 h-1/3 rounded-lg border-4 border-white" />
+            <div className={clsx(
+              "w-5/6 h-1/2 rounded-lg border-4 transition-colors duration-200",
+              {
+                "border-white": !isCodeDetected,
+                "border-green-500": isCodeDetected,
+              }
+            )} />
           </div>
         </div>
 

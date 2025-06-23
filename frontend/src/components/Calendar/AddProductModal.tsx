@@ -87,8 +87,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 setProductName(productData.name);
                 setView('confirm');
             } else {
-                setError('Nie znaleziono produktu dla tego kodu kreskowego.');
-                setTimeout(() => setError(null), 5000);
+                alert(`Kod ${decodedText} został zeskanowany, ale nie ma go w bazie. Uzupełnij dane ręcznie.`);
+                setProductName('');
+                setView('manual');
             }
         } catch (err) {
             setError('Wystąpił błąd podczas komunikacji z serwerem.');
