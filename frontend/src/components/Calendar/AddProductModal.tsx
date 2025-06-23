@@ -2,7 +2,10 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Transition } from '@headlessui/react';
 import axios from 'axios';
 import { productsService, ExternalProduct, CreateProductRequest, Product } from '../../services/productService';
-import clsx from 'clsx'; // Dodajemy clsx do ładniejszego stylowania
+import clsx from 'clsx';
+import { Html5QrcodeScanner } from 'html5-qrcode';
+import { ScanBarcode } from 'lucide-react';
+
 
 interface AddProductModalProps {
     onClose: () => void;
@@ -34,14 +37,12 @@ const useDebounce = (value: string, delay: number) => {
 
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdded, defaultDate }) => {
-    // Stara logika wyszukiwania i widoków - bez zmian
     const [view, setView] = useState<'search' | 'manual' | 'confirm'>('search');
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<ExternalProduct[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const debouncedQuery = useDebounce(query, 400);
 
-    // Stany formularza
     const [productName, setProductName] = useState('');
     const [expirationDate, setExpirationDate] = useState(
         defaultDate ? productsService.formatDate(defaultDate) : ''
@@ -50,18 +51,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFresh, setIsFresh] = useState(false);
     const [purchaseDate, setPurchaseDate] = useState('');
-
-    // --- NOWE STANY DLA NOWEGO, HYBRYDOWEGO FORMULARZA ---
-    // przechowuje informację, czy produkt jest na sztuki czy na wagę
     const [productType, setProductType] = useState<'szt.' | 'g'>('szt.');
-    // przechowuje cenę całkowitą
     const [price, setPrice] = useState('');
-    // przechowuje ilość w sztukach
     const [quantity, setQuantity] = useState('1');
-    // przechowuje wagę w gramach
     const [weight, setWeight] = useState('');
 
-    // Logika wyszukiwania - bez zmian
+    const [isScannerVisible, setIsScannerVisible] = useState(false);
+
+
     useEffect(() => {
         if (debouncedQuery.length > 2 && view === 'search') {
             setIsSearching(true);
@@ -74,18 +71,64 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
         }
     }, [debouncedQuery, view]);
 
+
+    useEffect(() => {
+        if (isScannerVisible) {
+            const scanner = new Html5QrcodeScanner(
+                'barcode-scanner-container',
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                false
+            );
+
+            const cleanup = () => {
+                scanner.clear().catch(err => console.error("Błąd przy czyszczeniu skanera", err));
+            }
+
+            scanner.render(handleScanSuccess, handleScanError);
+
+            return () => {
+
+                cleanup();
+            };
+        }
+    }, [isScannerVisible]);
+
+
     const handleProductSelect = (selectedProduct: ExternalProduct) => {
         setProductName(selectedProduct.name);
         setView('confirm');
     };
 
-    const handleSubmit = async () => {
-        // --- NOWA LOGIKA WYSYŁANIA FORMULARZA ---
+    const handleScanSuccess = async (decodedText: string) => {
+        setIsScannerVisible(false);
+        setIsSearching(true);
+        setError(null);
 
-        // 1. ustalamy, jaka jest faktyczna ilość/waga produktu
+        try {
+            const productData = await productsService.getProductByBarcode(decodedText);
+            if (productData) {
+                setProductName(productData.name);
+                setView('confirm');
+            } else {
+                setError('Nie znaleziono produktu dla tego kodu kreskowego.');
+                setTimeout(() => setError(null), 5000);
+            }
+        } catch (err) {
+            setError('Wystąpił błąd podczas komunikacji z serwerem.');
+            console.error("Błąd skanowania:", err);
+            setTimeout(() => setError(null), 5000);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleScanError = (errorMessage: string) => {
+    };
+
+    const handleSubmit = async () => {
         const amount = productType === 'szt.' ? parseFloat(quantity) : parseFloat(weight);
 
-        // 2. prosta walidacja
         if (!productName || !price || !amount || amount <= 0) {
             setError('Nazwa, cena i poprawna ilość/waga są wymagane.');
             return;
@@ -104,7 +147,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
         setError(null);
         setIsSubmitting(true);
 
-        // 3. budujemy obiekt danych zgodny z nowym API
         const newProductData: CreateProductRequest = {
             name: productName,
             price: parseFloat(price),
@@ -141,14 +183,33 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
 
     const renderContent = () => {
         if (view === 'search') {
-            // Widok wyszukiwania - bez zmian
             return (
                 <>
                     <h2 className="text-xl font-semibold text-gray-900">Dodaj nowy produkt</h2>
                     <div className="p-6 space-y-4">
                         <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Zacznij od wyszukania produktu</label>
-                        <input id="search" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="np. Mleko, Szynka, Ser..." className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+
+                        <div className="relative">
+                            <input
+                                id="search"
+                                type="text"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                placeholder="np. Mleko, Szynka, Ser..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10"
+                            />
+                            <div
+                                onClick={() => setIsScannerVisible(true)}
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-blue-500 md:hidden"
+                                title="Skanuj kod kreskowy"
+                            >
+                                <ScanBarcode size={20} />
+                            </div>
+                        </div>
+
                         {isSearching && <p className="text-sm text-gray-500 mt-2">Szukam...</p>}
+                        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+
                         <div className="mt-2 max-h-48 overflow-y-auto">
                             {results.map((product) => (
                                 <div key={product.id} onClick={() => handleProductSelect(product)} className="p-2 -mx-2 hover:bg-blue-50 cursor-pointer rounded-md">
@@ -166,7 +227,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
             );
         }
 
-        // Widok ręcznego dodawania / potwierdzania - przebudowany
         return (
             <>
                 <h2 className="text-xl font-semibold text-gray-900">
@@ -174,14 +234,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 </h2>
                 <div className="p-6 space-y-4">
                     {error && <div className="bg-red-100 text-red-700 px-4 py-3 rounded">{error}</div>}
-
-                    {/* Nazwa produktu - bez zmian */}
                     <div>
                         <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-1">Nazwa produktu *</label>
                         <input id="productName" type="text" value={productName} onChange={(e) => setProductName(e.target.value)} readOnly={view === 'confirm'} className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm ${view === 'confirm' ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-blue-500 focus:border-blue-500'}`} />
                     </div>
-
-                    {/* --- NOWY PRZEŁĄCZNIK TYPU PRODUKTU --- */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Typ produktu</label>
                         <div className="flex rounded-md shadow-sm">
@@ -193,9 +249,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                             </button>
                         </div>
                     </div>
-
                     <div className="grid grid-cols-2 gap-4">
-                        {/* --- WARUNKOWE POLE: ILOŚĆ LUB WAGA --- */}
                         {productType === 'szt.' ? (
                             <div>
                                 <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">Ilość (szt.) *</label>
@@ -207,15 +261,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                                 <input id="weight" type="number" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="np. 500" required min="1" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                         )}
-
-                        {/* --- NOWE POLE: CENA --- */}
                         <div>
                             <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Cena za całość (zł) *</label>
                             <input id="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="np. 12.50" required min="0.01" step="0.01" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                         </div>
                     </div>
-
-                    {/* Logika świeżych produktów i daty - bez zmian */}
                     <div className="md:col-span-3">
                         <label className="inline-flex items-center">
                             <input type="checkbox" checked={isFresh} onChange={(e) => setIsFresh(e.target.checked)} className="form-checkbox mr-2" />
@@ -240,7 +290,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
         );
     };
 
-    // Opakowanie modalu w Transition - bez zmian
     return (
         <Transition appear show={true} as={Fragment}>
             <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -271,6 +320,18 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                     </Transition.Child>
                 </div>
             </div>
+
+            {isScannerVisible && (
+                <div className="fixed inset-0 bg-black z-50 p-4 flex flex-col items-center justify-center">
+                    <div className="bg-white rounded-lg w-full max-w-md p-4">
+                        <h3 className="text-lg font-medium text-center mb-4 text-gray-800">Zeskanuj kod kreskowy</h3>
+                        <div id="barcode-scanner-container" className="w-full"></div>
+                        <button onClick={() => setIsScannerVisible(false)} className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium">
+                            Anuluj
+                        </button>
+                    </div>
+                </div>
+            )}
         </Transition>
     );
 };

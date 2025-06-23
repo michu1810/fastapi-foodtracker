@@ -1,3 +1,4 @@
+import axios from 'axios';
 import apiClient from './api';
 import type { Achievement } from './statsService';
 
@@ -38,6 +39,13 @@ export interface ExternalProduct {
     id: string;
     name: string;
     description?: string;
+}
+
+export interface BarcodeProductData {
+    id: string;
+    name: string;
+    description?: string;
+    image_url?: string;
 }
 
 export interface ProductActionResponse {
@@ -86,6 +94,22 @@ class ProductsService {
         } catch (error) {
             console.error('External search failed:', error);
             return [];
+        }
+    }
+
+    async getProductByBarcode(barcode: string): Promise<BarcodeProductData | null> {
+        try {
+            const response = await apiClient.get<BarcodeProductData>(`/external-products/barcode/${barcode}`);
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 404) {
+                    console.log(`Produkt o kodzie ${barcode} nie został znaleziony.`);
+                    return null;
+                }
+            }
+            console.error('Pobieranie produktu po kodzie kreskowym nie powiodło się:', error);
+            throw error;
         }
     }
 
