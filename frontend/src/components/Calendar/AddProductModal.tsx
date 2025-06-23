@@ -3,9 +3,8 @@ import { Transition } from '@headlessui/react';
 import axios from 'axios';
 import { productsService, ExternalProduct, CreateProductRequest, Product } from '../../services/productService';
 import clsx from 'clsx';
-import { Html5QrcodeScanner } from 'html5-qrcode';
 import { ScanBarcode } from 'lucide-react';
-
+import BarcodeScanner from '../BarcodeScanner';
 
 interface AddProductModalProps {
     onClose: () => void;
@@ -72,28 +71,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
     }, [debouncedQuery, view]);
 
 
-    useEffect(() => {
-        if (isScannerVisible) {
-            const scanner = new Html5QrcodeScanner(
-                'barcode-scanner-container',
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                false
-            );
-
-            const cleanup = () => {
-                scanner.clear().catch(err => console.error("Błąd przy czyszczeniu skanera", err));
-            }
-
-            scanner.render(handleScanSuccess, handleScanError);
-
-            return () => {
-
-                cleanup();
-            };
-        }
-    }, [isScannerVisible]);
-
-
     const handleProductSelect = (selectedProduct: ExternalProduct) => {
         setProductName(selectedProduct.name);
         setView('confirm');
@@ -120,10 +97,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
         } finally {
             setIsSearching(false);
         }
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleScanError = (errorMessage: string) => {
     };
 
     const handleSubmit = async () => {
@@ -200,7 +173,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                             />
                             <div
                                 onClick={() => setIsScannerVisible(true)}
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-blue-500 md:hidden"
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-blue-500"
                                 title="Skanuj kod kreskowy"
                             >
                                 <ScanBarcode size={20} />
@@ -321,16 +294,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onProductAdd
                 </div>
             </div>
 
+            {/* Poprawka: Użycie nowego komponentu skanera */}
             {isScannerVisible && (
-                <div className="fixed inset-0 bg-black z-50 p-4 flex flex-col items-center justify-center">
-                    <div className="bg-white rounded-lg w-full max-w-md p-4">
-                        <h3 className="text-lg font-medium text-center mb-4 text-gray-800">Zeskanuj kod kreskowy</h3>
-                        <div id="barcode-scanner-container" className="w-full"></div>
-                        <button onClick={() => setIsScannerVisible(false)} className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium">
-                            Anuluj
-                        </button>
-                    </div>
-                </div>
+                <BarcodeScanner
+                    onScan={handleScanSuccess}
+                    onClose={() => setIsScannerVisible(false)}
+                />
             )}
         </Transition>
     );

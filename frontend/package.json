@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.4",
     "@types/react-calendar": "^3.9.0",
+    "@zxing/library": "^0.21.3",
     "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.17.3",
@@ -30,6 +31,7 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.2",
     "react-sparklines": "^1.7.0",
+    "react-zxing": "^2.1.0",
     "recharts": "^2.15.3",
     "swr": "^2.3.3",
     "tailwindcss-scrollbar": "^0.1.0"
