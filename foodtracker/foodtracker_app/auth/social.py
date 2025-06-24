@@ -36,12 +36,27 @@ oauth.register(
 async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> User:
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
+
     if user:
-        if not user.social_provider or user.social_provider == "password":
+        if user.social_provider == "password":
+            if not user.is_verified:
+                user.is_verified = True
+                await db.commit()
+                await db.refresh(user)
+            return user
+
+        if user.social_provider not in [provider, None, ""]:
+            raise HTTPException(
+                status_code=400,
+                detail=f"To konto jest już połączone z dostawcą: {user.social_provider}.",
+            )
+
+        if not user.social_provider:
             user.social_provider = provider
             user.is_verified = True
             await db.commit()
             await db.refresh(user)
+
     else:
         user = User(
             email=email,
@@ -52,6 +67,7 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
         db.add(user)
         await db.commit()
         await db.refresh(user)
+
     return user
 
 

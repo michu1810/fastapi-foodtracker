@@ -6,7 +6,9 @@ services:
     restart: always
 
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
     command: celery -A foodtracker_app.notifications.celery_worker.celery_app worker -l INFO -P gevent
     volumes:
       - ./foodtracker:/app
@@ -17,7 +19,9 @@ services:
       - db
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
     command: uvicorn foodtracker_app.main:app --host 0.0.0.0 --port 8000 --reload --reload-exclude "*celerybeat-schedule*" --reload-exclude "*beat_db.sqlite3*"
     ports:
       - "8000:8000"
@@ -32,7 +36,9 @@ services:
       - redis
 
   beat:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
     command: celery -A foodtracker_app.notifications.celery_worker.celery_app beat --loglevel=info
     volumes:
       - ./foodtracker:/app

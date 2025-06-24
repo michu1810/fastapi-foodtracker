@@ -642,9 +642,16 @@ async def request_password_reset(
 
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
-    if not user:
-        return {"message": "Jeśli konto istnieje, zostanie wysłany link resetu."}
 
+    if not user:
+        return {
+            "message": "Jeśli konto o podanym adresie email istnieje, wysłano link do resetu hasła."
+        }
+    if not user.hashed_password or user.hashed_password == "social":
+        raise HTTPException(
+            status_code=400,
+            detail="To konto nie używa hasła. Zaloguj się przez Google lub GitHub.",
+        )
     token = str(uuid.uuid4())
     user.reset_password_token = token
     user.reset_password_expires_at = datetime.now(timezone.utc) + timedelta(minutes=15)
