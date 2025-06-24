@@ -1,29 +1,29 @@
 import os
-from datetime import date, timedelta
 import pytest
 import pytest_asyncio
+from datetime import date, timedelta
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
+from sqlalchemy import select
 
 os.environ["TESTING"] = "True"
 os.environ["SKIP_REDIS"] = "True"
-
 os.environ["BACKEND_URL"] = "http://test"
 os.environ["CLOUDINARY_API_SECRET"] = "SECRET"
 os.environ["CLOUDINARY_CLOUD_NAME"] = "NAMETEST"
 os.environ["CLOUDINARY_API_KEY"] = "TEST"
 
-
-from foodtracker_app.auth.utils import hash_password  # noqa: E402
-from foodtracker_app.db.database import Base, get_async_session  # noqa: E402
-from foodtracker_app.models.user import User  # noqa: E402
-
+from foodtracker_app.auth.utils import hash_password  # noqa: F401, E402
+from foodtracker_app.db.database import Base, get_async_session  # noqa: F401, E402
+from foodtracker_app.models.user import User  # noqa: F401, E402
+from foodtracker_app.main import app  # noqa: F401, E402
 from foodtracker_app import models  # noqa: F401, E402
 
-SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+
+SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db?cache=shared"
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -45,19 +45,15 @@ async def override_get_async_session():
         yield session
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="function")
 async def client():
-    from foodtracker_app.main import app
-
-    """Główna fixtura testowa z lokalną bazą i nadpisaniem zależności."""
     app.dependency_overrides[get_async_session] = override_get_async_session
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as c:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as c:
         yield c
 
     async with engine.begin() as conn:
@@ -66,7 +62,7 @@ async def client():
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture(scope="function")
 async def authenticated_client_factory(client: AsyncClient):
     async def _factory(
         email: str, password: str, is_verified: bool = True, login: bool = True
