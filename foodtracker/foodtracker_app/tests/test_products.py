@@ -222,3 +222,98 @@ async def test_get_product_stats_with_real_data(
     stats = stats_response.json()
     assert stats["total"] == 7
     assert stats["used"] == 1
+
+
+@pytest.mark.parametrize(
+    "use_amount, waste_amount, expected_used, expected_wasted",
+    [
+        (700, 500, 1, 0),
+        (500, 700, 0, 1),
+        (600, 600, 1, 0),
+    ],
+)
+async def test_weight_product_stats_logic(
+    authenticated_client, use_amount, waste_amount, expected_used, expected_wasted
+):
+    """Testuje logikę 'większość wygrywa' dla produktów na wagę."""
+    create_payload = {
+        "name": "Truskawki Testowe",
+        "expiration_date": str(date.today() + timedelta(days=5)),
+        "price": 20.0,
+        "unit": "g",
+        "initial_amount": 1200,
+    }
+    create_res = await authenticated_client.post(
+        "/products/create", json=create_payload
+    )
+    assert create_res.status_code == 201
+    product_id = create_res.json()["id"]
+
+    if use_amount > 0:
+        await authenticated_client.post(
+            f"/products/use/{product_id}", json={"amount": use_amount}
+        )
+
+    remaining_amount = 1200 - use_amount
+    await authenticated_client.post(
+        f"/products/waste/{product_id}", json={"amount": remaining_amount}
+    )
+
+    stats_res = await authenticated_client.get("/products/stats")
+    assert stats_res.status_code == 200
+    stats = stats_res.json()
+
+    assert stats["total"] == 1
+    assert stats["used"] == expected_used
+    assert stats["wasted"] == expected_wasted
+    assert stats["active"] == 0
+
+
+async def test_update_product_not_found(authenticated_client):
+    """Testuje próbę aktualizacji nieistniejącego produktu."""
+
+    update_payload = {
+        "name": "Nowa Nazwa",
+        "expiration_date": str(date.today()),
+        "price": 1,
+        "unit": "szt.",
+        "initial_amount": 1,
+        "is_fresh_product": False,
+    }
+    res = await authenticated_client.put("/products/update/99999", json=update_payload)
+    assert res.status_code == 404
+
+
+async def test_update_product_only_name(authenticated_client_factory, fixed_date):
+    """Aktualizacja tylko nazwy bez zmiany daty waznosci."""
+    client = await authenticated_client_factory("only.name@example.com", "x")
+    res = await client.post(
+        "/products/create",
+        json={
+            "name": "Jajko",
+            "expiration_date": str(fixed_date),
+            "price": 1.0,
+            "unit": "szt.",
+            "initial_amount": 6,
+            "is_fresh_product": False,
+        },
+    )
+    assert res.status_code == 201
+    product_id = res.json()["id"]
+
+    new_name = "Jajko Bio"
+    update_payload = {
+        "name": new_name,
+        "price": 1.0,
+        "unit": "szt.",
+        "initial_amount": 6,
+        "is_fresh_product": False,
+        "expiration_date": None,
+    }
+    update_res = await client.put(f"/products/update/{product_id}", json=update_payload)
+    assert update_res.status_code == 200
+    assert update_res.json()["name"] == new_name
+
+    get_res = await client.get(f"/products/get/{product_id}")
+    assert get_res.status_code == 200
+    assert get_res.json()["expiration_date"] == res.json()["expiration_date"]

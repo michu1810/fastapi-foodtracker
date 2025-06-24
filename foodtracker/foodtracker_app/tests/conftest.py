@@ -19,7 +19,6 @@ os.environ["CLOUDINARY_API_KEY"] = "TEST"
 
 from foodtracker_app.auth.utils import hash_password  # noqa: E402
 from foodtracker_app.db.database import Base, get_async_session  # noqa: E402
-from foodtracker_app.main import app  # noqa: E402
 from foodtracker_app.models.user import User  # noqa: E402
 
 from foodtracker_app import models  # noqa: F401, E402
@@ -48,6 +47,8 @@ async def override_get_async_session():
 
 @pytest_asyncio.fixture()
 async def client():
+    from foodtracker_app.main import app
+
     """Główna fixtura testowa z lokalną bazą i nadpisaniem zależności."""
     app.dependency_overrides[get_async_session] = override_get_async_session
 

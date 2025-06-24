@@ -78,6 +78,7 @@ class ProductStats(BaseModel):
     total: int
     used: int
     wasted: int
+    active: int
 
 
 class Achievement(BaseModel):

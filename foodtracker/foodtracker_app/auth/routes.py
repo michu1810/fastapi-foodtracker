@@ -42,7 +42,7 @@ from foodtracker_app.services.cloudinary_service import upload_image
 from foodtracker_app.settings import settings
 from foodtracker_app.utils.recaptcha import verify_recaptcha
 from rate_limiter import limiter
-from sqlalchemy import Date, case, cast, func
+from sqlalchemy import Date, case, cast, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.sql.functions import coalesce
@@ -542,29 +542,47 @@ async def get_product_stats(
                     - Product.wasted_amount,
                 ),
                 else_=case(
-                    (Product.current_amount < Product.initial_amount, 1), else_=0
+                    (
+                        and_(
+                            Product.current_amount == 0,
+                            2 * Product.wasted_amount <= Product.initial_amount,
+                        ),
+                        1,
+                    ),
+                    else_=0,
                 ),
             )
         ).label("used"),
         func.sum(
             case(
                 (Product.unit == "szt.", Product.wasted_amount),
-                else_=case((Product.wasted_amount > 0, 1), else_=0),
+                else_=case(
+                    (
+                        and_(
+                            Product.current_amount == 0,
+                            2 * Product.wasted_amount > Product.initial_amount,
+                        ),
+                        1,
+                    ),
+                    else_=0,
+                ),
             )
         ).label("wasted"),
     ).where(Product.user_id == user.id)
 
     res = await db.execute(query)
-    row = res.first()
+    row = res.one_or_none()
 
-    if not row:
-        return ProductStats(total=0, used=0, wasted=0)
+    if not row or row.total is None:
+        return ProductStats(total=0, used=0, wasted=0, active=0)
 
-    return ProductStats(
-        total=int(row.total or 0),
-        used=int(row.used or 0),
-        wasted=int(row.wasted or 0),
-    )
+    total = int(row.total)
+    used = int(row.used or 0)
+    wasted = int(row.wasted or 0)
+
+    active = total - used - wasted
+
+    return ProductStats(total=total, used=used, wasted=wasted, active=active)
 
 
 @product_router.get("/stats/trends", response_model=List[TrendData], tags=["Products"])

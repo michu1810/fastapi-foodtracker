@@ -1,0 +1,8 @@
+[run]
+omit =
+    foodtracker/foodtracker_app/tests/*
+    foodtracker/foodtracker_app/alembic/*
+    foodtracker/foodtracker_app/main.py
+
+[report]
+show_missing = True

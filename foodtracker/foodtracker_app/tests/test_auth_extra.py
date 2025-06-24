@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import io
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -18,6 +18,7 @@ from foodtracker_app.auth.utils import (
 from foodtracker_app.models.user import User
 from foodtracker_app.settings import settings
 from foodtracker_app.tests.conftest import TestingSessionLocal
+import random
 
 
 # ─────────────────────────  rejestracja  ─────────────────────────
@@ -475,7 +476,8 @@ async def test_request_password_reset_non_existent_email(client: AsyncClient, mo
     )
     assert res.status_code == 200
     assert (
-        res.json()["message"] == "Jeśli konto istnieje, zostanie wysłany link resetu."
+        res.json()["message"]
+        == "Jeśli konto o podanym adresie email istnieje, wysłano link do resetu hasła."
     )
     mock_send_email.assert_not_called()
 
@@ -704,3 +706,255 @@ async def test_product_trends_returns_full_range(authenticated_client_factory, m
 
     assert res.status_code == 200
     assert len(res.json()) == days
+
+
+@pytest.mark.asyncio
+async def test_request_password_reset_for_social_account(client: AsyncClient):
+    """Testuje, czy żądanie resetu hasła jest blokowane dla konta social."""
+    email = "social.user.for.reset@example.com"
+    async with TestingSessionLocal() as db:
+        db.add(
+            User(
+                email=email,
+                hashed_password="social",  # Placeholder
+                social_provider="google",
+                is_verified=True,
+            )
+        )
+        await db.commit()
+
+    res = await client.post("/auth/request-password-reset", json={"email": email})
+
+    assert res.status_code == 400
+    assert "To konto nie używa hasła" in res.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_change_password_success(authenticated_client_factory):
+    """Testuje pomyślną zmianę hasła."""
+    user_email = "change_pass_success@example.com"
+    old_password = "old_password_123"
+    new_password = "new_password_456"
+
+    client = await authenticated_client_factory(user_email, old_password)
+
+    res = await client.post(
+        "/auth/change-password",
+        json={"old_password": old_password, "new_password": new_password},
+    )
+    assert res.status_code == 200
+    assert res.json()["message"] == "Hasło zostało zmienione pomyślnie"
+
+    new_client = await authenticated_client_factory(
+        user_email, new_password, login=False
+    )
+    login_res = await new_client.post(
+        "/auth/login", json={"email": user_email, "password": new_password}
+    )
+    assert login_res.status_code == 200, login_res.text
+
+
+@pytest.mark.asyncio
+async def test_delete_account_success(authenticated_client_factory):
+    """Testuje pomyślne usunięcie konta."""
+    user_email = "to_be_deleted@example.com"
+    password = "password123"
+    client = await authenticated_client_factory(user_email, password)
+
+    delete_res = await client.delete("/auth/delete-account")
+    assert delete_res.status_code == 200
+    assert delete_res.json()["message"] == "Konto zostało usunięte"
+
+    async with TestingSessionLocal() as db:
+        res = await db.execute(select(User).where(User.email == user_email))
+        assert res.scalar_one_or_none() is None
+
+
+@pytest.mark.asyncio
+async def test_create_product_with_past_date(authenticated_client):
+    """Testuje walidację - data ważności nie może być z przeszłości."""
+    payload = {
+        "name": "Przeterminowany produkt",
+        "expiration_date": str(date.today() - timedelta(days=1)),
+        "price": 5.0,
+        "unit": "szt.",
+        "initial_amount": 1,
+        "is_fresh_product": False,
+    }
+    response = await authenticated_client.post("/products/create", json=payload)
+    assert response.status_code == 422
+    assert "Data ważności nie może być z przeszłości" in response.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_create_fresh_product_without_purchase_date(authenticated_client):
+    """Testuje walidację - świeży produkt musi mieć datę zakupu."""
+    payload = {
+        "name": "Świeży kurczak",
+        "price": 20.0,
+        "unit": "kg",
+        "initial_amount": 1.5,
+        "is_fresh_product": True,
+        "shelf_life_days": 3,
+        # Celowy brak purchase_date
+    }
+    response = await authenticated_client.post("/products/create", json=payload)
+    assert response.status_code == 422
+    assert "Brakuje daty zakupu dla świeżego produktu" in response.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_get_non_existent_product_by_id(authenticated_client):
+    """Testuje próbę pobrania nieistniejącego produktu."""
+    response = await authenticated_client.get("/products/get/99999")
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_use_product_not_found(authenticated_client):
+    """Testuje próbę zużycia nieistniejącego produktu."""
+    response = await authenticated_client.post(
+        "/products/use/99999", json={"amount": 1}
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_waste_product_not_found(authenticated_client):
+    """Testuje próbę wyrzucenia nieistniejącego produktu."""
+    response = await authenticated_client.post(
+        "/products/waste/99999", json={"amount": 1}
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_create_product_with_zero_price_fails(authenticated_client_factory):
+    """Testuje, czy walidacja Pydantic blokuje stworzenie produktu z ceną 0."""
+    client = await authenticated_client_factory("zeroprice@example.com", "password")
+    create_payload = {
+        "name": "Produkt darmowy",
+        "expiration_date": str(date.today() + timedelta(days=5)),
+        "price": 0.0,
+        "unit": "szt.",
+        "initial_amount": 1,
+        "is_fresh_product": False,
+    }
+    create_res = await client.post("/products/create", json=create_payload)
+
+    assert create_res.status_code == 422
+    assert "Input should be greater than 0" in str(create_res.json()["detail"])
+
+
+@pytest.mark.asyncio
+async def test_get_expiring_products_logic(authenticated_client_factory):
+    """Testuje endpoint /expiring-soon, pokrywając dużą część nieprzetestowanego kodu."""
+    client = await authenticated_client_factory("expiring@example.com", "password")
+    today = date.today()
+
+    # Ten produkt powinien się pojawić
+    await client.post(
+        "/products/create",
+        json={
+            "name": "Zaraz się zepsuje",
+            "expiration_date": str(today + timedelta(days=3)),
+            "price": 1,
+            "unit": "szt.",
+            "initial_amount": 1,
+            "is_fresh_product": False,
+        },
+    )
+    # Ten produkt też (na granicy)
+    await client.post(
+        "/products/create",
+        json={
+            "name": "Na granicy",
+            "expiration_date": str(today + timedelta(days=7)),
+            "price": 1,
+            "unit": "szt.",
+            "initial_amount": 1,
+            "is_fresh_product": False,
+        },
+    )
+    # Ten produkt nie
+    await client.post(
+        "/products/create",
+        json={
+            "name": "Długa data",
+            "expiration_date": str(today + timedelta(days=8)),
+            "price": 1,
+            "unit": "szt.",
+            "initial_amount": 1,
+            "is_fresh_product": False,
+        },
+    )
+    # Ten produkt nie (już zużyty)
+    res = await client.post(
+        "/products/create",
+        json={
+            "name": "Już zjedzony",
+            "expiration_date": str(today + timedelta(days=1)),
+            "price": 1,
+            "unit": "szt.",
+            "initial_amount": 1,
+            "is_fresh_product": False,
+        },
+    )
+    product_id = res.json()["id"]
+    await client.post(f"/products/use/{product_id}", json={"amount": 1})
+
+    # Sprawdź endpoint z domyślnym progiem 7 dni
+    response = await client.get("/products/expiring-soon")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 2
+    assert {p["name"] for p in data} == {"Zaraz się zepsuje", "Na granicy"}
+
+    # Sprawdź z progiem 2 dni
+    response_2 = await client.get("/products/expiring-soon?days=2")
+    assert response_2.status_code == 200
+    assert len(response_2.json()) == 0  # "Zaraz się zepsuje" ma 3 dni ważności
+
+
+@pytest.mark.asyncio
+async def test_update_product_success(authenticated_client_factory, fixed_date):
+    """Testuje poprawna aktualizacje istniejacego produktu."""
+    client = await authenticated_client_factory("update.test@example.com", "x")
+
+    create_res = await client.post(
+        "/products/create",
+        json={
+            "name": "Ser",
+            "expiration_date": str(fixed_date),
+            "price": 12.0,
+            "unit": "szt.",
+            "initial_amount": 1,
+            "is_fresh_product": False,
+        },
+    )
+    assert create_res.status_code == 201
+    product = create_res.json()
+    product_id = product["id"]
+
+    new_name = f"Zmieniony Ser {random.randint(1000, 9999)}"
+    new_date = str(date.today() + timedelta(days=20))
+
+    update_res = await client.put(
+        f"/products/update/{product_id}",
+        json={
+            "name": new_name,
+            "expiration_date": new_date,
+            "price": product["price"],
+            "unit": product["unit"],
+            "initial_amount": product["initial_amount"],
+            "is_fresh_product": False,
+        },
+    )
+
+    assert update_res.status_code == 200
+    assert update_res.json()["name"] == new_name
+    assert update_res.json()["expiration_date"].startswith(new_date)
+
+    get_res = await client.get(f"/products/get/{product_id}")
+    assert get_res.status_code == 200
+    assert get_res.json()["name"] == new_name

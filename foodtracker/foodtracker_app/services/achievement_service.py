@@ -2,12 +2,13 @@ import asyncio
 from datetime import date
 from typing import Any, Dict, List
 
+from sqlalchemy import Date, case, cast, func, or_, select, and_, Integer
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from foodtracker_app.auth.schemas import Achievement
 from foodtracker_app.models.financial_stats import FinancialStat
 from foodtracker_app.models.product import Product
 from foodtracker_app.models.user import User
-from sqlalchemy import Date, case, cast, func, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
     {
@@ -85,7 +86,7 @@ ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
     {
         "id": "work_titan_10",
         "name": "Tytan Pracy",
-        "description": "Dodaj 10 produktów w ciągu jednego dnia.",
+        "description": "Dodaj 10 różnych produktów w ciągu jednego dnia.",
         "icon": "💪",
         "type": "day_add_streak",
         "total_progress": 10,
@@ -93,7 +94,7 @@ ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
     {
         "id": "full_house_20",
         "name": "Pełna Chata",
-        "description": "Miej jednocześnie 20 aktywnych produktów.",
+        "description": "Miej jednocześnie 20 różnych aktywnych produktów.",
         "icon": "🏠",
         "type": "active_products_count",
         "total_progress": 20,
@@ -131,12 +132,12 @@ ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
         "total_progress": 1000.0,
     },
     {
-        "id": "investor_200",
-        "name": "Inwestor",
-        "description": "Osiągnij łączną wartość aktywnych produktów na poziomie 200 zł.",
+        "id": "investor_250",
+        "name": "Koneser Zakupów",
+        "description": "Kup produkty o łącznej wartości 250 zł.",
         "icon": "📈",
-        "type": "active_value",
-        "total_progress": 200.0,
+        "type": "total_spent_value",
+        "total_progress": 250.0,
     },
     {
         "id": "veteran_30",
@@ -205,11 +206,33 @@ ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
 ]
 
 
-async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievement]:
+async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
+    """Prywatna funkcja pomocnicza do pobierania wszystkich danych potrzebnych do obliczenia postępu."""
     today = date.today()
+    dialect = db.bind.dialect.name
+    if dialect == "postgresql":
+        day_of_week = func.extract("isodow", Product.created_at)  # Monday=1, Sunday=7
+    else:
+        day_of_week = case(
+            (func.strftime("%w", Product.created_at) == "0", 7),
+            else_=cast(func.strftime("%w", Product.created_at), Integer),
+        )
 
-    day_of_week = func.extract("dow", Product.created_at)
-
+    healthy_keywords = [
+        "%sałata%",
+        "%owoc%",
+        "%warzywo%",
+        "%pomidor%",
+        "%ogórek%",
+        "%brokuł%",
+        "%marchew%",
+        "%jabłko%",
+        "%banan%",
+        "%szpinak%",
+        "%kurczak%",
+        "%ryba%",
+        "%jogurt%",
+    ]
     queries = {
         "product_stats": select(
             func.sum(
@@ -224,14 +247,30 @@ async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievemen
                         - Product.wasted_amount,
                     ),
                     else_=case(
-                        (Product.current_amount < Product.initial_amount, 1), else_=0
+                        (
+                            and_(
+                                Product.current_amount == 0,
+                                2 * Product.wasted_amount <= Product.initial_amount,
+                            ),
+                            1,
+                        ),
+                        else_=0,
                     ),
                 )
             ).label("used"),
             func.sum(
                 case(
                     (Product.unit == "szt.", Product.wasted_amount),
-                    else_=case((Product.wasted_amount > 0, 1), else_=0),
+                    else_=case(
+                        (
+                            and_(
+                                Product.current_amount == 0,
+                                2 * Product.wasted_amount > Product.initial_amount,
+                            ),
+                            1,
+                        ),
+                        else_=0,
+                    ),
                 )
             ).label("wasted"),
         ).where(Product.user_id == user.id),
@@ -245,9 +284,6 @@ async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievemen
             Product.user_id == user.id,
             func.extract("hour", Product.created_at).between(0, 4),
         ),
-        "active_value": select(func.sum(Product.price * Product.current_amount)).where(
-            Product.user_id == user.id, Product.current_amount > 0
-        ),
         "active_products_count": select(func.count(Product.id)).where(
             Product.user_id == user.id, Product.current_amount > 0
         ),
@@ -255,29 +291,24 @@ async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievemen
             Product.user_id == user.id, cast(Product.created_at, Date) == today
         ),
         "sunday_adds": select(func.count(Product.id)).where(
-            Product.user_id == user.id,
-            cast(Product.created_at, Date) == today,
-            day_of_week == 0,
-        ),  # Niedziela to 0
+            Product.user_id == user.id, day_of_week == 7
+        ),
         "weekend_adds": select(func.count(Product.id)).where(
-            Product.user_id == user.id, day_of_week.in_([6, 0])
-        ),  # Sobota to 6, Niedziela to 0
-        "healthy_monday_add": select(func.count(Product.id)).where(
-            Product.user_id == user.id,
-            cast(Product.created_at, Date) == today,
-            day_of_week == 1,  # Poniedziałek to 1
-            or_(
-                Product.name.ilike("%sałata%"),
-                Product.name.ilike("%owoc%"),
-                Product.name.ilike("%warzywo%"),
-            ),
+            Product.user_id == user.id, day_of_week.in_([6, 7])
         ),
         "morning_caffeine_add": select(func.count(Product.id)).where(
             Product.user_id == user.id,
-            cast(Product.created_at, Date) == today,
             func.extract("hour", Product.created_at) < 9,
             or_(Product.name.ilike("%kawa%"), Product.name.ilike("%herbata%")),
         ),
+        "healthy_monday_add": select(func.count(Product.id)).where(
+            Product.user_id == user.id,
+            day_of_week == 1,
+            or_(*[Product.name.ilike(keyword) for keyword in healthy_keywords]),
+        ),
+        "total_spent_value": select(
+            func.sum(Product.price * Product.initial_amount)
+        ).where(Product.user_id == user.id),
     }
 
     results = await asyncio.gather(*(db.execute(q) for q in queries.values()))
@@ -286,50 +317,61 @@ async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievemen
     p_stats = res_map["product_stats"].one_or_none()
     f_stats = res_map["financial_stats"].scalar_one_or_none()
 
-    if p_stats is None or p_stats.total is None:
-        p_stats_dict = {"used": 0, "total": 0, "wasted": 0}
-    else:
-        p_stats_dict = {
-            "used": p_stats.used,
-            "total": p_stats.total,
-            "wasted": p_stats.wasted,
+    p_stats_dict = (
+        {
+            "used": p_stats.used or 0,
+            "total": p_stats.total or 0,
+            "wasted": p_stats.wasted or 0,
         }
+        if p_stats
+        else {"used": 0, "total": 0, "wasted": 0}
+    )
 
     progress_data = {
-        "saved_products": int(p_stats_dict["used"] or 0),
-        "total_products": int(p_stats_dict["total"] or 0),
-        "wasted_products": int(p_stats_dict["wasted"] or 0),
+        "saved_products": int(p_stats_dict["used"]),
+        "total_products": int(p_stats_dict["total"]),
+        "wasted_products": int(p_stats_dict["wasted"]),
         "money_saved": float(f_stats.saved_value) if f_stats else 0.0,
-        "cheese_products": res_map["cheese_products"].scalar_one(),
-        "night_actions": res_map["night_actions"].scalar_one(),
-        "active_value": float(res_map["active_value"].scalar_one_or_none() or 0.0),
-        "active_products_count": res_map["active_products_count"].scalar_one(),
-        "day_add_streak": res_map["day_add_streak"].scalar_one(),
-        "sunday_adds": res_map["sunday_adds"].scalar_one(),
-        "weekend_adds": res_map["weekend_adds"].scalar_one(),
-        "healthy_monday_add": res_map["healthy_monday_add"].scalar_one(),
-        "morning_caffeine_add": res_map["morning_caffeine_add"].scalar_one(),
+        "cheese_products": res_map["cheese_products"].scalar_one() or 0,
+        "night_actions": res_map["night_actions"].scalar_one() or 0,
+        "active_products_count": res_map["active_products_count"].scalar_one() or 0,
+        "day_add_streak": res_map["day_add_streak"].scalar_one() or 0,
+        "sunday_adds": res_map["sunday_adds"].scalar_one() or 0,
+        "weekend_adds": res_map["weekend_adds"].scalar_one() or 0,
+        "healthy_monday_add": res_map["healthy_monday_add"].scalar_one() or 0,
+        "morning_caffeine_add": res_map["morning_caffeine_add"].scalar_one() or 0,
+        "total_spent_value": float(
+            res_map["total_spent_value"].scalar_one_or_none() or 0.0
+        ),
         "days_as_user": (today - user.created_at.date()).days if user.created_at else 0,
     }
 
-    total_actions = progress_data["saved_products"] + progress_data["wasted_products"]
+    total_consumed = progress_data["saved_products"] + progress_data["wasted_products"]
     progress_data["efficiency_rate"] = (
-        int((progress_data["saved_products"] / total_actions) * 100)
-        if total_actions > 0
+        int((progress_data["saved_products"] / total_consumed) * 100)
+        if total_consumed > 0
         else 0
     )
+    return progress_data
+
+
+async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievement]:
+    """Główna, publiczna funkcja. Pobiera dane i buduje listę osiągnięć."""
+
+    progress_data = await _get_progress_data(db, user)
 
     user_achievements: List[Achievement] = []
     for definition in ACHIEVEMENT_DEFINITIONS:
         progress_type = definition["type"]
         current_progress = progress_data.get(progress_type, 0)
 
-        if "money" in progress_type or "value" in progress_type:
+        total_progress = definition["total_progress"]
+        if isinstance(total_progress, float):
             current_progress = float(current_progress)
         else:
             current_progress = int(current_progress)
 
-        is_achieved = current_progress >= definition["total_progress"]
+        is_achieved = current_progress >= total_progress
 
         user_achievements.append(
             Achievement(
@@ -340,7 +382,7 @@ async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievemen
                 type=progress_type,
                 achieved=is_achieved,
                 current_progress=current_progress,
-                total_progress=definition["total_progress"],
+                total_progress=total_progress,
             )
         )
 

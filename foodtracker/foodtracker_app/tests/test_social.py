@@ -1,4 +1,5 @@
 import pytest
+from fastapi import HTTPException
 from httpx import AsyncClient
 from unittest.mock import AsyncMock
 from sqlalchemy.future import select
@@ -55,9 +56,19 @@ async def test_google_callback_new_user(client: AsyncClient, mocker):
 
 @pytest.mark.asyncio
 async def test_google_callback_existing_password_user(client: AsyncClient, mocker):
+    """
+    Testuje, czy użytkownik z kontem hasłowym po zalogowaniu przez Google
+    POZOSTAJE użytkownikiem hasłowym (nie jest konwertowany).
+    """
     email = "password.user@example.com"
     async with TestingSessionLocal() as db:
-        db.add(User(email=email, hashed_password=hash_password("pwd")))
+        db.add(
+            User(
+                email=email,
+                hashed_password=hash_password("pwd"),
+                social_provider="password",
+            )
+        )
         await db.commit()
 
     mocker.patch(
@@ -77,7 +88,7 @@ async def test_google_callback_existing_password_user(client: AsyncClient, mocke
     async with TestingSessionLocal() as db:
         result = await db.execute(select(User).where(User.email == email))
         user = result.scalar_one()
-        assert user.social_provider == "google"
+        assert user.social_provider == "password"
         assert user.is_verified is True
 
 
@@ -234,10 +245,9 @@ async def test_resolve_user_data_handles_bad_type():
 
 @pytest.mark.asyncio
 async def test_get_or_create_user_conflicting_provider(client: AsyncClient):
-    """Testuje, co się stanie, gdy użytkownik z jednym providerem próbuje użyć innego."""
+    """Testuje, czy rzucany jest błąd, gdy użytkownik z jednym providerem próbuje użyć innego."""
     email = "conflict@example.com"
     async with TestingSessionLocal() as db:
-        # Użytkownik już istnieje i jest powiązany z Google
         db.add(
             User(
                 email=email,
@@ -248,12 +258,11 @@ async def test_get_or_create_user_conflicting_provider(client: AsyncClient):
         )
         await db.commit()
 
-        # Próba "utworzenia" go przez GitHub
-        user = await get_or_create_user(db, email, "github")
+        with pytest.raises(HTTPException) as exc_info:
+            await get_or_create_user(db, email, "github")
 
-        # Logika w `get_or_create_user` powinna go po prostu zwrócić,
-        # NIE zmieniając providera.
-        assert user.social_provider == "google"
+        assert exc_info.value.status_code == 400
+        assert "To konto jest już połączone z dostawcą: google" in exc_info.value.detail
 
 
 @pytest.mark.asyncio

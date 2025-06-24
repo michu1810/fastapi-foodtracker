@@ -38,3 +38,4 @@ test.db
 .coverage
 
 beat_db.sqlite3
+htmlcov

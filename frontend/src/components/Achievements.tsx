@@ -7,12 +7,11 @@ interface AchievementsProps {
   list: Achievement[];
 }
 
-// ZMIANA: Dodajemy wszystkie nowe kategorie i ich nazwy
 const CATEGORY_NAMES: { [key: string]: string } = {
   saved_products: 'Walka z Marnotrawstwem',
   efficiency_rate: 'Walka z Marnotrawstwem',
   money_saved: 'Mistrzostwo Finansowe',
-  active_value: 'Mistrzostwo Finansowe',
+  total_spent_value: 'Mistrzostwo Finansowe',
   total_products: 'Aktywność i Kolekcjonowanie',
   day_add_streak: 'Aktywność i Kolekcjonowanie',
   active_products_count: 'Aktywność i Kolekcjonowanie',
@@ -25,12 +24,11 @@ const CATEGORY_NAMES: { [key: string]: string } = {
   morning_caffeine_add: 'Kreatywne Wyzwania',
 };
 
-// ZMIANA: Aktualizujemy kolejność i dodajemy nowe typy
 const CATEGORY_ORDER = [
     'saved_products',
     'efficiency_rate',
     'money_saved',
-    'active_value',
+    'total_spent_value',
     'total_products',
     'active_products_count',
     'day_add_streak',
@@ -48,7 +46,6 @@ const Achievements: React.FC<AchievementsProps> = ({ list }) => {
     if (!list) return {};
     const groups: { [key: string]: {name: string, achievements: Achievement[]} } = {};
 
-    // Używamy zdefiniowanej mapy, aby uniknąć duplikatów kategorii
     list.forEach(ach => {
       const categoryName = CATEGORY_NAMES[ach.type] || 'Inne';
       if (!groups[categoryName]) {
@@ -57,7 +54,6 @@ const Achievements: React.FC<AchievementsProps> = ({ list }) => {
       groups[categoryName].achievements.push(ach);
     });
 
-    // Sortujemy osiągnięcia wewnątrz każdej grupy
     for(const categoryName in groups) {
         groups[categoryName].achievements.sort((a, b) => (a.total_progress ?? 0) - (b.total_progress ?? 0));
     }
@@ -67,7 +63,6 @@ const Achievements: React.FC<AchievementsProps> = ({ list }) => {
 
   if (!list || list.length === 0) return null;
 
-  // Tworzymy posortowaną listę kategorii na podstawie kolejności i tego co istnieje
   const sortedCategoryNames = [...new Set(CATEGORY_ORDER.map(key => CATEGORY_NAMES[key]).filter(Boolean))];
 
   return (
@@ -104,7 +99,6 @@ const AchievementCard: React.FC<{ achievement: Achievement, index: number }> = (
 
     const isLocked = !achieved && current === 0 && total > 1;
 
-    // Funkcja do formatowania wartości (szczególnie dla pieniędzy)
     const formatValue = (value: number) => {
         if (type.includes('money') || type.includes('value')) {
             return `${value.toFixed(2)} zł`;
