@@ -111,9 +111,7 @@ async def google_callback(
             user = await get_or_create_user(db, email, provider="google")
         except HTTPException as e:
             if e.status_code == 400 and "jest już zarejestrowany" in e.detail:
-                provider_name = e.detail.split(": ")[-1]
-                error_detail = f"Ten e-mail jest już zarejestrowany przez {provider_name.capitalize()}. Użyj tej samej metody logowania."
-                encoded_error = urllib.parse.quote(error_detail)
+                encoded_error = urllib.parse.quote(e.detail)
                 return RedirectResponse(
                     url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
                 )
@@ -188,9 +186,7 @@ async def github_callback(
             user = await get_or_create_user(db, email, provider="github")
         except HTTPException as e:
             if e.status_code == 400 and "jest już zarejestrowany" in e.detail:
-                provider_name = e.detail.split(": ")[-1]
-                error_detail = f"Ten e-mail jest już zarejestrowany przez {provider_name.capitalize()}. Użyj tej samej metody logowania."
-                encoded_error = urllib.parse.quote(error_detail)
+                encoded_error = urllib.parse.quote(e.detail)
                 return RedirectResponse(
                     url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
                 )
