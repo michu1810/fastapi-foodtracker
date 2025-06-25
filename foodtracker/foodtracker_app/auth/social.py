@@ -7,6 +7,7 @@ from foodtracker_app.settings import settings
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.responses import RedirectResponse
+import urllib.parse
 
 router = APIRouter()
 
@@ -48,7 +49,7 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
         if user.social_provider not in [provider, None, ""]:
             raise HTTPException(
                 status_code=400,
-                detail=f"To konto jest już połączone z dostawcą: {user.social_provider}.",
+                detail=f"Ten adres e-mail jest już zarejestrowany poprzez {user.social_provider.capitalize()}. Zaloguj się, używając tej samej metody.",
             )
 
         if not user.social_provider:
@@ -97,38 +98,55 @@ async def google_callback(
 ):
     try:
         token = await oauth.google.authorize_access_token(request)
+        user_info = await oauth.google.userinfo(token=token)
+        email = user_info.get("email")
+
+        if not email:
+            raise HTTPException(
+                status_code=400,
+                detail="Nie odnaleziono adresu e-mail w odpowiedzi od Google.",
+            )
+
+        try:
+            user = await get_or_create_user(db, email, provider="google")
+        except HTTPException as e:
+            if e.status_code == 400 and "połączone z dostawcą" in e.detail:
+                provider_name = e.detail.split(": ")[-1]
+                error_detail = f"Ten e-mail jest już zarejestrowany przez {provider_name.capitalize()}. Użyj tej samej metody logowania."
+                encoded_error = urllib.parse.quote(error_detail)
+                return RedirectResponse(
+                    url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
+                )
+            raise
+
+        access_token = create_access_token(
+            {"sub": user.email, "provider": user.social_provider}
+        )
+        refresh_token = create_refresh_token(
+            {"sub": user.email, "provider": user.social_provider}
+        )
+
+        response = RedirectResponse(
+            url=f"{settings.FRONTEND_URL}/google/callback?token={access_token}"
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.IS_PRODUCTION,
+            samesite="strict",
+            path="/auth",
+        )
+        return response
+
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error from authlib: {e}")
-
-    user_info = await oauth.google.userinfo(token=token)
-    email = user_info.get("email")
-
-    if not email:
-        raise HTTPException(status_code=400, detail="Email not found from Google.")
-
-    user = await get_or_create_user(db, email, provider="google")
-
-    access_token = create_access_token(
-        {"sub": user.email, "provider": user.social_provider}
-    )
-    refresh_token = create_refresh_token(
-        {"sub": user.email, "provider": user.social_provider}
-    )
-
-    response = RedirectResponse(
-        url=f"{settings.FRONTEND_URL}/google/callback?token={access_token}"
-    )
-
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=settings.IS_PRODUCTION,
-        samesite="strict",
-        path="/auth",
-    )
-
-    return response
+        encoded_error = urllib.parse.quote(
+            "Wystąpił nieoczekiwany błąd podczas logowania przez Google."
+        )
+        print(f"Google Callback Error: {e}")
+        return RedirectResponse(
+            url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
+        )
 
 
 @router.get("/github/login")
@@ -144,45 +162,65 @@ async def github_callback(
 ):
     try:
         token_response = await oauth.github.authorize_access_token(request)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error from authlib: {e}")
+        user_resp = await oauth.github.get("user", token=token_response)
+        user_data = await resolve_user_data(user_resp)
+        email = user_data.get("email")
 
-    user_resp = await oauth.github.get("user", token=token_response)
-    user_data = await resolve_user_data(user_resp)
+        if not email:
+            emails_resp = await oauth.github.get("user/emails", token=token_response)
+            emails_data = await resolve_user_data(emails_resp)
+            email = next(
+                (
+                    e["email"]
+                    for e in emails_data
+                    if e.get("primary") and e.get("verified")
+                ),
+                None,
+            )
 
-    email = user_data.get("email")
+        if not email:
+            raise HTTPException(
+                status_code=400,
+                detail="Nie odnaleziono adresu e-mail w odpowiedzi od GitHub.",
+            )
 
-    if not email:
-        emails_resp = await oauth.github.get("user/emails", token=token_response)
-        emails_data = await resolve_user_data(emails_resp)
-        email = next(
-            (e["email"] for e in emails_data if e.get("primary") and e.get("verified")),
-            None,
+        try:
+            user = await get_or_create_user(db, email, provider="github")
+        except HTTPException as e:
+            if e.status_code == 400 and "połączone z dostawcą" in e.detail:
+                provider_name = e.detail.split(": ")[-1]
+                error_detail = f"Ten e-mail jest już zarejestrowany przez {provider_name.capitalize()}. Użyj tej samej metody logowania."
+                encoded_error = urllib.parse.quote(error_detail)
+                return RedirectResponse(
+                    url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
+                )
+            raise
+
+        access_token = create_access_token(
+            {"sub": user.email, "provider": user.social_provider}
+        )
+        refresh_token = create_refresh_token(
+            {"sub": user.email, "provider": user.social_provider}
         )
 
-    if not email:
-        raise HTTPException(status_code=400, detail="Email not found from GitHub.")
+        response = RedirectResponse(
+            url=f"{settings.FRONTEND_URL}/github/callback?token={access_token}"
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.IS_PRODUCTION,
+            samesite="strict",
+            path="/auth",
+        )
+        return response
 
-    user = await get_or_create_user(db, email, provider="github")
-
-    access_token = create_access_token(
-        {"sub": user.email, "provider": user.social_provider}
-    )
-    refresh_token = create_refresh_token(
-        {"sub": user.email, "provider": user.social_provider}
-    )
-
-    response = RedirectResponse(
-        url=f"{settings.FRONTEND_URL}/github/callback?token={access_token}"
-    )
-
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=settings.IS_PRODUCTION,
-        samesite="strict",
-        path="/auth",
-    )
-
-    return response
+    except Exception as e:
+        encoded_error = urllib.parse.quote(
+            "Wystąpił nieoczekiwany błąd podczas logowania przez GitHub."
+        )
+        print(f"GitHub Callback Error: {e}")
+        return RedirectResponse(
+            url=f"{settings.FRONTEND_URL}/login?error={encoded_error}"
+        )

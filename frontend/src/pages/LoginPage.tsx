@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, socialLogin, isLoading, error, clearError } = useAuth();
+  const { login, socialLogin, isLoading, error: authError, clearError } = useAuth();
+
+  const [displayedError, setDisplayedError] = useState<string | null>(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const urlError = searchParams.get('error');
+    if (urlError) {
+      setDisplayedError(decodeURIComponent(urlError));
+      searchParams.delete('error');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authError) {
+      setDisplayedError(authError);
+    }
+  }, [authError]);
+
+  const clearAllErrors = () => {
+    clearError();
+    setDisplayedError(null);
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    clearError();
+    clearAllErrors();
     await login(email, password);
   };
 
@@ -19,9 +43,9 @@ const LoginPage = () => {
       <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-2xl px-8 py-10 w-full max-w-md border border-white/20 space-y-6 animate-fade-in">
         <h1 className="text-3xl font-bold text-center text-white">Logowanie</h1>
 
-        {error && (
+        {displayedError && (
           <div className="p-3 bg-red-500/20 border border-red-500 text-red-100 rounded-lg text-center text-sm">
-            {error}
+            {displayedError}
           </div>
         )}
 
@@ -32,7 +56,7 @@ const LoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => {
-                clearError();
+                clearAllErrors();
                 setEmail(e.target.value);
               }}
               placeholder="Email"
@@ -47,7 +71,7 @@ const LoginPage = () => {
               type="password"
               value={password}
               onChange={(e) => {
-                clearError();
+                clearAllErrors();
                 setPassword(e.target.value);
               }}
               placeholder="Hasło"
@@ -77,13 +101,19 @@ const LoginPage = () => {
 
         <div className="space-y-3">
           <button
-            onClick={() => socialLogin('google')}
+            onClick={() => {
+                clearAllErrors();
+                socialLogin('google');
+            }}
             className="flex items-center justify-center gap-3 w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
           >
             <FaGoogle className="text-xl" /> Zaloguj przez Google
           </button>
           <button
-            onClick={() => socialLogin('github')}
+            onClick={() => {
+                clearAllErrors();
+                socialLogin('github');
+            }}
             className="flex items-center justify-center gap-3 w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 rounded-lg transition"
           >
             <FaGithub className="text-xl" /> Zaloguj przez GitHub

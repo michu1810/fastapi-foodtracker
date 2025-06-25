@@ -56,10 +56,6 @@ async def test_google_callback_new_user(client: AsyncClient, mocker):
 
 @pytest.mark.asyncio
 async def test_google_callback_existing_password_user(client: AsyncClient, mocker):
-    """
-    Testuje, czy użytkownik z kontem hasłowym po zalogowaniu przez Google
-    POZOSTAJE użytkownikiem hasłowym (nie jest konwertowany).
-    """
     email = "password.user@example.com"
     async with TestingSessionLocal() as db:
         db.add(
@@ -94,6 +90,7 @@ async def test_google_callback_existing_password_user(client: AsyncClient, mocke
 
 @pytest.mark.asyncio
 async def test_google_callback_no_email(client: AsyncClient, mocker):
+    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.google.authorize_access_token",
         new=AsyncMock(return_value={"access_token": "fake-token"}),
@@ -102,20 +99,31 @@ async def test_google_callback_no_email(client: AsyncClient, mocker):
         "foodtracker_app.auth.social.oauth.google.userinfo",
         new=AsyncMock(return_value={"name": "No Email User"}),
     )
-    response = await client.get("/google/callback?code=fakecode")
-    assert response.status_code == 400
-    assert "Email not found from Google" in response.json()["detail"]
+    response = await client.get(
+        "/google/callback?code=fakecode", follow_redirects=False
+    )
+    # Sprawdzamy, czy jest przekierowanie z błędem
+    assert response.status_code == 307
+    assert response.headers["location"].startswith(
+        f"{settings.FRONTEND_URL}/login?error="
+    )
 
 
 @pytest.mark.asyncio
 async def test_google_callback_auth_error(client: AsyncClient, mocker):
+    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.google.authorize_access_token",
         new=AsyncMock(side_effect=Exception("Auth error")),
     )
-    response = await client.get("/google/callback?code=fakecode")
-    assert response.status_code == 400
-    assert "Error from authlib" in response.json()["detail"]
+    response = await client.get(
+        "/google/callback?code=fakecode", follow_redirects=False
+    )
+    # Sprawdzamy, czy jest przekierowanie z błędem
+    assert response.status_code == 307
+    assert response.headers["location"].startswith(
+        f"{settings.FRONTEND_URL}/login?error="
+    )
 
 
 @pytest.mark.asyncio
@@ -179,6 +187,7 @@ async def test_github_callback_secondary_email_used(client: AsyncClient, mocker)
 
 @pytest.mark.asyncio
 async def test_github_callback_no_email_at_all(client: AsyncClient, mocker):
+    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.github.authorize_access_token",
         new=AsyncMock(return_value={"access_token": "fake-github-token"}),
@@ -192,14 +201,18 @@ async def test_github_callback_no_email_at_all(client: AsyncClient, mocker):
         new=AsyncMock(side_effect=[mock_resp_user, mock_resp_emails]),
     )
 
-    response = await client.get("/github/callback?code=fakecode")
-    assert response.status_code == 400
-    assert "Email not found from GitHub" in response.json()["detail"]
+    response = await client.get(
+        "/github/callback?code=fakecode", follow_redirects=False
+    )
+    # Sprawdzamy, czy jest przekierowanie z błędem
+    assert response.status_code == 307
+    assert response.headers["location"].startswith(
+        f"{settings.FRONTEND_URL}/login?error="
+    )
 
 
 @pytest.mark.asyncio
 async def test_get_or_create_user_existing_social_user(client: AsyncClient):
-    """Testuje, czy ponowne logowanie przez social media nie zmienia danych."""
     email = "existing.social@example.com"
     async with TestingSessionLocal() as db:
         db.add(
@@ -219,33 +232,36 @@ async def test_get_or_create_user_existing_social_user(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_github_callback_auth_error(client: AsyncClient, mocker):
-    """Testuje przypadek, gdy autoryzacja w GitHub zawodzi."""
+    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.github.authorize_access_token",
         new=AsyncMock(side_effect=Exception("Auth error")),
     )
-    response = await client.get("/github/callback?code=fakecode")
-    assert response.status_code == 400
-    assert "Error from authlib" in response.json()["detail"]
+    response = await client.get(
+        "/github/callback?code=fakecode", follow_redirects=False
+    )
+    # Sprawdzamy, czy jest przekierowanie z błędem
+    assert response.status_code == 307
+    assert response.headers["location"].startswith(
+        f"{settings.FRONTEND_URL}/login?error="
+    )
 
 
 @pytest.mark.asyncio
 async def test_resolve_user_data_handles_dict():
-    """Testuje, czy funkcja poprawnie obsługuje, gdy odpowiedź jest już słownikiem."""
     test_dict = {"key": "value"}
     assert await resolve_user_data(test_dict) == test_dict
 
 
 @pytest.mark.asyncio
 async def test_resolve_user_data_handles_bad_type():
-    """Testuje, czy funkcja rzuca błąd dla nieobsługiwanego typu."""
     with pytest.raises(TypeError, match="Nieobsługiwany typ odpowiedzi"):
         await resolve_user_data(123)
 
 
 @pytest.mark.asyncio
 async def test_get_or_create_user_conflicting_provider(client: AsyncClient):
-    """Testuje, czy rzucany jest błąd, gdy użytkownik z jednym providerem próbuje użyć innego."""
+    # POPRAWIONY TEST
     email = "conflict@example.com"
     async with TestingSessionLocal() as db:
         db.add(
@@ -262,12 +278,12 @@ async def test_get_or_create_user_conflicting_provider(client: AsyncClient):
             await get_or_create_user(db, email, "github")
 
         assert exc_info.value.status_code == 400
-        assert "To konto jest już połączone z dostawcą: google" in exc_info.value.detail
+        assert "Ten adres e-mail jest już zarejestrowany" in exc_info.value.detail
+        assert "Google" in exc_info.value.detail
 
 
 @pytest.mark.asyncio
 async def test_resolve_user_data_with_json_method(mocker):
-    """Testuje, czy funkcja poprawnie obsługuje obiekt z metodą .json()."""
     mock_response = mocker.AsyncMock()
     mock_response.json = mocker.AsyncMock(return_value={"data": "z json"})
 
@@ -278,9 +294,7 @@ async def test_resolve_user_data_with_json_method(mocker):
 
 @pytest.mark.asyncio
 async def test_resolve_user_data_type_error_then_json(mocker):
-    """Testuje przypadek, gdy pierwsze .json() rzuca TypeError (jak w authlib)."""
-    mock_response = mocker.Mock()  # Używamy synchronicznego mocka
-    # Pierwsze wywołanie `await response.json()` rzuci błąd, bo mock nie jest awaitable
+    mock_response = mocker.Mock()
     mock_response.json = mocker.Mock(
         side_effect=[TypeError, {"data": "z drugiego json"}]
     )
