@@ -9,6 +9,8 @@ from foodtracker_app.auth.schemas import Achievement
 from foodtracker_app.models.financial_stats import FinancialStat
 from foodtracker_app.models.product import Product
 from foodtracker_app.models.user import User
+from foodtracker_app.models.pantry import Pantry
+from foodtracker_app.models.pantry_user import PantryUser
 
 ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
     {
@@ -207,11 +209,10 @@ ACHIEVEMENT_DEFINITIONS: List[Dict[str, Any]] = [
 
 
 async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
-    """Prywatna funkcja pomocnicza do pobierania wszystkich danych potrzebnych do obliczenia postępu."""
     today = date.today()
     dialect = db.bind.dialect.name
     if dialect == "postgresql":
-        day_of_week = func.extract("isodow", Product.created_at)  # Monday=1, Sunday=7
+        day_of_week = func.extract("isodow", Product.created_at)
     else:
         day_of_week = case(
             (func.strftime("%w", Product.created_at) == "0", 7),
@@ -233,6 +234,23 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
         "%ryba%",
         "%jogurt%",
     ]
+
+    base_query = (  # noqa : F401
+        select(Product)
+        .join(Pantry)
+        .join(PantryUser)
+        .where(PantryUser.user_id == user.id)
+    )
+
+    def query_count(where_clause):
+        return (
+            select(func.count(Product.id))
+            .select_from(Product)
+            .join(Pantry)
+            .join(PantryUser)
+            .where(PantryUser.user_id == user.id, *where_clause)
+        )
+
     queries = {
         "product_stats": select(
             func.sum(
@@ -273,42 +291,39 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
                     ),
                 )
             ).label("wasted"),
-        ).where(Product.user_id == user.id),
-        "financial_stats": select(FinancialStat).where(
-            FinancialStat.user_id == user.id
+        )
+        .select_from(Product)
+        .join(Pantry)
+        .join(PantryUser)
+        .where(PantryUser.user_id == user.id),
+        "financial_stats": (
+            select(FinancialStat)
+            .join(Pantry, FinancialStat.pantry_id == Pantry.id)
+            .join(PantryUser, PantryUser.pantry_id == Pantry.id)
+            .where(PantryUser.user_id == user.id)
         ),
-        "cheese_products": select(func.count(Product.id)).where(
-            Product.user_id == user.id, Product.name.ilike("%ser%")
+        "cheese_products": query_count([Product.name.ilike("%ser%")]),
+        "night_actions": query_count(
+            [func.extract("hour", Product.created_at).between(0, 4)]
         ),
-        "night_actions": select(func.count(Product.id)).where(
-            Product.user_id == user.id,
-            func.extract("hour", Product.created_at).between(0, 4),
+        "active_products_count": query_count([Product.current_amount > 0]),
+        "day_add_streak": query_count([cast(Product.created_at, Date) == today]),
+        "sunday_adds": query_count([day_of_week == 7]),
+        "weekend_adds": query_count([day_of_week.in_([6, 7])]),
+        "morning_caffeine_add": query_count(
+            [
+                func.extract("hour", Product.created_at) < 9,
+                or_(Product.name.ilike("%kawa%"), Product.name.ilike("%herbata%")),
+            ]
         ),
-        "active_products_count": select(func.count(Product.id)).where(
-            Product.user_id == user.id, Product.current_amount > 0
+        "healthy_monday_add": query_count(
+            [day_of_week == 1, or_(*[Product.name.ilike(k) for k in healthy_keywords])]
         ),
-        "day_add_streak": select(func.count(Product.id)).where(
-            Product.user_id == user.id, cast(Product.created_at, Date) == today
-        ),
-        "sunday_adds": select(func.count(Product.id)).where(
-            Product.user_id == user.id, day_of_week == 7
-        ),
-        "weekend_adds": select(func.count(Product.id)).where(
-            Product.user_id == user.id, day_of_week.in_([6, 7])
-        ),
-        "morning_caffeine_add": select(func.count(Product.id)).where(
-            Product.user_id == user.id,
-            func.extract("hour", Product.created_at) < 9,
-            or_(Product.name.ilike("%kawa%"), Product.name.ilike("%herbata%")),
-        ),
-        "healthy_monday_add": select(func.count(Product.id)).where(
-            Product.user_id == user.id,
-            day_of_week == 1,
-            or_(*[Product.name.ilike(keyword) for keyword in healthy_keywords]),
-        ),
-        "total_spent_value": select(
-            func.sum(Product.price * Product.initial_amount)
-        ).where(Product.user_id == user.id),
+        "total_spent_value": select(func.sum(Product.price * Product.initial_amount))
+        .select_from(Product)
+        .join(Pantry)
+        .join(PantryUser)
+        .where(PantryUser.user_id == user.id),
     }
 
     results = await asyncio.gather(*(db.execute(q) for q in queries.values()))
@@ -356,21 +371,19 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
 
 
 async def get_user_achievements(db: AsyncSession, user: User) -> List[Achievement]:
-    """Główna, publiczna funkcja. Pobiera dane i buduje listę osiągnięć."""
-
     progress_data = await _get_progress_data(db, user)
-
     user_achievements: List[Achievement] = []
+
     for definition in ACHIEVEMENT_DEFINITIONS:
         progress_type = definition["type"]
         current_progress = progress_data.get(progress_type, 0)
-
         total_progress = definition["total_progress"]
-        if isinstance(total_progress, float):
-            current_progress = float(current_progress)
-        else:
-            current_progress = int(current_progress)
 
+        current_progress = (
+            float(current_progress)
+            if isinstance(total_progress, float)
+            else int(current_progress)
+        )
         is_achieved = current_progress >= total_progress
 
         user_achievements.append(
