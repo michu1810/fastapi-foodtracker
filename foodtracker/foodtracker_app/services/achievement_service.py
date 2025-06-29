@@ -297,7 +297,10 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
         .join(PantryUser)
         .where(PantryUser.user_id == user.id),
         "financial_stats": (
-            select(FinancialStat)
+            select(
+                func.sum(FinancialStat.saved_value).label("total_saved"),
+                func.sum(FinancialStat.wasted_value).label("total_wasted"),
+            )
             .join(Pantry, FinancialStat.pantry_id == Pantry.id)
             .join(PantryUser, PantryUser.pantry_id == Pantry.id)
             .where(PantryUser.user_id == user.id)
@@ -330,7 +333,7 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
     res_map = dict(zip(queries.keys(), results))
 
     p_stats = res_map["product_stats"].one_or_none()
-    f_stats = res_map["financial_stats"].scalar_one_or_none()
+    f_stats_row = res_map["financial_stats"].one_or_none()
 
     p_stats_dict = (
         {
@@ -346,7 +349,9 @@ async def _get_progress_data(db: AsyncSession, user: User) -> Dict[str, Any]:
         "saved_products": int(p_stats_dict["used"]),
         "total_products": int(p_stats_dict["total"]),
         "wasted_products": int(p_stats_dict["wasted"]),
-        "money_saved": float(f_stats.saved_value) if f_stats else 0.0,
+        "money_saved": float(f_stats_row.total_saved)
+        if f_stats_row and f_stats_row.total_saved
+        else 0.0,
         "cheese_products": res_map["cheese_products"].scalar_one() or 0,
         "night_actions": res_map["night_actions"].scalar_one() or 0,
         "active_products_count": res_map["active_products_count"].scalar_one() or 0,
