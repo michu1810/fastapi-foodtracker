@@ -2,7 +2,9 @@ from authlib.integrations.starlette_client import OAuth
 from fastapi import APIRouter, Depends, HTTPException, Request
 from foodtracker_app.auth.utils import create_access_token, create_refresh_token
 from foodtracker_app.db.database import get_async_session
-from foodtracker_app.models.user import User
+
+from foodtracker_app.models import User, Pantry, PantryUser
+
 from foodtracker_app.settings import settings
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -66,6 +68,14 @@ async def get_or_create_user(db: AsyncSession, email: str, provider: str) -> Use
             is_verified=True,
         )
         db.add(user)
+        await db.flush()
+
+        default_pantry = Pantry(name="Moja Spiżarnia", owner_id=user.id)
+        db.add(default_pantry)
+
+        pantry_association = PantryUser(user=user, pantry=default_pantry, role="owner")
+        db.add(pantry_association)
+
         await db.commit()
         await db.refresh(user)
 

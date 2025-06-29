@@ -6,10 +6,10 @@ from zoneinfo import ZoneInfo
 
 import magic
 from fastapi import APIRouter, Body, Cookie, Depends, File, HTTPException
-from fastapi import Path as FastAPIPath
 from fastapi import Query, Request, Response, UploadFile, status
 from fastapi.responses import JSONResponse
-from foodtracker_app.auth.dependancies import get_current_user
+from foodtracker_app.auth.dependancies import get_current_user, get_pantry_for_user
+from foodtracker_app.schemas.pantry import PantryCreate
 from foodtracker_app.auth.schemas import (
     Achievement,
     ChangePasswordRequest,
@@ -23,6 +23,7 @@ from foodtracker_app.auth.schemas import (
     TrendData,
     UserCreate,
     UserProfile,
+    UserSettingsUpdate,
 )
 from foodtracker_app.auth.utils import (
     create_access_token,
@@ -34,15 +35,18 @@ from foodtracker_app.auth.utils import (
     verify_password,
 )
 from foodtracker_app.db.database import get_async_session
-from foodtracker_app.models.financial_stats import FinancialStat
-from foodtracker_app.models.product import Product
-from foodtracker_app.models.user import User
-from foodtracker_app.services import achievement_service
+from foodtracker_app.models import User, Product, Pantry, FinancialStat
+from foodtracker_app.services import (
+    achievement_service,
+    pantry_service,
+    product_service,
+)
 from foodtracker_app.services.cloudinary_service import upload_image
 from foodtracker_app.settings import settings
 from foodtracker_app.utils.recaptcha import verify_recaptcha
 from rate_limiter import limiter
 from sqlalchemy import Date, case, cast, func, and_
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.sql.functions import coalesce
@@ -80,7 +84,7 @@ async def upload_avatar(
 
 
 @limiter.limit("5/day")
-@auth_router.post("/register", tags=["Auth"])
+@auth_router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(
     request: Request, payload: dict, db: AsyncSession = Depends(get_async_session)
 ):
@@ -96,29 +100,22 @@ async def register(
         raise HTTPException(status_code=400, detail="Invalid reCAPTCHA")
 
     result = await db.execute(select(User).where(User.email == email))
-    existing_user = result.scalar_one_or_none()
-    if existing_user:
-        if (
-            existing_user.social_provider
-            and existing_user.social_provider != "password"
-        ):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Ten e-mail jest powiązany z logowaniem przez {existing_user.social_provider}.",
-            )
-        else:
-            raise HTTPException(status_code=400, detail="Email already registered")
+    if result.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Email already registered")
 
     new_user = User(
         email=email, hashed_password=hash_password(password), social_provider="password"
     )
     db.add(new_user)
-
     await db.commit()
     await db.refresh(new_user)
 
-    await trigger_verification_email(new_user, db)
+    default_pantry_data = PantryCreate(name="Moja Spiżarnia")
+    await pantry_service.create_pantry(
+        db=db, user=new_user, pantry_data=default_pantry_data
+    )
 
+    await trigger_verification_email(new_user, db)
     return {"message": "User created successfully. Sprawdź email, by aktywować konto."}
 
 
@@ -230,7 +227,75 @@ async def get_me(user: User = Depends(get_current_user)):
         "createdAt": user.created_at,
         "avatar_url": user.avatar_url,
         "provider": user.social_provider if user.social_provider else "password",
+        "send_expiration_notifications": user.send_expiration_notifications,  # <<< DODAJ TĘ LINIĘ
     }
+
+
+@auth_router.patch("/me/settings", response_model=UserProfile, tags=["Auth"])
+async def update_user_settings(
+    settings_data: UserSettingsUpdate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Aktualizuje ustawienia powiadomień dla zalogowanego użytkownika.
+    """
+    user.send_expiration_notifications = settings_data.send_expiration_notifications
+    await db.commit()
+    await db.refresh(user)
+
+    return {
+        "id": user.id,
+        "email": user.email,
+        "createdAt": user.created_at,
+        "avatar_url": user.avatar_url,
+        "provider": user.social_provider if user.social_provider else "password",
+        "send_expiration_notifications": user.send_expiration_notifications,
+    }
+
+
+async def _handle_product_action(
+    action_type: str,
+    product: Product,
+    amount: Decimal,
+    db: AsyncSession,
+    user: User,
+):
+    stats_result = await db.execute(
+        select(FinancialStat).where(FinancialStat.pantry_id == product.pantry_id)
+    )
+    financial_stat = stats_result.scalar_one_or_none()
+    if not financial_stat:
+        financial_stat = FinancialStat(pantry_id=product.pantry_id)
+        db.add(financial_stat)
+        await db.flush()
+
+    achievements_before = await achievement_service.get_user_achievements(db, user)
+    achieved_before_ids = {ach.id for ach in achievements_before if ach.achieved}
+
+    if product.initial_amount > 0:
+        price_per_unit = product.price / product.initial_amount
+        value_of_action = price_per_unit * amount
+        if action_type == "use":
+            financial_stat.saved_value += value_of_action
+        else:
+            financial_stat.wasted_value += value_of_action
+
+    product.current_amount -= amount
+    if action_type == "waste":
+        product.wasted_amount += amount
+
+    await db.commit()
+    await db.refresh(product)
+    await db.refresh(financial_stat)
+
+    achievements_after = await achievement_service.get_user_achievements(db, user)
+    newly_unlocked = [
+        ach
+        for ach in achievements_after
+        if ach.achieved and ach.id not in achieved_before_ids
+    ]
+    return {"product": product, "unlocked_achievements": newly_unlocked}
 
 
 @product_router.post(
@@ -239,66 +304,17 @@ async def get_me(user: User = Depends(get_current_user)):
 async def create_product(
     product_data: ProductCreate,
     db: AsyncSession = Depends(get_async_session),
+    pantry: Pantry = Depends(get_pantry_for_user),
     user: User = Depends(get_current_user),
 ):
-    final_expiration_date = product_data.expiration_date
-    if product_data.is_fresh_product:
-        if not product_data.purchase_date:
-            raise HTTPException(
-                status_code=422, detail="Brakuje daty zakupu dla świeżego produktu."
-            )
-        final_expiration_date = product_data.purchase_date + timedelta(
-            days=product_data.shelf_life_days or 5
-        )
-
-    if not final_expiration_date:
-        raise HTTPException(
-            status_code=422,
-            detail="Data ważności jest wymagana dla tego typu produktu.",
-        )
-
-    if final_expiration_date < date.today():
-        raise HTTPException(
-            status_code=422, detail="Data ważności nie może być z przeszłości."
-        )
-
-    new_product = Product(
-        name=product_data.name,
-        expiration_date=final_expiration_date,
-        user_id=user.id,
-        external_id=product_data.external_id,
-        price=Decimal(str(product_data.price)),
-        unit=product_data.unit,
-        initial_amount=Decimal(str(product_data.initial_amount)),
-        current_amount=Decimal(str(product_data.initial_amount)),
+    """
+    Tworzy nowy produkt w podanej spiżarni.
+    Cała logika została przeniesiona do warstwy serwisowej.
+    """
+    new_product = await product_service.create_product(
+        db=db, pantry_id=pantry.id, product_data=product_data
     )
-    db.add(new_product)
-    await db.commit()
-    await db.refresh(new_product)
     return new_product
-
-
-async def get_product_and_stats(product_id: int, user: User, db: AsyncSession):
-    product_result = await db.execute(
-        select(Product).where(Product.id == product_id, Product.user_id == user.id)
-    )
-    product = product_result.scalar_one_or_none()
-
-    if not product:
-        return None, None
-
-    stats_result = await db.execute(
-        select(FinancialStat).where(FinancialStat.user_id == user.id)
-    )
-    financial_stat = stats_result.scalar_one_or_none()
-
-    if not financial_stat:
-        financial_stat = FinancialStat(user_id=user.id)
-        db.add(financial_stat)
-        await db.flush()
-        await db.refresh(financial_stat)
-
-    return product, financial_stat
 
 
 async def _handle_product_action(
@@ -339,128 +355,152 @@ async def _handle_product_action(
     return {"product": product, "unlocked_achievements": newly_unlocked}
 
 
-@product_router.post(
-    "/use/{product_id}", response_model=ProductActionResponse, tags=["Products"]
-)
+@product_router.post("/use/{product_id}", response_model=ProductActionResponse)
 async def use_product(
     product_id: int,
     action_request: ProductActionRequest,
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
     user: User = Depends(get_current_user),
 ):
-    product, financial_stat = await get_product_and_stats(product_id, user, db)
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    if not financial_stat:
+    product_to_use = await db.get(Product, product_id)
+    if not product_to_use or product_to_use.pantry_id != pantry.id:
         raise HTTPException(
-            status_code=500, detail="Financial stats for user not found."
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
         )
 
     amount_to_use = Decimal(str(action_request.amount))
-    if product.current_amount < amount_to_use:
+    if product_to_use.current_amount < amount_to_use:
         raise HTTPException(status_code=400, detail="Nie możesz zużyć więcej niż masz.")
 
+    financial_stat = await db.scalar(
+        select(FinancialStat).where(FinancialStat.pantry_id == pantry.id)
+    )
+
+    if not financial_stat:
+        financial_stat = FinancialStat(pantry_id=pantry.id)
+        db.add(financial_stat)
+        await db.commit()
+        await db.refresh(financial_stat)
     return await _handle_product_action(
-        "use", product, financial_stat, amount_to_use, user, db
+        "use", product_to_use, financial_stat, amount_to_use, user, db
     )
 
 
-@product_router.post(
-    "/waste/{product_id}", response_model=ProductActionResponse, tags=["Products"]
-)
+@product_router.post("/waste/{product_id}", response_model=ProductActionResponse)
 async def waste_product(
     product_id: int,
     action_request: ProductActionRequest,
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
     user: User = Depends(get_current_user),
 ):
-    product, financial_stat = await get_product_and_stats(product_id, user, db)
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    if not financial_stat:
+    product_to_waste = await db.get(Product, product_id)
+    if not product_to_waste or product_to_waste.pantry_id != pantry.id:
         raise HTTPException(
-            status_code=500, detail="Financial stats for user not found."
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
         )
 
     amount_to_waste = Decimal(str(action_request.amount))
-    if product.current_amount < amount_to_waste:
+    if product_to_waste.current_amount < amount_to_waste:
         raise HTTPException(
             status_code=400, detail="Nie możesz wyrzucić więcej niż masz."
         )
 
+    financial_stat = await db.scalar(
+        select(FinancialStat).where(FinancialStat.pantry_id == pantry.id)
+    )
+
+    if not financial_stat:
+        financial_stat = FinancialStat(pantry_id=pantry.id)
+        db.add(financial_stat)
+        await db.commit()
+        await db.refresh(financial_stat)
+    if not financial_stat:
+        raise HTTPException(
+            status_code=500, detail="Brak danych finansowych dla tej spiżarni"
+        )
+
     return await _handle_product_action(
-        "waste", product, financial_stat, amount_to_waste, user, db
+        "waste", product_to_waste, financial_stat, amount_to_waste, user, db
     )
 
 
-@product_router.get("/get", response_model=List[ProductOut], tags=["Products"])
+@product_router.get("/get", response_model=List[ProductOut])
 async def get_products(
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
 ):
-    result = await db.execute(select(Product).where(Product.user_id == user.id))
-    return result.scalars().all()
+    """
+    Zwraca listę wszystkich produktów dla autoryzowanej spiżarni.
+    Używa jawnego zapytania dla maksymalnej niezawodności.
+    """
+    stmt = (
+        select(Product)
+        .options(selectinload(Product.category))
+        .where(Product.pantry_id == pantry.id)
+        .order_by(Product.expiration_date.asc())
+    )
+    result = await db.execute(stmt)
+    products = result.scalars().all()
+    return products
 
 
-@product_router.delete(
-    "/delete/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Products"]
-)
+@product_router.delete("/delete/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product(
     product_id: int,
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
 ):
-    result = await db.execute(
-        select(Product).where(Product.id == product_id, Product.user_id == user.id)
-    )
-    product = result.scalar_one_or_none()
-
-    if product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
+    product = await db.get(Product, product_id)
+    if not product or product.pantry_id != pantry.id:
+        raise HTTPException(
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
+        )
 
     await db.delete(product)
     await db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@product_router.put(
-    "/update/{product_id}", response_model=ProductOut, tags=["Products"]
-)
+@product_router.put("/update/{product_id}", response_model=ProductOut)
 async def update_product(
-    product_id: int = FastAPIPath(..., gt=0),
-    updated_data: ProductCreate = Body(...),
+    product_id: int,
+    updated_data: ProductCreate,
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
 ):
-    result = await db.execute(
-        select(Product).where(Product.id == product_id, Product.user_id == user.id)
-    )
-    product = result.scalar_one_or_none()
+    product = await db.get(Product, product_id)
+    if not product or product.pantry_id != pantry.id:
+        raise HTTPException(
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
+        )
 
-    if product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    product.name = updated_data.name
-    if updated_data.expiration_date:
-        product.expiration_date = updated_data.expiration_date
+    product_data = updated_data.model_dump(exclude_unset=True)
+    for key, value in product_data.items():
+        if hasattr(product, key):
+            setattr(product, key, value)
 
     await db.commit()
     await db.refresh(product)
     return product
 
 
-@product_router.get("/get/{product_id}", response_model=ProductOut, tags=["Products"])
+@product_router.get("/get/{product_id}", response_model=ProductOut)
 async def get_product_by_id(
-    product_id: int,
-    db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
+    product_id: int, pantry: Pantry = Depends(get_pantry_for_user)
 ):
-    result = await db.execute(
-        select(Product).where(Product.id == product_id, Product.user_id == user.id)
-    )
-    product = result.scalar_one_or_none()
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product
+    product_to_get = None
+    for p in pantry.products:
+        if p.id == product_id:
+            product_to_get = p
+            break
+
+    if not product_to_get:
+        raise HTTPException(
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
+        )
+    return product_to_get
 
 
 @product_router.get(
@@ -469,7 +509,7 @@ async def get_product_by_id(
 async def get_expiring_products(
     days: int = Query(7, gt=0),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
+    pantry: Pantry = Depends(get_pantry_for_user),
 ):
     today = date.today()
     deadline = today + timedelta(days=days)
@@ -477,7 +517,7 @@ async def get_expiring_products(
     result = await db.execute(
         select(Product)
         .where(
-            Product.user_id == user.id,
+            Product.pantry_id == pantry.id,
             Product.expiration_date <= deadline,
             Product.expiration_date >= today,
             Product.current_amount > 0,
@@ -501,23 +541,17 @@ async def get_expiring_products(
     return products_to_return
 
 
-@product_router.get(
-    "/stats/financial", response_model=FinancialStatsOut, tags=["Products"]
-)
+@product_router.get("/stats/financial", response_model=FinancialStatsOut)
 async def get_financial_stats(
+    pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
 ):
-    result = await db.execute(
-        select(FinancialStat).where(FinancialStat.user_id == user.id)
+    stats = await db.scalar(
+        select(FinancialStat).where(FinancialStat.pantry_id == pantry.id)
     )
-    stats = result.scalar_one_or_none()
 
     if not stats:
-        stats = FinancialStat(user_id=user.id)
-        db.add(stats)
-        await db.commit()
-        await db.refresh(stats)
+        return FinancialStatsOut(saved=0, wasted=0)
 
     return FinancialStatsOut(
         saved=float(stats.saved_value), wasted=float(stats.wasted_value)
@@ -527,7 +561,7 @@ async def get_financial_stats(
 @product_router.get("/stats", response_model=ProductStats, tags=["Products"])
 async def get_product_stats(
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
+    pantry: Pantry = Depends(get_pantry_for_user),
 ):
     query = select(
         func.sum(case((Product.unit == "szt.", Product.initial_amount), else_=1)).label(
@@ -568,7 +602,7 @@ async def get_product_stats(
                 ),
             )
         ).label("wasted"),
-    ).where(Product.user_id == user.id)
+    ).where(Product.pantry_id == pantry.id)
 
     res = await db.execute(query)
     row = res.one_or_none()
@@ -589,7 +623,7 @@ async def get_product_stats(
 async def get_product_trends(
     range_days: int = Query(30, gt=0),
     db: AsyncSession = Depends(get_async_session),
-    user: User = Depends(get_current_user),
+    pantry: Pantry = Depends(get_pantry_for_user),
 ):
     """
     Zwraca dzienne trendy dodawania produktów, poprawnie obsługując
@@ -614,7 +648,7 @@ async def get_product_trends(
                 0,
             ).label("total_items"),
         )
-        .where(Product.user_id == user.id)
+        .where(Product.pantry_id == pantry.id)
         .where(cast(local_created_at, Date) >= start_date)
         .group_by(cast(local_created_at, Date))
         .order_by(cast(local_created_at, Date))
@@ -727,14 +761,38 @@ async def change_password(
     return {"message": "Hasło zostało zmienione pomyślnie"}
 
 
-@auth_router.delete("/delete-account", tags=["Auth"])
+@auth_router.delete(
+    "/delete-account", tags=["Auth"], status_code=status.HTTP_204_NO_CONTENT
+)
 async def delete_account(
     db: AsyncSession = Depends(get_async_session),
     user: User = Depends(get_current_user),
 ):
+    """
+    Niezawodnie usuwa konto użytkownika wraz ze wszystkimi jego zależnościami.
+    """
+    # Krok 1: Znajdź wszystkie spiżarnie, których właścicielem jest użytkownik.
+    owned_pantries_result = await db.execute(
+        select(Pantry).where(Pantry.owner_id == user.id)
+    )
+    owned_pantries = owned_pantries_result.scalars().all()
+
+    # Krok 2: Usuń każdą ze spiżarni należących do użytkownika.
+    # Dzięki `cascade="all, delete-orphan"` w modelu Pantry, to usunie również
+    # wszystkie produkty, statystyki i powiązania członków (`PantryUser`) z TĄ spiżarnią.
+    for pantry in owned_pantries:
+        await db.delete(pantry)
+
+    # Krok 3: Usuń obiekt samego użytkownika.
+    # Na tym etapie jedyne potencjalne zależności to członkostwo w spiżarniach
+    # należących do innych osób. `cascade="all, delete-orphan"` w modelu User
+    # na relacji `pantry_associations` zajmie się usunięciem tych wpisów.
     await db.delete(user)
+
+    # Krok 4: Zatwierdź transakcję.
     await db.commit()
-    return {"message": "Konto zostało usunięte"}
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @auth_router.post("/refresh", tags=["Auth"])
