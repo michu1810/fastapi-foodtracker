@@ -26,9 +26,9 @@ Food Tracker is a full-stack web application designed and built from the ground 
 
 ### 🖼️ Application Gallery
 
-|              Login & Registration              |                   Main Dashboard                   |                  Pantry Management                   |                     Achievements                      |
-|:----------------------------------------------:|:--------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------:|
-| ![Login Page](https://i.imgur.com/FF3zlVz.png) | ![Main Dashboard](https://i.imgur.com/3ciOqZF.png) | ![Pantry Management](link do Twojego nowego screenshota) | ![Achievements Page](https://i.imgur.com/JnkB6KY.png) |
+|              Login & Registration              |                   Main Dashboard                   |                   Pantry Management                   |                     Achievements                      |
+|:----------------------------------------------:|:--------------------------------------------------:|:-----------------------------------------------------:|:-----------------------------------------------------:|
+| ![Login Page](https://i.imgur.com/FF3zlVz.png) | ![Main Dashboard](https://i.imgur.com/3ciOqZF.png) | ![Pantry Management](https://imgur.com/a/qhI1bO2.png) | ![Achievements Page](https://i.imgur.com/JnkB6KY.png) |
 
 ---
 
@@ -119,7 +119,7 @@ When designing the backend architecture, I set several key goals: **security, pe
 <summary><h3>🧪 Automated Testing - A Solid Foundation (Click to expand)</h3></summary>
 
 -   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. **Pre-commit** hooks are configured to automatically check code quality before every commit.
--   **Code Coverage:** I aim for the highest possible code coverage (currently over 75% and growing), with a strong focus on achieving 100% coverage for critical service modules like `pantry_service`.
+-   **Code Coverage:** I aim for the highest possible code coverage (currently over 85% and growing), with a strong focus on achieving 100% coverage for critical service modules like `pantry_service`.
 -   **Framework:** The entire test suite is based on **Pytest**, leveraging its advanced features like fixtures and parametrization.
 -   **Test Types:**
     -   **Unit tests** for business logic (e.g., the achievement system, helper functions).
