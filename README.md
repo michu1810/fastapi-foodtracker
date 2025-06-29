@@ -14,7 +14,7 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
 ![Pytest](https://img.shields.io/badge/pytest-✓-green?style=flat-square)
 
-Food Tracker is a full-stack web application designed and built from the ground up to help users reduce food waste, manage their home pantry, and save money.
+Food Tracker is a full-stack web application designed and built from the ground up to help users reduce food waste, manage their home pantry collaboratively, and save money.
 
 <p align="center">
   <a href="https://food-tracker.pl" target="_blank">
@@ -26,20 +26,20 @@ Food Tracker is a full-stack web application designed and built from the ground 
 
 ### 🖼️ Application Gallery
 
-|              Login & Registration              |                   Main Dashboard                   |                     Statistics                      |                     Achievements                      |
-|:----------------------------------------------:|:--------------------------------------------------:|:---------------------------------------------------:|:-----------------------------------------------------:|
-| ![Login Page](https://i.imgur.com/FF3zlVz.png) | ![Main Dashboard](https://i.imgur.com/3ciOqZF.png) | ![Statistics Page](https://i.imgur.com/xAzbQE2.png) | ![Achievements Page](https://i.imgur.com/JnkB6KY.png) |
+|              Login & Registration              |                   Main Dashboard                   |                  Pantry Management                   |                     Achievements                      |
+|:----------------------------------------------:|:--------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------:|
+| ![Login Page](https://i.imgur.com/FF3zlVz.png) | ![Main Dashboard](https://i.imgur.com/3ciOqZF.png) | ![Pantry Management](link do Twojego nowego screenshota) | ![Achievements Page](https://i.imgur.com/JnkB6KY.png) |
 
 ---
 
 ### 🌟 Key Features
 
 * **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
-* **Modern Authentication:** JWT-based system with `access` and `refresh` tokens, stored securely in `HttpOnly` cookies.
-* **Product Management (CRUD):** Full control over the home pantry with smart expiration date suggestions for fresh, unlabeled products.
-* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggest product details.
+* **Collaborative Pantries:** Users can create their own pantries, invite friends or family via unique, time-limited links, and manage shared grocery lists together. The system supports distinct roles (owner, member) and enforces ownership rules.
+* **Product Management (CRUD):** Full control over pantry items with smart expiration date suggestions for fresh, unlabeled products.
+* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggest product details, including automatic category assignment.
 * **Automated Notifications:** Daily, asynchronous email notifications for expiring products, powered by **Celery Beat** and background workers.
-* **Data Analytics & Gamification:** Financial statistics, data visualization charts with proper timezone handling, and an achievement system to boost user engagement.
+* **Data Analytics & Gamification:** Per-pantry financial statistics, data visualization charts with proper timezone handling, and a global achievement system that aggregates user progress across all their pantries to boost engagement.
 * **Modern & Responsive UI:** A **Mobile-First** design approach ensures the application is fully functional and beautiful on any device.
 
 ### 🛠️ Tech Stack
@@ -50,7 +50,7 @@ Food Tracker is a full-stack web application designed and built from the ground 
 | **Frontend** | React, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
 | **Database** | PostgreSQL, Redis (for Celery), Alembic (for migrations) |
 | **Testing** | Pytest, Pytest-asyncio, HTTPX, Codecov |
-| **DevOps** | Docker, Docker Compose, GitHub Actions (CI/CD) |
+| **DevOps** | Docker, Docker Compose, GitHub Actions (CI/CD), Pre-commit |
 | **Services** | OAuth2 (Google & GitHub), JWT, Bcrypt, Cloudinary, Ruff |
 
 ---
@@ -91,7 +91,7 @@ The entire project is containerized, allowing for a one-command setup.
 
 Every year, millions of tons of food are wasted. In Poland alone, this figure is close to 5 million tons. We throw food away because we forget about expiration dates, buy too much, or plan poorly. I decided to leverage my technical skills to create a tool that actively helps combat this ubiquitous problem at the individual level.
 
-**Food Tracker** is my answer to this challenge. It is a fully functional web application that I designed and built from scratch to give users a simple and effective way to manage their home pantry, save money, and care for our planet. This repository is not just code—it's a demonstration of my approach to building complex, secure, and efficient full-stack systems.
+**Food Tracker** is my answer to this challenge. It is a fully functional web application that I designed and built from scratch to give users a simple and effective way to manage their home pantry—alone or with others—to save money, and to care for our planet. This repository is not just code—it's a demonstration of my approach to building complex, secure, and efficient full-stack systems.
 
 </details>
 
@@ -100,7 +100,7 @@ Every year, millions of tons of food are wasted. In Poland alone, this figure is
 
 When designing the backend architecture, I set several key goals: **security, performance, and scalability**. Below are the most important technical decisions I made to achieve them:
 
--   **API Design (FastAPI):** I chose the asynchronous framework **FastAPI** to ensure extremely high performance and low latency, even under heavy load. I utilized the built-in **Dependency Injection** system to manage database sessions and user authentication.
+-   **API Design (FastAPI):** I chose the asynchronous framework **FastAPI** to ensure extremely high performance and low latency, even under heavy load. I utilized the built-in **Dependency Injection** system to manage database sessions and user authentication, making the code clean and highly testable.
 
 -   **Authentication and Security:** I implemented authentication based on **JWTs**. The long-lived `refresh_token` is stored in a secure **`HttpOnly` cookie**, which is an industry standard for protection against **XSS** attacks. User passwords are protected with the strong, adaptive **bcrypt** algorithm.
 
@@ -108,7 +108,7 @@ When designing the backend architecture, I set several key goals: **security, pe
 
 -   **Asynchronous Background Tasks (Celery):** Sending emails and periodically checking expiration dates are delegated to **Celery** asynchronous tasks. This ensures the API remains responsive at all times. **Celery Beat** acts as a built-in scheduler, guaranteeing the automation of key processes.
 
--   **Database (PostgreSQL & SQLAlchemy):** I opted for a fully **asynchronous database stack** with `asyncpg` and `AsyncSession` in SQLAlchemy. To manage database schema changes, I used **Alembic**, which provides versioning and ensures safe migrations. Financial values are stored using the precise **`Decimal`** type to avoid rounding errors.
+-   **Database (PostgreSQL & SQLAlchemy):** I opted for a fully **asynchronous database stack** with `asyncpg` and `AsyncSession` in SQLAlchemy. To manage database schema changes, I used **Alembic**, which provides versioning and ensures safe migrations. Financial values are stored using the precise **`Decimal`** type to avoid rounding errors. The multi-tenancy model for pantries is managed through robust relational logic and foreign key constraints.
 
 -   **Containerization (Docker):** The entire application is containerized using **Docker**, with separate, optimized configurations for development (`docker-compose.yml`) and production (`docker-compose.prod.yml`). For enhanced security, the processes inside the containers run as a **non-root user**.
 
@@ -118,13 +118,13 @@ When designing the backend architecture, I set several key goals: **security, pe
 <details>
 <summary><h3>🧪 Automated Testing - A Solid Foundation (Click to expand)</h3></summary>
 
--   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. This ensures high code quality, consistency, and adherence to best practices across the project.
--   **Code Coverage:** I aim for the highest possible code coverage (currently around 85-90%), with a strong focus on achieving 100% coverage for critical modules like authentication.
+-   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. **Pre-commit** hooks are configured to automatically check code quality before every commit.
+-   **Code Coverage:** I aim for the highest possible code coverage (currently over 75% and growing), with a strong focus on achieving 100% coverage for critical service modules like `pantry_service`.
 -   **Framework:** The entire test suite is based on **Pytest**, leveraging its advanced features like fixtures and parametrization.
 -   **Test Types:**
     -   **Unit tests** for business logic (e.g., the achievement system, helper functions).
     -   **Integration tests** for the API, using an isolated, in-memory SQLite database for speed and reliability.
-    -   **Mocking** of external and asynchronous services (e.g., email dispatch, Cloudinary API, Celery tasks).
+    -   **Mocking** of external and asynchronous services (e.g., email dispatch, Cloudinary API, Celery tasks) using `unittest.mock` to ensure tests are fast and deterministic.
 -   **Automation (CI/CD):** A process using **GitHub Actions** automatically runs the linter (`ruff check`) and the entire test suite after every commit, ensuring constant quality control and measuring code coverage with **Codecov**.
 
 This comprehensive testing approach allows me to develop the application quickly and safely, confident that its foundations are solid and reliable.
