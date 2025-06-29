@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from typing import List
 from datetime import datetime, timedelta, timezone
@@ -13,15 +13,42 @@ async def create_pantry(
     db: AsyncSession, user: User, pantry_data: PantryCreate
 ) -> Pantry:
     """
-    Tworzy nową spiżarnię, ustawiając danego użytkownika jako jej właściciela.
+    Tworzy nową spiżarnię, sprawdzając limity i unikalność nazwy.
     """
+    existing_pantry_stmt = select(Pantry.id).where(
+        Pantry.owner_id == user.id, func.lower(Pantry.name) == pantry_data.name.lower()
+    )
+    existing_pantry = await db.scalar(existing_pantry_stmt)
+    if existing_pantry:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Spiżarnia o tej nazwie już istnieje.",
+        )
+
+    stmt = select(func.count(Pantry.id)).where(Pantry.owner_id == user.id)
+    owned_pantry_count = await db.scalar(stmt)
+
+    if owned_pantry_count >= 3:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Osiągnięto maksymalny limit 3 posiadanych spiżarni.",
+        )
+
     new_pantry = Pantry(name=pantry_data.name, owner_id=user.id)
     pantry_association = PantryUser(user=user, pantry=new_pantry, role="owner")
     db.add(new_pantry)
     db.add(pantry_association)
     await db.commit()
-    await db.refresh(new_pantry)
-    return new_pantry
+
+    stmt = (
+        select(Pantry)
+        .options(selectinload(Pantry.member_associations).selectinload(PantryUser.user))
+        .where(Pantry.id == new_pantry.id)
+    )
+    result = await db.execute(stmt)
+    final_pantry = result.unique().scalars().one()
+
+    return final_pantry
 
 
 async def get_user_pantries(db: AsyncSession, user: User) -> List[Pantry]:
