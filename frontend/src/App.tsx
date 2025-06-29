@@ -16,11 +16,15 @@ import UserProfilePage from './pages/UserProfilePage';
 import RequireAuth from './routes/RequireAuth';
 import SocialCallback from './components/SocialCallback';
 import AchievementsPage from './pages/AchievementsPage';
+import { PantryManagementPage } from './pages/PantryManagementPage';
+import JoinPantryPage from './pages/JoinPantryPage';
+
 
 export default function App() {
   const location = useLocation();
+  // Poprawiona ścieżka do weryfikacji, aby pasowała do prawdziwego URL
   const minimal = ['/login','/register','/forgot-password','/reset-password','/email-verification-sent','/verify'];
-  const isMinimal = minimal.includes(location.pathname);
+  const isMinimal = minimal.some(path => location.pathname.startsWith(path));
 
   return (
     <>
@@ -36,25 +40,23 @@ export default function App() {
         >
           <Routes location={location} key={location.pathname}>
             {/* Minimal routes */}
-            {isMinimal && (
-              <>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/email-verification-sent" element={<EmailVerificationSent />} />
-                <Route path="/verify" element={<VerifyAccount />} />
-              </>
-            )}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/email-verification-sent" element={<EmailVerificationSent />} />
+            <Route path="/verify" element={<VerifyAccount />} />
+
+            {/* Strona dołączania do spiżarni musi być dostępna dla niezalogowanych */}
+            <Route path="/join-pantry/:token" element={<JoinPantryPage />} />
+
             {/* Protected pages */}
-            {!isMinimal && (
-              <>
-                <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
-                <Route path="/stats" element={<RequireAuth><StatsPage /></RequireAuth>} />
-                <Route path="/profile" element={<RequireAuth><UserProfilePage /></RequireAuth>} />
-                <Route path="/achievements" element={<RequireAuth><AchievementsPage /></RequireAuth>} />
-              </>
-            )}
+            <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
+            <Route path="/stats" element={<RequireAuth><StatsPage /></RequireAuth>} />
+            <Route path="/profile" element={<RequireAuth><UserProfilePage /></RequireAuth>} />
+            <Route path="/achievements" element={<RequireAuth><AchievementsPage /></RequireAuth>} />
+            <Route path="/profile/pantries" element={<RequireAuth><PantryManagementPage /></RequireAuth>} />
+
             {/* Callbacks */}
             <Route path="/google/callback" element={<SocialCallback />} />
             <Route path="/github/callback" element={<SocialCallback />} />
