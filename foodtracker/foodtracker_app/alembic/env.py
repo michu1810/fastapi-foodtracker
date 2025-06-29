@@ -6,6 +6,13 @@ from foodtracker_app.settings import settings
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine.url import make_url
 
+from foodtracker_app.models.user import User  # noqa: F401
+from foodtracker_app.models.product import Product  # noqa: F401
+from foodtracker_app.models.pantry import Pantry  # noqa: F401
+from foodtracker_app.models.pantry_user import PantryUser  # noqa: F401
+from foodtracker_app.models.category import Category  # noqa: F401
+from foodtracker_app.models.financial_stats import FinancialStat  # noqa: F401
+
 config = context.config
 
 if config.config_file_name is not None:
