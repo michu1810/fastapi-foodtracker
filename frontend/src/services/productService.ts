@@ -1,18 +1,21 @@
 import axios from 'axios';
 import apiClient from './api';
 import type { Achievement } from './statsService';
+import type { Category } from './categoryService';
+
 
 export interface Product {
     id: number;
     name: string;
     expiration_date: string;
     external_id?: string | null;
-    user_id: number;
+    pantry_id: number;
     price: number;
     unit: string;
     initial_amount: number;
     current_amount: number;
     wasted_amount: number;
+    category: Category | null;
 }
 
 export interface ExpiringProduct {
@@ -33,6 +36,7 @@ export interface CreateProductRequest {
     shelf_life_days?: number;
     expiration_date?: string | null;
     external_id?: string | null;
+    category_id?: number | null;
 }
 
 export interface ExternalProduct {
@@ -53,37 +57,42 @@ export interface ProductActionResponse {
     unlocked_achievements: Achievement[];
 }
 
+
 class ProductsService {
-    async getAllProducts(): Promise<Product[]> {
-        const response = await apiClient.get<Product[]>('/products/get');
+    async getAllProducts(pantryId: number): Promise<Product[]> {
+        const response = await apiClient.get<Product[]>(`/pantries/${pantryId}/products/get`);
         return response.data;
     }
 
-    async createProduct(product: CreateProductRequest): Promise<Product> {
-        const response = await apiClient.post<Product>('/products/create', product);
+    async createProduct(pantryId: number, product: CreateProductRequest): Promise<Product> {
+        const response = await apiClient.post<Product>(`/pantries/${pantryId}/products/create`, product);
         return response.data;
     }
 
-    async deleteProduct(productId: number): Promise<void> {
-        await apiClient.delete(`/products/delete/${productId}`);
+    async deleteProduct(pantryId: number, productId: number): Promise<void> {
+        await apiClient.delete(`/pantries/${pantryId}/products/delete/${productId}`);
     }
 
-    async useProduct(productId: number, amountToUse: number): Promise<ProductActionResponse> {
-        const response = await apiClient.post<ProductActionResponse>(`/products/use/${productId}`, {
+    async useProduct(pantryId: number, productId: number, amountToUse: number): Promise<ProductActionResponse> {
+        const response = await apiClient.post<ProductActionResponse>(`/pantries/${pantryId}/products/use/${productId}`, {
             amount: amountToUse,
         });
         return response.data;
     }
 
-    async wasteProduct(productId: number, amountToWaste: number): Promise<ProductActionResponse> {
-        const response = await apiClient.post<ProductActionResponse>(`/products/waste/${productId}`, {
+    async wasteProduct(pantryId: number, productId: number, amountToWaste: number): Promise<ProductActionResponse> {
+        const response = await apiClient.post<ProductActionResponse>(`/pantries/${pantryId}/products/waste/${productId}`, {
             amount: amountToWaste,
         });
         return response.data;
     }
 
-    async updateProduct(productId: number, productData: {name: string, expiration_date: string}): Promise<Product> {
-        const response = await apiClient.put<Product>(`/products/update/${productId}`, productData);
+    async updateProduct(pantryId: number, productId: number, productData: CreateProductRequest): Promise<Product> {
+        const response = await apiClient.put<Product>(`/pantries/${pantryId}/products/update/${productId}`, productData);
+        return response.data;
+    }
+    async resolveCategory(externalId: string): Promise<Category> {
+        const response = await apiClient.get<Category>(`/external-products/resolve-category/${externalId}`);
         return response.data;
     }
 
@@ -113,8 +122,8 @@ class ProductsService {
         }
     }
 
-    async getExpiringSoonProducts(): Promise<ExpiringProduct[]> {
-        const response = await apiClient.get<ExpiringProduct[]>('/products/expiring-soon');
+      async getExpiringSoonProducts(pantryId: number): Promise<ExpiringProduct[]> {
+        const response = await apiClient.get<ExpiringProduct[]>(`/pantries/${pantryId}/products/expiring-soon`);
         return response.data;
     }
 

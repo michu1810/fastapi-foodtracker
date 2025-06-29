@@ -1,5 +1,6 @@
-import api from './api';
+import apiClient from './api';
 
+// Interfejsy
 export interface TrendData {
     period: string;
     total: number;
@@ -25,40 +26,40 @@ export interface Averages {
     avgWeekly: number;
     avgMonthly: number;
 }
+
 export interface Stats {
     total: number;
     used: number;
     wasted: number;
+    active: number;
 }
 
-// NOWY INTERFEJS DLA STATYSTYK FINANSOWYCH
 export interface FinancialStats {
     saved: number;
     wasted: number;
 }
 
-
-export async function getTrends(range: 'day' | 'week' | 'month'): Promise<TrendData[]> {
-    const res = await api.get(`/products/stats/trends?range=${range}`);
+export async function getTrends(pantryId: number, range: 'day' | 'week' | 'month'): Promise<TrendData[]> {
+    const res = await apiClient.get(`/pantries/${pantryId}/products/stats/trends?range=${range}`);
     return res.data;
 }
 
 export async function getAchievements(): Promise<Achievement[]> {
-    const res = await api.get('/products/achievements');
+    const res = await apiClient.get('/pantries/{pantryId}/products/achievements');
     return res.data;
 }
 
-export async function getAverages(): Promise<Averages> {
-    const res = await api.get('/products/stats/averages');
+export async function getAverages(pantryId: number): Promise<Averages> {
+    const res = await apiClient.get(`/pantries/${pantryId}/products/stats/averages`);
     return res.data;
 }
-export async function getStats(): Promise<Stats> {
-    const response = await api.get('/products/stats');
+
+export async function getStats(pantryId: number): Promise<Stats> {
+    const response = await apiClient.get(`/pantries/${pantryId}/products/stats`);
     return response.data;
 }
 
-// NOWA FUNKCJA DO POBIERANIA STATYSTYK FINANSOWYCH
-export async function getFinancialStats(): Promise<FinancialStats> {
-    const response = await api.get('/products/stats/financial');
+export async function getFinancialStats(pantryId: number): Promise<FinancialStats> {
+    const response = await apiClient.get(`/pantries/${pantryId}/products/stats/financial`);
     return response.data;
 }
