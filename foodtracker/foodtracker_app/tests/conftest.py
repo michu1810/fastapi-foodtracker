@@ -3,6 +3,7 @@ import pytest
 import pytest_asyncio
 from datetime import date, timedelta
 from httpx import ASGITransport, AsyncClient
+from typing import Callable, Coroutine, Tuple, AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -16,12 +17,10 @@ os.environ["CLOUDINARY_API_SECRET"] = "SECRET"
 os.environ["CLOUDINARY_CLOUD_NAME"] = "NAMETEST"
 os.environ["CLOUDINARY_API_KEY"] = "TEST"
 
-from foodtracker_app.auth.utils import hash_password  # noqa: F401, E402
-from foodtracker_app.db.database import Base, get_async_session  # noqa: F401, E402
-from foodtracker_app.models.user import User  # noqa: F401, E402
-from foodtracker_app.main import app  # noqa: F401, E402
-from foodtracker_app import models  # noqa: F401, E402
-
+from foodtracker_app.auth.utils import hash_password  # noqa : E402
+from foodtracker_app.db.database import Base, get_async_session  # noqa : E402
+from foodtracker_app.main import app  # noqa : E402
+from foodtracker_app.models import User, Pantry, PantryUser  # noqa : E402
 
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db?cache=shared"
 
@@ -46,9 +45,8 @@ async def override_get_async_session():
 
 
 @pytest_asyncio.fixture(scope="function")
-async def client():
+async def client() -> AsyncClient:
     app.dependency_overrides[get_async_session] = override_get_async_session
-
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -58,61 +56,99 @@ async def client():
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-
     app.dependency_overrides.clear()
 
 
 @pytest_asyncio.fixture(scope="function")
-async def authenticated_client_factory(client: AsyncClient):
+def authenticated_client_factory(
+    client: AsyncClient,
+) -> Callable[..., Coroutine[any, any, Tuple[AsyncClient, Pantry]]]:
+    """
+    Fabryka do tworzenia autoryzowanych klientów.
+    Zwraca krotkę (klient, obiekt spiżarni).
+    """
+
+    # POPRAWKA: Dodajemy argument `login`, aby móc tworzyć użytkowników bez logowania
     async def _factory(
         email: str, password: str, is_verified: bool = True, login: bool = True
-    ):
+    ) -> Tuple[AsyncClient, Pantry]:
         async with TestingSessionLocal() as session:
-            result = await session.execute(select(User).where(User.email == email))
-            user = result.scalar_one_or_none()
+            user_result = await session.execute(select(User).where(User.email == email))
+            user = user_result.scalar_one_or_none()
             if not user:
                 user = User(
                     email=email,
                     hashed_password=hash_password(password),
                     is_verified=is_verified,
-                    social_provider="password",
+                    send_expiration_notifications=True,
                 )
                 session.add(user)
-                await session.commit()
-            else:
-                user.is_verified = is_verified
-                await session.commit()
+                await session.flush()
 
-        if login:
-            resp = await client.post(
-                "/auth/login", json={"email": email, "password": password}
+            pantry_result = await session.execute(
+                select(Pantry).where(Pantry.owner_id == user.id)
             )
-            assert resp.status_code == 200, resp.text
-            client.headers["Authorization"] = f"Bearer {resp.json()['access_token']}"
-        return client
+            pantry = pantry_result.scalar_one_or_none()
+            if not pantry:
+                pantry = Pantry(name=f"Spiżarnia {user.email}", owner_id=user.id)
+                session.add(pantry)
+                await session.flush()
+
+            link_result = await session.execute(
+                select(PantryUser).where(
+                    PantryUser.user_id == user.id, PantryUser.pantry_id == pantry.id
+                )
+            )
+            if not link_result.scalar_one_or_none():
+                session.add(PantryUser(user_id=user.id, pantry_id=pantry.id))
+
+            await session.commit()
+            await session.refresh(pantry)
+
+        # POPRAWKA: Logujemy klienta tylko jeśli `login` jest True
+        if login:
+            res = await client.post(
+                "/auth/login",
+                json={"email": email, "password": password},
+            )
+            assert res.status_code == 200, f"Logowanie nie powiodło się: {res.text}"
+            token = res.json()["access_token"]
+            client.headers["Authorization"] = f"Bearer {token}"
+
+        return client, pantry
 
     return _factory
 
 
 @pytest_asyncio.fixture
-async def authenticated_client(authenticated_client_factory):
-    return await authenticated_client_factory("default.user@example.com", "password123")
+async def authenticated_client(
+    authenticated_client_factory: Callable[
+        ..., Coroutine[any, any, Tuple[AsyncClient, Pantry]]
+    ],
+) -> AsyncClient:
+    client, pantry = await authenticated_client_factory(
+        "default.user@example.com", "password123"
+    )
+    setattr(client, "pantry", pantry)
+    return client
+
+
+@pytest_asyncio.fixture(scope="function")
+async def db() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Fikstura tworząca czystą bazę danych i dostarczająca sesję
+    do bezpośredniego użytku w testach.
+    """
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    async with TestingSessionLocal() as session:
+        yield session  # Udostępnia sesję do testu
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
 
 
 @pytest.fixture
-def fixed_date():
+def fixed_date() -> date:
     return date.today() + timedelta(days=30)
-
-
-@pytest_asyncio.fixture
-async def product_in_db(authenticated_client: AsyncClient, fixed_date: date):
-    payload = {
-        "name": "Produkt testowy",
-        "expiration_date": str(fixed_date + timedelta(days=7)),
-        "price": 9.99,
-        "unit": "szt.",
-        "initial_amount": 5,
-    }
-    resp = await authenticated_client.post("/products/create", json=payload)
-    assert resp.status_code == 201, resp.text
-    return resp.json()

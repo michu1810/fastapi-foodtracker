@@ -1,61 +1,29 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-from contextlib import asynccontextmanager
 import redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from foodtracker_app.notifications import tasks
 from foodtracker_app.notifications.utils import send_email_reminder
 import foodtracker_app.notifications.celery_worker as worker
 
 
-class _DummyResult:
-    """Imituje SQLAlchemy ScalarResult (scalars → unique → all)."""
-
-    def scalars(self):
-        return self
-
-    def unique(self):
-        return self
-
-    def all(self):
-        # Brak użytkowników - brak maili
-        return []
-
-
-class _DummySession:
-    async def execute(self, *_args, **_kwargs):
-        return _DummyResult()
-
-
-@asynccontextmanager
-async def _dummy_session_cm():
-    """Asynchroniczny context-manager zwracający _DummySession."""
-    yield _DummySession()
-
-
 @pytest.mark.asyncio
-async def test_notify_expiring_products_sends_mail(mocker):
+async def test_notify_expiring_products_sends_mail(
+    db: AsyncSession, mocker
+):  # Zmienione argumenty
     """
-    Jeśli w bazie nie ma użytkowników z produktami,
-    funkcja NIE powinna wysyłać e-maili.
+    Testuje, czy funkcja NIE wysyła e-maili, gdy baza jest pusta.
+    Używa prawdziwej, pustej bazy danych `db` zamiast starych mocków.
     """
-    # Patchujemy fabrykę sesji na nasz context-manager
-    mocker.patch(
-        "foodtracker_app.notifications.tasks.async_session_maker",
-        new=_dummy_session_cm,
-    )
-
-    # Patchujemy render_template i send_email_async
-    mocker.patch(
-        "foodtracker_app.notifications.tasks.render_template",
-        new=AsyncMock(return_value="<html>dummy</html>"),
-    )
+    # Patchujemy tylko zewnętrzne serwisy
     send_mail = mocker.patch(
         "foodtracker_app.notifications.tasks.send_email_async",
         new=AsyncMock(),
     )
 
-    await tasks._notify_expiring_products()
+    # Wywołujemy funkcję, podając jej naszą pustą bazę danych
+    await tasks._notify_expiring_products(db_session=db)
 
     # Assert – nic nie powinno zostać wysłane
     send_mail.assert_not_awaited()
