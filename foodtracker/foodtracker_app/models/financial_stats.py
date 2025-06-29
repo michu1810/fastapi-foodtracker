@@ -9,7 +9,7 @@ class FinancialStat(Base):
     __tablename__ = "financial_stats"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True)
+    pantry_id = Column(Integer, ForeignKey("pantries.id"), nullable=False, unique=True)
 
     saved_value = Column(
         Numeric(10, 2), nullable=False, server_default="0.00", default=Decimal("0.00")
@@ -19,4 +19,4 @@ class FinancialStat(Base):
         Numeric(10, 2), nullable=False, server_default="0.00", default=Decimal("0.00")
     )
 
-    user = relationship("User", back_populates="financial_stat")
+    pantry = relationship("Pantry", back_populates="financial_stat")

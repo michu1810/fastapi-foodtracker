@@ -24,8 +24,8 @@ class Product(Base):
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
-    user_id = Column(Integer, ForeignKey("users.id"))
     external_id = Column(String, nullable=True)
+    pantry_id = Column(Integer, ForeignKey("pantries.id"), nullable=False)
 
     price = Column(Numeric(10, 2), nullable=False)
     unit = Column(String(10), nullable=False)
@@ -36,7 +36,12 @@ class Product(Base):
         Numeric(10, 2), nullable=False, server_default="0.00", default=Decimal("0.00")
     )
 
-    user = relationship("User", back_populates="products")
+    pantry = relationship("Pantry", back_populates="products")
+
+    category_id = Column(
+        Integer, ForeignKey("categories.id"), nullable=True
+    )  # nullable=True na razie
+    category = relationship("Category", back_populates="products")
 
     __table_args__ = (
         CheckConstraint(
