@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { pantryService } from '../services/pantryService';
 import type { PantryRead } from '../services/pantryService';
-import { FaCopy, FaUsers, FaPen, FaPlusCircle, FaTrash, FaSignOutAlt } from 'react-icons/fa';
+import { FaCopy, FaUsers, FaPen, FaPlusCircle, FaTrash, FaSignOutAlt, FaPlus } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -11,7 +11,7 @@ interface PantryManagementProps {
     onDataChange: () => void;
 }
 
-type ModalAction = 'removeMember' | 'deletePantry' | 'leavePantry';
+type ModalAction = 'removeMember' | 'deletePantry' | 'leavePantry' | 'createPantry'; // NOWOŚĆ: dodajemy akcję 'createPantry'
 interface ModalState {
     isOpen: boolean;
     action: ModalAction | null;
@@ -26,6 +26,9 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
     const [newName, setNewName] = useState(pantry.name);
     const [inviteLink, setInviteLink] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [newPantryName, setNewPantryName] = useState('');
 
     const [modalState, setModalState] = useState<ModalState>({
         isOpen: false,
@@ -71,7 +74,6 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
         toast.success('Skopiowano do schowka!');
     };
 
-
     const openRemoveMemberModal = (memberId: number) => {
         setModalState({
             isOpen: true,
@@ -102,6 +104,23 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
         });
     };
 
+    const handleCreatePantry = async () => {
+        if (newPantryName.trim().length < 2) {
+            toast.error("Nazwa spiżarni musi mieć co najmniej 2 znaki.");
+            return;
+        }
+        try {
+            await pantryService.createPantry(newPantryName);
+            toast.success(`Spiżarnia "${newPantryName}" została utworzona!`);
+            onDataChange(); // Odświeżamy listę spiżarni w całej apce
+            setIsCreateModalOpen(false);
+            setNewPantryName('');
+        } catch (error: any) {
+            console.error(error);
+            const errorMessage = error.response?.data?.detail || 'Nie udało się stworzyć spiżarni.';
+            toast.error(errorMessage);
+        }
+    };
 
     const performRemoveMember = async (memberId: number) => {
         try {
@@ -142,6 +161,16 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
     return (
         <>
             <div className="space-y-8">
+                <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center"><FaPlus className="mr-3 text-teal-600"/>Stwórz nową spiżarnię</h2>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Możesz stworzyć maksymalnie 3 własne spiżarnie. Dołączanie do spiżarni innych nie ma limitu.
+                    </p>
+                    <button onClick={() => setIsCreateModalOpen(true)} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-lg">
+                        Dodaj spiżarnię
+                    </button>
+                </div>
+
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                     <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center"><FaPen className="mr-3 text-teal-600"/>Zmień nazwę spiżarni</h2>
                     <div className="flex gap-2">
@@ -206,7 +235,6 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
                     )}
                 </div>
 
-                {/* ... sekcja opcji nieodwracalnych bez zmian ... */}
                 <div className="bg-red-50 border border-red-200 p-6 rounded-xl shadow-sm space-y-4">
                     <h2 className="text-xl font-bold text-red-600">⚠️ Opcje nieodwracalne</h2>
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -233,6 +261,28 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
                             <div className="flex justify-center gap-4 pt-2">
                                 <button onClick={() => setModalState({ ...modalState, isOpen: false })} className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition-colors">Anuluj</button>
                                 <button onClick={modalState.onConfirm} className="px-6 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors">Potwierdź</button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {isCreateModalOpen && (
+                     <motion.div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                        <motion.div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}>
+                            <h3 className="text-lg font-bold text-gray-800 mb-4">Stwórz nową spiżarnię</h3>
+                            <input
+                                type="text"
+                                value={newPantryName}
+                                onChange={(e) => setNewPantryName(e.target.value)}
+                                placeholder="Nazwa spiżarni..."
+                                maxLength={50}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500 mb-4"
+                            />
+                            <div className="flex justify-end gap-4">
+                                <button onClick={() => setIsCreateModalOpen(false)} className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition-colors">Anuluj</button>
+                                <button onClick={handleCreatePantry} className="px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-colors">Stwórz</button>
                             </div>
                         </motion.div>
                     </motion.div>
