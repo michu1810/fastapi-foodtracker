@@ -1,22 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { ExpiringProduct, productsService } from '../services/productService';
+import { usePantry } from '../context/PantryContext';
 
 export default function ExpiringSoonPanel() {
+  const { selectedPantry } = usePantry();
   const [products, setProducts] = useState<ExpiringProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      const data = await productsService.getExpiringSoonProducts();
-      setProducts(data);
-      setLoading(false);
-    })();
-    const i = setInterval(async () => {
-      const data = await productsService.getExpiringSoonProducts();
-      setProducts(data);
-    }, 10000);
-    return () => clearInterval(i);
-  }, []);
+    const fetchExpiring = async () => {
+      if (!selectedPantry) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      try {
+        const data = await productsService.getExpiringSoonProducts(selectedPantry.id);
+        setProducts(data);
+      } catch (error) {
+        console.error("Błąd pobierania produktów bliskich ważności:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExpiring();
+
+    const intervalId = setInterval(fetchExpiring, 10000);
+
+    return () => clearInterval(intervalId);
+
+  }, [selectedPantry]);
 
   const getText = (d: number) => {
     if (d === 0) return 'Wygasa dziś';
