@@ -1,5 +1,11 @@
 import httpx
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from foodtracker_app.services import product_service
+from foodtracker_app.schemas.category import CategoryRead
+from foodtracker_app.db.database import get_async_session
+
 
 router = APIRouter(prefix="/external-products", tags=["External"])
 
@@ -106,3 +112,19 @@ async def get_product_by_barcode(barcode: str):
             )
 
     raise HTTPException(status_code=500, detail="Wystąpił nieoczekiwany błąd serwera")
+
+
+@router.get("/resolve-category/{external_id}", response_model=CategoryRead)
+async def resolve_category_endpoint(
+    external_id: str, db: AsyncSession = Depends(get_async_session)
+):
+    """
+    Na podstawie external_id próbuje znaleźć i zwrócić pasującą kategorię wewnętrzną.
+    """
+    category = await product_service.resolve_category_from_external_id(db, external_id)
+    if not category:
+        raise HTTPException(
+            status_code=404,
+            detail="Nie udało się automatycznie dopasować kategorii dla tego produktu.",
+        )
+    return category
