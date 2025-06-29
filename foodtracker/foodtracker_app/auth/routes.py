@@ -771,25 +771,16 @@ async def delete_account(
     """
     Niezawodnie usuwa konto użytkownika wraz ze wszystkimi jego zależnościami.
     """
-    # Krok 1: Znajdź wszystkie spiżarnie, których właścicielem jest użytkownik.
     owned_pantries_result = await db.execute(
         select(Pantry).where(Pantry.owner_id == user.id)
     )
     owned_pantries = owned_pantries_result.scalars().all()
 
-    # Krok 2: Usuń każdą ze spiżarni należących do użytkownika.
-    # Dzięki `cascade="all, delete-orphan"` w modelu Pantry, to usunie również
-    # wszystkie produkty, statystyki i powiązania członków (`PantryUser`) z TĄ spiżarnią.
     for pantry in owned_pantries:
         await db.delete(pantry)
 
-    # Krok 3: Usuń obiekt samego użytkownika.
-    # Na tym etapie jedyne potencjalne zależności to członkostwo w spiżarniach
-    # należących do innych osób. `cascade="all, delete-orphan"` w modelu User
-    # na relacji `pantry_associations` zajmie się usunięciem tych wpisów.
     await db.delete(user)
 
-    # Krok 4: Zatwierdź transakcję.
     await db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

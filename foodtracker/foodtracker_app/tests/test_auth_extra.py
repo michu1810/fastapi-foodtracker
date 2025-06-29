@@ -75,7 +75,6 @@ async def test_register_existing_social_user(client: AsyncClient, mocker):
         },
     )
     assert res.status_code == 400
-    # POPRAWKA: Sprawdzamy poprawny komunikat błędu
     assert res.json()["detail"] == "Email already registered"
 
 
@@ -124,7 +123,6 @@ async def test_register_success(client: AsyncClient, mocker):
             "recaptcha_token": "valid-recaptcha-token",
         },
     )
-    # POPRAWKA: Poprawny status code to 201 Created
     assert res.status_code == 201
     assert (
         res.json()["message"]
@@ -205,7 +203,6 @@ async def test_resend_verification_email_success(mocker, authenticated_client_fa
     mocker.patch(
         "foodtracker_app.auth.routes.trigger_verification_email", new=AsyncMock()
     )
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         "reuser@example.com", "x", is_verified=False, login=False
     )
@@ -217,7 +214,6 @@ async def test_resend_verification_email_success(mocker, authenticated_client_fa
 
 @pytest.mark.asyncio
 async def test_resend_verification_email_already_verified(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         "reuser_verified@example.com", "x", is_verified=True
     )
@@ -283,7 +279,6 @@ async def test_login_invalid_credentials(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_login_unverified_account(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         "unverified@example.com", "pwd", is_verified=False, login=False
     )
@@ -296,7 +291,6 @@ async def test_login_unverified_account(authenticated_client_factory):
 
 @pytest.mark.asyncio
 async def test_login_success(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         "verified@example.com", "pwd", is_verified=True, login=False
     )
@@ -369,7 +363,6 @@ async def test_upload_avatar_invalid_mime_type(authenticated_client: AsyncClient
 @pytest.mark.asyncio
 async def test_upload_avatar_success_with_db_update(authenticated_client_factory):
     user_email = "avatar_user_db@example.com"
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(user_email, "pwd")
     mock_content = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
     file = {"file": ("avatar.png", io.BytesIO(mock_content), "image/png")}
@@ -391,7 +384,6 @@ async def test_request_password_reset_success(mocker, authenticated_client_facto
     mocker.patch(
         "foodtracker_app.auth.routes.send_reset_password_email", new=AsyncMock()
     )
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         "reset_success@example.com", "x", login=False
     )
@@ -421,7 +413,6 @@ async def test_reset_password_success(client):
 
 @pytest.mark.asyncio
 async def test_change_password_wrong_old(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory("pwd@example.com", "old123")
     res = await client.post(
         "/auth/change-password",
@@ -434,7 +425,6 @@ async def test_change_password_wrong_old(authenticated_client_factory):
 @pytest.mark.asyncio
 async def test_change_password_social_user(authenticated_client_factory):
     user_email = "socialchange_test@example.com"
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         user_email, "dummy_password", is_verified=True, login=False
     )
@@ -452,14 +442,12 @@ async def test_change_password_success(authenticated_client_factory):
     user_email = "change_pass_success@example.com"
     old_password = "old_password_123"
     new_password = "new_password_456"
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(user_email, old_password)
     res = await client.post(
         "/auth/change-password",
         json={"old_password": old_password, "new_password": new_password},
     )
     assert res.status_code == 200
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client_new, _ = await authenticated_client_factory(
         user_email, new_password, login=False
     )
@@ -480,7 +468,6 @@ async def test_refresh_token_missing_cookie(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_refresh_token_happy_path(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory("rt2_test@example.com", "secret")
     refresh = create_refresh_token(
         {"sub": "rt2_test@example.com", "provider": "password"}
@@ -494,7 +481,6 @@ async def test_refresh_token_happy_path(authenticated_client_factory):
 
 @pytest.mark.asyncio
 async def test_financial_stats_autocreate(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki i poprawiony URL
     client, pantry = await authenticated_client_factory("stat@example.com", "x")
     res = await client.get(f"/pantries/{pantry.id}/products/stats/financial")
     assert res.status_code == 200
@@ -505,7 +491,6 @@ async def test_financial_stats_autocreate(authenticated_client_factory):
 async def test_create_fresh_product_purchase_date(
     authenticated_client_factory, fixed_date
 ):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki i poprawiony URL
     client, pantry = await authenticated_client_factory("f@example.com", "x")
     res = await client.post(
         f"/pantries/{pantry.id}/products/create",
@@ -540,10 +525,8 @@ async def test_product_trends_returns_full_range(authenticated_client_factory, m
 @pytest.mark.asyncio
 async def test_delete_account_success(authenticated_client_factory):
     user_email = "to_be_deleted@example.com"
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(user_email, "password123")
-    # POPRAWKA: Poprawny endpoint to /auth/me i poprawny status code to 204
-    delete_res = await client.delete("/auth/me")
+    delete_res = await client.delete("/auth/delete-account")
     assert delete_res.status_code == 204
     async with TestingSessionLocal() as db:
         res = await db.execute(select(User).where(User.email == user_email))
@@ -552,7 +535,6 @@ async def test_delete_account_success(authenticated_client_factory):
 
 @pytest.mark.asyncio
 async def test_create_product_with_past_date(authenticated_client):
-    # POPRAWKA: Używamy poprawnej, pełnej ścieżki URL
     pantry_id = authenticated_client.pantry.id
     payload = {
         "name": "Przeterminowany produkt",
@@ -569,7 +551,6 @@ async def test_create_product_with_past_date(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_create_fresh_product_without_purchase_date(authenticated_client):
-    # POPRAWKA: Używamy poprawnej, pełnej ścieżki URL
     pantry_id = authenticated_client.pantry.id
     payload = {
         "name": "Świeży kurczak",
@@ -587,7 +568,6 @@ async def test_create_fresh_product_without_purchase_date(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_get_non_existent_product_by_id(authenticated_client):
-    # POPRAWKA: Używamy poprawnej, pełnej ścieżki URL
     pantry_id = authenticated_client.pantry.id
     response = await authenticated_client.get(
         f"/pantries/{pantry_id}/products/get/99999"
@@ -597,7 +577,6 @@ async def test_get_non_existent_product_by_id(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_use_product_not_found(authenticated_client):
-    # POPRAWKA: Używamy poprawnej, pełnej ścieżki URL
     pantry_id = authenticated_client.pantry.id
     response = await authenticated_client.post(
         f"/pantries/{pantry_id}/products/use/99999", json={"amount": 1}
@@ -607,7 +586,6 @@ async def test_use_product_not_found(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_waste_product_not_found(authenticated_client):
-    # POPRAWKA: Używamy poprawnej, pełnej ścieżki URL
     pantry_id = authenticated_client.pantry.id
     response = await authenticated_client.post(
         f"/pantries/{pantry_id}/products/waste/99999", json={"amount": 1}
@@ -617,7 +595,6 @@ async def test_waste_product_not_found(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_create_product_with_zero_price_fails(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki i poprawiony URL
     client, pantry = await authenticated_client_factory(
         "zeroprice@example.com", "password"
     )
@@ -636,7 +613,6 @@ async def test_create_product_with_zero_price_fails(authenticated_client_factory
 
 @pytest.mark.asyncio
 async def test_get_expiring_products_logic(authenticated_client_factory):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki i poprawione URLe
     client, pantry = await authenticated_client_factory(
         "expiring@example.com", "password"
     )
@@ -683,7 +659,6 @@ async def test_get_expiring_products_logic(authenticated_client_factory):
 
 @pytest.mark.asyncio
 async def test_update_product_success(authenticated_client_factory, fixed_date):
-    # POPRAWKA: Rozpakowanie wyniku z fabryki i poprawione URLe
     client, pantry = await authenticated_client_factory("update.test@example.com", "x")
     pantry_id = pantry.id
     create_res = await client.post(
