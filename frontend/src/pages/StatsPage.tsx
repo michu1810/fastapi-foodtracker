@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 import { FaBoxOpen, FaCheck, FaPiggyBank, FaTrash, FaExclamationCircle, FaChartLine } from 'react-icons/fa';
 import CountUp from 'react-countup';
 import { getStats, getFinancialStats } from '../services/statsService';
-import type { FinancialStats, Stats } from '../services/statsService';
+import type { FinancialStats, Stats, TrendData } from '../services/statsService';
 import useSWR from 'swr';
 import TrendChart from '../components/TrendChart';
 import FinancialBarChart from '../components/FinancialBarChart';
+import { usePantry } from '../context/PantryContext';
+import apiClient from '../services/api';
 
-// --- Komponenty Pomocnicze ---
 
 const CardWrapper: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className }) => (
     <div className={`bg-white p-6 rounded-2xl shadow-lg border border-gray-200/80 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${className}`}>
@@ -86,26 +87,37 @@ const SavingsForecastCard: React.FC<{ savedSoFar: number }> = ({ savedSoFar }) =
     );
 }
 
-// --- Główny Komponent Strony ---
 
 export default function StatsPage() {
-    const { data: quantityStats, error: qError } = useSWR<Stats>('/products/stats', getStats);
-    const { data: financialStats, error: fError } = useSWR<FinancialStats>('/products/stats/financial', getFinancialStats);
+    const { selectedPantry } = usePantry();
 
-    const isLoading = !quantityStats && !financialStats && !qError && !fError;
-    const error = qError || fError;
+    const swrKeyForStats = selectedPantry ? `/pantries/${selectedPantry.id}/products/stats` : null;
+    const { data: quantityStats, error: qError } = useSWR<Stats>(swrKeyForStats, () => getStats(selectedPantry!.id));
+
+    const swrKeyForFinancials = selectedPantry ? `/pantries/${selectedPantry.id}/products/stats/financial` : null;
+    const { data: financialStats, error: fError } = useSWR<FinancialStats>(swrKeyForFinancials, () => getFinancialStats(selectedPantry!.id));
+
+    const swrKeyForTrends = selectedPantry ? `/pantries/${selectedPantry.id}/products/stats/trends` : null;
+    const { data: trendData, error: tError } = useSWR<TrendData[]>(swrKeyForTrends, (url: string) => apiClient.get(url).then(res => res.data));
+
+    const isLoading = selectedPantry && !quantityStats && !financialStats && !qError && !fError;
+    const error = qError || fError || tError;
+
+    if (!selectedPantry) {
+        return <div className="text-center p-10 text-gray-500">Wybierz spiżarnię w menu na górze, aby zobaczyć statystyki.</div>;
+    }
 
     if (isLoading) return <div className="text-center p-10">Ładowanie statystyk...</div>;
-    if (error) return <div className="p-6 bg-red-100 text-red-700 rounded-lg text-center">Nie udało się pobrać danych.</div>;
+    if (error) return <div className="p-6 bg-red-100 text-red-700 rounded-lg text-center">Nie udało się pobrać danych dla tej spiżarni.</div>;
     if (!quantityStats || !financialStats) return <div className="text-center p-10">Brak danych do wyświetlenia.</div>;
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-6 lg:p-8 bg-slate-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-4xl font-bold text-gray-800 mb-10 text-center tracking-tight">Pulpit Statystyk</h2>
+                <h2 className="text-4xl font-bold text-gray-800 mb-2 text-center tracking-tight">Pulpit Statystyk</h2>
+                <p className="text-center text-gray-500 mb-10">dla spiżarni: <span className="font-semibold text-teal-600">{selectedPantry.name}</span></p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-
                     <div className="lg:col-span-3 space-y-8">
                         <h3 className="text-xl font-bold text-gray-800 text-center -mb-2">Statystyki Produktów</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -114,21 +126,28 @@ export default function StatsPage() {
                             <CountBlock icon={FaExclamationCircle} value={quantityStats.wasted} label="Wyrzuconych produktów" color="text-red-500" />
                         </div>
                         <EfficiencyGauge used={quantityStats.used} wasted={quantityStats.wasted} />
-                        <TrendChart />
+
+                        {tError ? (
+                            <div className="text-center text-red-500 p-4 bg-red-50 rounded-lg">Błąd ładowania wykresu trendu.</div>
+                        ) : !trendData ? (
+                            <div className="text-center p-4 bg-white rounded-2xl shadow-lg">Ładowanie danych do wykresu...</div>
+                        ) : (
+                            <TrendChart data={trendData} />
+                        )}
                     </div>
 
                     <div className="lg:col-span-2 space-y-8">
-                         <div className="bg-transparent">
-                              <h3 className="text-xl font-bold text-gray-800 text-center mb-4">Podsumowanie Finansowe</h3>
-                              <div className="flex flex-col sm:flex-row gap-6 w-full">
-                                  <FinancialCard title="Zaoszczędzono" value={financialStats.saved} icon={FaPiggyBank} color="text-green-500" />
-                                  <FinancialCard title="Stracono" value={financialStats.wasted} icon={FaTrash} color="text-red-500" />
-                              </div>
-                         </div>
-                         <CardWrapper>
+                        <div className="bg-transparent">
+                            <h3 className="text-xl font-bold text-gray-800 text-center mb-4">Podsumowanie Finansowe</h3>
+                            <div className="flex flex-col sm:flex-row gap-6 w-full">
+                                <FinancialCard title="Zaoszczędzono" value={financialStats.saved} icon={FaPiggyBank} color="text-green-500" />
+                                <FinancialCard title="Stracono" value={financialStats.wasted} icon={FaTrash} color="text-red-500" />
+                            </div>
+                        </div>
+                        <CardWrapper>
                             <FinancialBarChart data={financialStats} />
-                         </CardWrapper>
-                         <SavingsForecastCard savedSoFar={financialStats.saved} />
+                        </CardWrapper>
+                        <SavingsForecastCard savedSoFar={financialStats.saved} />
                     </div>
                 </div>
             </div>

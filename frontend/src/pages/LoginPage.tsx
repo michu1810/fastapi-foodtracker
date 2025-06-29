@@ -1,42 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link, useSearchParams } from 'react-router-dom';
+import { saveToStorage } from '../utils/localStorage';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login, socialLogin, isLoading, error: authError, clearError } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { login, socialLogin, isLoading, error: authError, clearError } = useAuth();
+    const [displayedError, setDisplayedError] = useState<string | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  const [displayedError, setDisplayedError] = useState<string | null>(null);
+    // NOWOŚĆ: Używamy useLocation do odczytania stanu przekazanego przez nawigację
+    const location = useLocation();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+   useEffect(() => {
+    const redirectPath = location.state?.from;
+    if (redirectPath) {
+        // Używamy Twojej funkcji pomocniczej zamiast bezpośredniego wywołania
+        saveToStorage('redirectAfterLogin', redirectPath);
+    }
 
-  useEffect(() => {
     const urlError = searchParams.get('error');
     if (urlError) {
-      setDisplayedError(decodeURIComponent(urlError));
-      searchParams.delete('error');
-      setSearchParams(searchParams, { replace: true });
+        setDisplayedError(decodeURIComponent(urlError));
+        searchParams.delete('error');
+        setSearchParams(searchParams, { replace: true });
     }
-  }, []);
+}, [location.state, searchParams, setSearchParams]);
 
-  useEffect(() => {
-    if (authError) {
-      setDisplayedError(authError);
+    useEffect(() => {
+        if (authError) {
+            setDisplayedError(authError);
+        }
+    }, [authError]);
+
+    const clearAllErrors = () => {
+        clearError();
+        setDisplayedError(null);
     }
-  }, [authError]);
 
-  const clearAllErrors = () => {
-    clearError();
-    setDisplayedError(null);
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    clearAllErrors();
-    await login(email, password);
-  };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        clearAllErrors();
+        // Po standardowym logowaniu, AuthContext sam przekieruje użytkownika
+        await login(email, password);
+    };
 
   return (
     <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
