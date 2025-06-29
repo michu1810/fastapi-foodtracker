@@ -51,7 +51,8 @@ const FancyCalendar: React.FC<FancyCalendarProps> = ({ productsByDate, onDateCli
             const formattedDate = format(day, 'yyyy-MM-dd');
             const isCurrent = isSameMonth(day, monthStart);
             const isToday = isSameDay(day, today);
-            const pureDate = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+            const clickDate = new Date(day);
+            clickDate.setHours(0, 0, 0, 0);
 
             const allProducts = productsByDate[formattedDate] || [];
 
@@ -115,7 +116,7 @@ const FancyCalendar: React.FC<FancyCalendarProps> = ({ productsByDate, onDateCli
                             ? 'z-10 scale-[1.03] shadow-2xl bg-white/60 backdrop-blur-lg saturate-150'
                             : 'aspect-square hover:shadow-lg hover:border-blue-200'
                     )}
-                    onClick={() => onDateClick(pureDate)}
+                    onClick={() => onDateClick(clickDate)}
                     onMouseEnter={() => setHoveredDate(formattedDate)}
                     onMouseLeave={() => setHoveredDate(null)}
                 >
