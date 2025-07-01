@@ -40,8 +40,10 @@ from foodtracker_app.services import (
     achievement_service,
     pantry_service,
     product_service,
+    statistics_service,
 )
 from foodtracker_app.services.cloudinary_service import upload_image
+from foodtracker_app.schemas.statistics import CategoryWasteStat, MostWastedProductStat
 from foodtracker_app.settings import settings
 from foodtracker_app.utils.recaptcha import verify_recaptcha
 from rate_limiter import limiter
@@ -672,6 +674,64 @@ async def get_product_trends(
         )
 
     return trends
+
+
+@product_router.get(
+    "/stats/category-waste",
+    response_model=List[CategoryWasteStat],
+    summary="Pobierz statystyki zużycia i marnotrawstwa wg. kategorii",
+    tags=["Products", "Statistics"],
+)
+async def get_category_waste_statistics(
+    pantry_id: int,
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(get_current_user),
+):
+    """
+    Zwraca listę statystyk dla konkretnej spiżarni, do której użytkownik ma dostęp.
+    """
+    user_pantry_ids = {
+        pantry_association.pantry_id for pantry_association in user.pantry_associations
+    }
+    if pantry_id not in user_pantry_ids:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Brak dostępu do tej spiżarni",
+        )
+
+    stats = await statistics_service.get_category_waste_stats(
+        db=db, pantry_id=pantry_id
+    )
+    return stats
+
+
+@product_router.get(
+    "/stats/most-wasted-products",
+    response_model=List[MostWastedProductStat],
+    summary="Pobierz produkty o największej wartości, które zostały wyrzucone",
+    tags=["Products", "Statistics"],
+)
+async def get_most_wasted_products_stats(
+    pantry_id: int,
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(get_current_user),
+):
+    """
+    Zwraca listę 3 produktów, które wygenerowały ndajwiększe straty finansowe.
+    """
+    user_pantry_ids = {
+        pantry_association.pantry_id for pantry_association in user.pantry_associations
+    }
+    if pantry_id not in user_pantry_ids:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Brak dostępu do tej spiżarni",
+        )
+
+    stats = await statistics_service.get_most_expensive_wasted_products(
+        db=db, pantry_id=pantry_id
+    )
+    return stats
 
 
 @product_router.get(
