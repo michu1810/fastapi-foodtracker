@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaBoxOpen, FaCheck, FaPiggyBank, FaTrash, FaExclamationCircle, FaChartLine } from 'react-icons/fa';
 import CountUp from 'react-countup';
-import { getStats, getFinancialStats } from '../services/statsService';
-import type { FinancialStats, Stats, TrendData } from '../services/statsService';
+import { getStats, getFinancialStats, FinancialStats, Stats, TrendData } from '../services/statsService';
 import useSWR from 'swr';
 import TrendChart from '../components/TrendChart';
 import FinancialBarChart from '../components/FinancialBarChart';
 import { usePantry } from '../context/PantryContext';
 import apiClient from '../services/api';
-
+import CategoryStats from '../components/CategoryStats';
+import MostWastedProducts from '../components/MostWastedProducts';
 
 const CardWrapper: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className }) => (
     <div className={`bg-white p-6 rounded-2xl shadow-lg border border-gray-200/80 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${className}`}>
@@ -70,7 +70,6 @@ const SavingsForecastCard: React.FC<{ savedSoFar: number }> = ({ savedSoFar }) =
     const today = new Date();
     const dayOfMonth = today.getDate();
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-
     const projection = dayOfMonth > 1 ? (savedSoFar / dayOfMonth) * daysInMonth : savedSoFar;
 
     return (
@@ -86,7 +85,6 @@ const SavingsForecastCard: React.FC<{ savedSoFar: number }> = ({ savedSoFar }) =
         </CardWrapper>
     );
 }
-
 
 export default function StatsPage() {
     const { selectedPantry } = usePantry();
@@ -108,7 +106,7 @@ export default function StatsPage() {
     }
 
     if (isLoading) return <div className="text-center p-10">Ładowanie statystyk...</div>;
-    if (error) return <div className="p-6 bg-red-100 text-red-700 rounded-lg text-center">Nie udało się pobrać danych dla tej spiżarni.</div>;
+    if (error && (!quantityStats || !financialStats)) return <div className="p-6 bg-red-100 text-red-700 rounded-lg text-center">Nie udało się pobrać danych dla tej spiżarni.</div>;
     if (!quantityStats || !financialStats) return <div className="text-center p-10">Brak danych do wyświetlenia.</div>;
 
     return (
@@ -117,13 +115,16 @@ export default function StatsPage() {
                 <h2 className="text-4xl font-bold text-gray-800 mb-2 text-center tracking-tight">Pulpit Statystyk</h2>
                 <p className="text-center text-gray-500 mb-10">dla spiżarni: <span className="font-semibold text-teal-600">{selectedPantry.name}</span></p>
 
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
+
                     <div className="lg:col-span-3 space-y-8">
-                        <h3 className="text-xl font-bold text-gray-800 text-center -mb-2">Statystyki Produktów</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <CountBlock icon={FaBoxOpen} value={quantityStats.total} label="Wszystkich produktów" color="text-blue-500" />
-                            <CountBlock icon={FaCheck} value={quantityStats.used} label="Uratowanych produktów" color="text-green-500" />
-                            <CountBlock icon={FaExclamationCircle} value={quantityStats.wasted} label="Wyrzuconych produktów" color="text-red-500" />
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-800 text-center mb-4">Statystyki Produktów</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                <CountBlock icon={FaBoxOpen} value={quantityStats.total} label="Wszystkich produktów" color="text-blue-500" />
+                                <CountBlock icon={FaCheck} value={quantityStats.used} label="Uratowanych produktów" color="text-green-500" />
+                                <CountBlock icon={FaExclamationCircle} value={quantityStats.wasted} label="Wyrzuconych produktów" color="text-red-500" />
+                            </div>
                         </div>
                         <EfficiencyGauge used={quantityStats.used} wasted={quantityStats.wasted} />
 
@@ -136,8 +137,8 @@ export default function StatsPage() {
                         )}
                     </div>
 
-                    <div className="lg:col-span-2 space-y-8">
-                        <div className="bg-transparent">
+                    <div className="lg:col-span-2 flex flex-col gap-8">
+                        <div>
                             <h3 className="text-xl font-bold text-gray-800 text-center mb-4">Podsumowanie Finansowe</h3>
                             <div className="flex flex-col sm:flex-row gap-6 w-full">
                                 <FinancialCard title="Zaoszczędzono" value={financialStats.saved} icon={FaPiggyBank} color="text-green-500" />
@@ -147,8 +148,18 @@ export default function StatsPage() {
                         <CardWrapper>
                             <FinancialBarChart data={financialStats} />
                         </CardWrapper>
-                        <SavingsForecastCard savedSoFar={financialStats.saved} />
+
+                        <div className="flex flex-col gap-8 flex-grow">
+                            <SavingsForecastCard savedSoFar={financialStats.saved} />
+                            <div className="flex-grow flex flex-col gap-8">
+                                <MostWastedProducts />
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div className="mt-8">
+                    <CategoryStats />
                 </div>
             </div>
         </motion.div>

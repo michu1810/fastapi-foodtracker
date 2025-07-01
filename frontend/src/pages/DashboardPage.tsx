@@ -24,14 +24,14 @@ export default function DashboardPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="min-h-screen"
+            className="min-h-screen isolate"
         >
             <div className="w-full space-y-6 md:space-y-10">
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                     <div className="lg:col-span-2 space-y-6">
                         {renderCalendar()}
                     </div>
-                    <aside className="space-y-6">
+                    <aside className="space-y-6 z-0">
                         <div className="card h-full flex flex-col">
                             <h2 className="card-title text-base sm:text-xl">🔥 Wygasa wkrótce</h2>
                             <ExpiringSoonPanel />
