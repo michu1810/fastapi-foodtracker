@@ -115,6 +115,7 @@ export const PantryManagement: React.FC<PantryManagementProps> = ({ pantry, onDa
             onDataChange(); // Odświeżamy listę spiżarni w całej apce
             setIsCreateModalOpen(false);
             setNewPantryName('');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error(error);
             const errorMessage = error.response?.data?.detail || 'Nie udało się stworzyć spiżarni.';
