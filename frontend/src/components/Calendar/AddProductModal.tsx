@@ -3,13 +3,14 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import axios from 'axios';
 import { productsService, ExternalProduct, CreateProductRequest, Product } from '../../services/productService';
 import clsx from 'clsx';
-import { ScanBarcode } from 'lucide-react';
+import { ScanBarcode, Info } from 'lucide-react';
 import BarcodeScanner from '../BarcodeScanner';
 import { usePantry } from '../../context/PantryContext';
 import useSWR from 'swr';
 import { Category, categoryService } from '../../services/categoryService';
 import { Listbox } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import Portal from '../Portal';
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -50,10 +51,8 @@ const modalVariants: Variants = {
     visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } },
 };
 
-
 const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onProductAdded, defaultDate }) => {
     const { selectedPantry } = usePantry();
-
     const [view, setView] = useState<'search' | 'manual' | 'confirm'>('search');
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<ExternalProduct[]>([]);
@@ -71,11 +70,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
     const [quantity, setQuantity] = useState('1');
     const [weight, setWeight] = useState('');
     const [isScannerVisible, setIsScannerVisible] = useState(false);
-
     const { data: categories, error: categoriesError } = useSWR<Category[]>('categories', categoryService.getAllCategories);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-
     const [searchSessionKey, setSearchSessionKey] = useState(0);
+
     useEffect(() => {
         if (isOpen) {
             setExpirationDate(defaultDate ? productsService.formatDate(defaultDate) : '');
@@ -83,39 +81,42 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
     }, [isOpen, defaultDate]);
 
     useEffect(() => {
-    if (!isOpen) {
-        setView('search');
-        setQuery('');
-        setResults([]);
-        setProductName('');
-        setSelectedExternalId(undefined);
-        setError(null);
-        setSelectedCategory(null);
-        setPrice('');
-        setQuantity('1');
-        setWeight('');
-        setIsFresh(false);
-        setPurchaseDate('');
-        setSearchSessionKey(prev => prev + 1);
-    }
-}, [isOpen]);
+        if (!isOpen) {
+            const timer = setTimeout(() => {
+                setView('search');
+                setQuery('');
+                setResults([]);
+                setProductName('');
+                setSelectedExternalId(undefined);
+                setError(null);
+                setSelectedCategory(null);
+                setPrice('');
+                setQuantity('1');
+                setWeight('');
+                setIsFresh(false);
+                setPurchaseDate('');
+                setSearchSessionKey(prev => prev + 1);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen]);
 
-   useEffect(() => {
-    if (view !== 'search' || debouncedQuery.trim() === '') {
-        setResults([]);
-        return;
-    }
+    useEffect(() => {
+        if (view !== 'search' || debouncedQuery.trim() === '') {
+            setResults([]);
+            return;
+        }
 
-    if (debouncedQuery.length > 2) {
-        setIsSearching(true);
-        productsService.searchExternalProducts(debouncedQuery)
-            .then(setResults)
-            .catch(err => console.error("Błąd wyszukiwania:", err))
-            .finally(() => setIsSearching(false));
-    } else {
-        setResults([]);
-    }
-}, [debouncedQuery, view, searchSessionKey]);
+        if (debouncedQuery.length > 2) {
+            setIsSearching(true);
+            productsService.searchExternalProducts(debouncedQuery)
+                .then(setResults)
+                .catch(err => console.error("Błąd wyszukiwania:", err))
+                .finally(() => setIsSearching(false));
+        } else {
+            setResults([]);
+        }
+    }, [debouncedQuery, view, searchSessionKey]);
 
     const resolveAndSetCategory = async (productId: string) => {
         try {
@@ -124,7 +125,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                 setSelectedCategory(category);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             console.log("Nie udało się automatycznie ustalić kategorii (to nie problem).");
             setSelectedCategory(null);
         }
@@ -162,8 +163,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
             setIsSearching(false);
         }
     };
-
-
 
     const handleSubmit = async () => {
         if (!selectedPantry) {
@@ -223,11 +222,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
     };
 
     const renderManualForm = () => (
-        <>
-            <h2 className="text-xl font-semibold text-gray-900">
+        <div className="p-4 sm:p-6">
+            <h2 className="text-xl font-semibold text-gray-900" id="modal-title">
                 {view === 'confirm' ? `Dodaj "${productName}"` : 'Dodaj produkt ręcznie'}
             </h2>
-            <div className="p-4 md:p-6 grid grid-cols-1 gap-y-5">
+            <div className="mt-4 grid grid-cols-1 gap-y-5">
                 {error && <div className="bg-red-100 text-red-700 px-4 py-3 rounded">{error}</div>}
 
                 <div>
@@ -239,7 +238,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                     <Listbox value={selectedCategory} onChange={setSelectedCategory}>
                         <div className="relative">
                             <Listbox.Label className="block text-sm font-medium text-gray-700 mb-1">Kategoria</Listbox.Label>
-                            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 sm:text-sm">
+                            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm">
                                 <span className="block truncate">{selectedCategory ? selectedCategory.name : "Wybierz kategorię (opcjonalnie)"}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                     <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -260,6 +259,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                             </Listbox.Options>
                         </div>
                     </Listbox>
+                    <div className="flex items-start gap-2 mt-1.5 text-xs text-gray-500">
+                        <Info size={14} className="flex-shrink-0 mt-0.5" />
+                        <span>Kategoria jest dopasowywana automatycznie i może zawierać błędy. Zawsze możesz ją poprawić ręcznie.</span>
+                    </div>
                 </div>
 
                 <div>
@@ -269,7 +272,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                         <button type="button" onClick={() => setProductType('g')} className={clsx('relative inline-flex items-center justify-center w-1/2 px-4 py-2 text-sm font-medium -ml-px border border-gray-300 rounded-r-md focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500', productType === 'g' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50')}>Na wagę</button>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {productType === 'szt.' ? (
                         <div>
                             <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">Ilość (szt.) *</label>
@@ -286,11 +290,18 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                         <input id="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="np. 12.50" required min="0.01" step="0.01" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                     </div>
                 </div>
+
                 <div>
                     <label className="flex items-center space-x-3 cursor-pointer">
                         <input type="checkbox" checked={isFresh} onChange={(e) => setIsFresh(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                         <span className="text-sm text-gray-700">Świeży produkt (np. warzywo, owoc)</span>
                     </label>
+                    {isFresh && (
+                        <div className="flex items-start gap-2 mt-1.5 text-xs text-gray-500">
+                           <Info size={14} className="flex-shrink-0 mt-0.5" />
+                           <span>Data ważności jest szacowana na podstawie średniej dla danej kategorii. Traktuj ją jako wskazówkę.</span>
+                        </div>
+                    )}
                 </div>
                 <div>
                     {isFresh ? (
@@ -306,15 +317,15 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 
     const renderContent = () => {
         if (view === 'search') {
             return (
-                <>
+                <div className="p-4 sm:p-6">
                     <h2 className="text-xl font-semibold text-gray-900">Dodaj nowy produkt</h2>
-                    <div className="p-6 space-y-4">
+                    <div className="mt-4 space-y-4">
                         <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Zacznij od wyszukania produktu</label>
                         <div className="relative">
                             <input id="search" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="np. Mleko, Szynka, Ser..." className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10" />
@@ -331,53 +342,51 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
                             <button onClick={() => setView('manual')} className="text-sm font-medium text-blue-600 hover:underline">Nie możesz znaleźć produktu? Wprowadź ręcznie</button>
                         </div>
                     </div>
-                </>
+                </div>
             );
         }
         return renderManualForm();
     };
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                    aria-labelledby="modal-title"
-                    role="dialog"
-                    aria-modal="true"
-                >
+
+        <Portal>
+            <AnimatePresence>
+                {isOpen && (
                     <motion.div
-                        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-                        variants={backdropVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
+                        className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-8 sm:pt-16"
+                        aria-labelledby="modal-title"
+                        role="dialog"
+                        aria-modal="true"
                         onClick={onClose}
-                    />
-                    <motion.div
-                        className="relative z-10 inline-block bg-white rounded-lg shadow-xl w-full max-w-lg text-left align-middle"
-                        variants={modalVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            {renderContent()}
-                        </div>
-                        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
-                            <button type="button" onClick={handleSubmit} disabled={isSubmitting || view === 'search'} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-blue-300 disabled:cursor-not-allowed">
-                                {isSubmitting ? 'Dodawanie...' : 'Dodaj produkt'}
-                            </button>
-                            <button type="button" onClick={onClose} className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                Anuluj
-                            </button>
-                        </div>
+                        <motion.div
+                            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                            variants={backdropVariants} initial="hidden" animate="visible" exit="hidden"
+                        />
+                        <motion.div
+                            className="relative z-10 bg-white rounded-lg shadow-xl w-full max-w-lg flex flex-col"
+                            variants={modalVariants} initial="hidden" animate="visible" exit="hidden"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex-grow overflow-y-auto max-h-[85vh]">
+                                {renderContent()}
+                            </div>
+
+                            <div className="flex-shrink-0 bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3 border-t">
+                                <button type="button" onClick={handleSubmit} disabled={isSubmitting || view === 'search'} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-blue-300 disabled:cursor-not-allowed">
+                                    {isSubmitting ? 'Dodawanie...' : 'Dodaj produkt'}
+                                </button>
+                                <button type="button" onClick={onClose} className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                    Anuluj
+                                </button>
+                            </div>
+                        </motion.div>
                     </motion.div>
-                </motion.div>
-            )}
-            {isScannerVisible && (<BarcodeScanner onScan={handleScanSuccess} onClose={() => setIsScannerVisible(false)} />)}
-        </AnimatePresence>
+                )}
+                {isScannerVisible && (<BarcodeScanner onScan={handleScanSuccess} onClose={() => setIsScannerVisible(false)} />)}
+            </AnimatePresence>
+        </Portal>
     );
 };
 
