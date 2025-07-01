@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { pantryService, PantryRead } from '../services/pantryService';
-import { useAuth } from './AuthContext'; // Używamy naszego istniejącego AuthContext
+import { useAuth } from './AuthContext';
 
 interface PantryContextType {
     pantries: PantryRead[];
@@ -10,41 +10,39 @@ interface PantryContextType {
     refreshPantries: () => void;
 }
 
-const PantryContext = createContext<PantryContextType | undefined>(undefined);
+export const PantryContext = createContext<PantryContextType | undefined>(undefined);
 
 export const PantryProvider = ({ children }: { children: ReactNode }) => {
-    const { user } = useAuth(); // Pobieramy obiekt użytkownika z AuthContext
+    const { user } = useAuth();
     const [pantries, setPantries] = useState<PantryRead[]>([]);
     const [selectedPantry, setSelectedPantry] = useState<PantryRead | null>(null);
     const [loading, setLoading] = useState(true);
 
     const fetchPantries = useCallback(async () => {
-        if (!user) return; // Nie rób nic, jeśli nie ma użytkownika
+        if (!user) return;
 
         setLoading(true);
         try {
             const userPantries = await pantryService.getUserPantries();
             setPantries(userPantries);
 
-            // Sprawdzamy, czy jakaś spiżarnia była ostatnio wybrana
             const lastSelectedId = localStorage.getItem('selectedPantryId');
             const lastPantry = userPantries.find(p => p.id === Number(lastSelectedId));
 
             if (lastPantry) {
                 setSelectedPantry(lastPantry);
             } else if (userPantries.length > 0) {
-                // Jeśli nie, ustawiamy pierwszą z listy jako domyślną
                 setSelectedPantry(userPantries[0]);
+                localStorage.setItem('selectedPantryId', String(userPantries[0].id));
             }
         } catch (error) {
             console.error("Nie udało się pobrać spiżarni", error);
         } finally {
             setLoading(false);
         }
-    }, [user]); // Funkcja zależy od obiektu użytkownika
+    }, [user]);
 
     useEffect(() => {
-        // Pobieramy spiżarnie za każdym razem, gdy zmieni się użytkownik (logowanie/wylogowanie)
         if (user) {
             fetchPantries();
         } else {
@@ -58,7 +56,6 @@ export const PantryProvider = ({ children }: { children: ReactNode }) => {
         const pantry = pantries.find(p => p.id === pantryId);
         if (pantry) {
             setSelectedPantry(pantry);
-            // Zapisujemy wybór w localStorage, aby go zapamiętać
             localStorage.setItem('selectedPantryId', String(pantry.id));
         }
     };
@@ -78,7 +75,6 @@ export const PantryProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-// Tworzymy customowy hook dla łatwego dostępu do kontekstu
 export const usePantry = () => {
     const context = useContext(PantryContext);
     if (context === undefined) {
