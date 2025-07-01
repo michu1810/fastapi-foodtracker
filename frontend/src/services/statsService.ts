@@ -1,6 +1,5 @@
 import apiClient from './api';
 
-// Interfejsy
 export interface TrendData {
     period: string;
     total: number;
@@ -8,6 +7,21 @@ export interface TrendData {
     expired: number;
     added: number;
     wasted?: number;
+}
+
+export interface CategoryWasteStat {
+  category_name: string;
+  saved_szt: number;
+  wasted_szt: number;
+  saved_grams: number;
+  wasted_grams: number;
+  icon_name: string | null;
+}
+
+export interface MostWastedProduct {
+    id: number;
+    name: string;
+    wasted_value: number;
 }
 
 export interface Achievement {
@@ -39,6 +53,7 @@ export interface FinancialStats {
     wasted: number;
 }
 
+// Funkcje API (bez zmian, aż do ostatniej)
 export async function getTrends(pantryId: number, range: 'day' | 'week' | 'month'): Promise<TrendData[]> {
     const res = await apiClient.get(`/pantries/${pantryId}/products/stats/trends?range=${range}`);
     return res.data;
@@ -61,5 +76,17 @@ export async function getStats(pantryId: number): Promise<Stats> {
 
 export async function getFinancialStats(pantryId: number): Promise<FinancialStats> {
     const response = await apiClient.get(`/pantries/${pantryId}/products/stats/financial`);
+    return response.data;
+}
+
+
+export async function getCategoryWasteStats(pantryId: number): Promise<CategoryWasteStat[]> {
+    const response = await apiClient.get(`/pantries/${pantryId}/products/stats/category-waste`, {
+        params: { pantryId },
+    });
+    return response.data;
+}
+export async function getMostWastedProducts(pantryId: number): Promise<MostWastedProduct[]> {
+    const response = await apiClient.get(`/pantries/${pantryId}/products/stats/most-wasted-products`);
     return response.data;
 }
