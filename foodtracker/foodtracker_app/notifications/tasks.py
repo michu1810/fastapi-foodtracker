@@ -13,7 +13,7 @@ from foodtracker_app.db.database import async_session_maker
 from foodtracker_app.models import Product, Pantry, PantryUser, User
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
-from foodtracker_app.settings import settings  # Import ustawień
+from foodtracker_app.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -110,10 +110,12 @@ async def _notify_expiring_products(db_session: AsyncSession = None):
                     )
                 ]
 
+                # ✅ POPRAWKA: Dodajemy `now` do kontekstu szablonu
                 html_body = await render_template(
                     "email_expiration_notification.html",
                     email=user.email,
                     products=products_data_for_template,
+                    now=datetime.now(timezone.utc),
                 )
 
                 try:
