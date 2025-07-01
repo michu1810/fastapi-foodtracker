@@ -9,7 +9,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
@@ -34,8 +33,14 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    result = await db.execute(select(User).where(User.email == email))
+    stmt = (
+        select(User)
+        .where(User.email == email)
+        .options(selectinload(User.pantry_associations))
+    )
+    result = await db.execute(stmt)
     user = result.scalar_one_or_none()
+
     if user is None:
         raise credentials_exception
 
