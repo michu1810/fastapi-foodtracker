@@ -68,7 +68,6 @@ export const useProductCalendarLogic = () => {
         fetchProducts();
     }, [mutate, fetchProducts, selectedPantry]);
 
-    // --- ZMIANA: Scentralizowany blok do zarządzania modalami ---
 
     const handleDayClick = (date: Date) => {
         setSelectedDate(date);

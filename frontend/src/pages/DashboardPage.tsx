@@ -1,12 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ProductCalendar } from '../components/Calendar/ProductCalendar';
+import { ProductCalendar } from '../components/Calendar/ProductCalendar'; // Upewnij się, że importujesz ProductCalendar
 import ExpiringSoonPanel from '../components/ExpiringSoonPanel';
-import { useProductCalendarLogic } from '../components/Calendar/useProductCalendarLogic';
 import { usePantry } from '../context/PantryContext';
 
 export default function DashboardPage() {
-    const calendarLogic = useProductCalendarLogic();
     const { selectedPantry, loading } = usePantry();
 
     const renderCalendar = () => {
@@ -16,7 +14,7 @@ export default function DashboardPage() {
         if (!selectedPantry) {
             return <div className="card text-center p-10">Stwórz lub wybierz spiżarnię, aby zacząć.</div>;
         }
-        return <ProductCalendar {...calendarLogic} />;
+        return <ProductCalendar />;
     };
 
     return (

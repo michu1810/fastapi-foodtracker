@@ -132,7 +132,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
                             initial="hidden" animate="visible" exit="hidden"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            {/* ZMIANA: Renderuj zawartość dopiero, gdy isContentLoaded jest true */}
                             {isContentLoaded && (
                                 <>
                                     <div className="p-4 sm:p-6 border-b">

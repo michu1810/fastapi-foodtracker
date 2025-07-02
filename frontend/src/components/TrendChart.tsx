@@ -2,7 +2,6 @@ import React from 'react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import type { TrendData } from '../services/statsService';
 
-// POPRAWKA: Komponent przyjmuje dane przez propsy, a nie pobiera ich sam
 const TrendChart: React.FC<{ data: TrendData[] }> = ({ data }) => {
 
     return (
