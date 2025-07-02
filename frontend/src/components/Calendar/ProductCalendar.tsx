@@ -1,54 +1,35 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy } from 'react';
 import Confetti from 'react-confetti';
 import FancyCalendar from './FancyCalendar';
-import ProductModal from './ProductModal';
-import AddProductModal from './AddProductModal';
-import ConsumptionModal from './ConsumptionModal';
 import { getStats } from '../../services/statsService';
 import type { Stats } from '../../services/statsService';
 import OnboardingGuide from '../OnboardingGuide';
-import type { Product } from '../../services/productService';
 import useSWR from 'swr';
 import { useAuth } from '../../context/AuthContext';
 import { usePantry } from '../../context/PantryContext';
 import { useProductCalendarLogic } from './useProductCalendarLogic';
 
-type ProductCalendarProps = ReturnType<typeof useProductCalendarLogic>;
+const ProductModal = lazy(() => import('./ProductModal'));
+const AddProductModal = lazy(() => import('./AddProductModal'));
+const ConsumptionModal = lazy(() => import('./ConsumptionModal'));
 
-export const ProductCalendar: React.FC<ProductCalendarProps> = ({
-    productsByDate, selectedDate, productsForSelectedDate, isProductModalOpen, isAddModalOpen, createdAt,
-    handleDayClick, handleCloseProductModal, handleOpenAddModal, handleCloseAddModal,
-    handleProductAdded, onUseProduct, handleDeleteProduct, handleProductUpdate,
-    onWasteProduct, onHideProduct,
-    showConfetti, recycleConfetti
-}) => {
+export const ProductCalendar: React.FC = () => {
+
+    const {
+        productsByDate, selectedDate, productsForSelectedDate, createdAt, showConfetti, recycleConfetti,
+        isProductModalOpen, isAddModalOpen, isConsumptionModalOpen,
+        isProductModalContentLoaded, isAddModalContentLoaded, isConsumptionModalContentLoaded,
+        productToConsume, actionType,
+        handleDayClick, handleCloseProductModal, handleOpenAddModal, handleCloseAddModal, handleProductAdded,
+        handleOpenConsumptionModal, handleCloseConsumptionModal, handleConfirmConsumption,
+        handleDeleteProduct, handleProductUpdate, onHideProduct,
+    } = useProductCalendarLogic();
+
     const { user } = useAuth();
     const { selectedPantry } = usePantry();
 
     const swrKeyForStats = selectedPantry ? `/pantries/${selectedPantry.id}/products/stats` : null;
     const { data: stats } = useSWR<Stats>(swrKeyForStats, () => getStats(selectedPantry!.id));
-
-    const [consumptionModalOpen, setConsumptionModalOpen] = useState(false);
-    const [productToConsume, setProductToConsume] = useState<Product | null>(null);
-    const [actionType, setActionType] = useState<'use' | 'waste'>('use');
-
-    const handleOpenConsumptionModal = (product: Product, type: 'use' | 'waste') => {
-        handleCloseProductModal();
-        setProductToConsume(product);
-        setActionType(type);
-        setConsumptionModalOpen(true);
-    };
-
-    const handleCloseConsumptionModal = () => {
-        setConsumptionModalOpen(false);
-        setProductToConsume(null);
-    };
-
-    const handleConfirmConsumption = (productId: number, amount: number) => {
-        if (actionType === 'use') onUseProduct(productId, amount);
-        else onWasteProduct(productId, amount);
-        handleCloseConsumptionModal();
-    };
 
     const totalProductsCount = Object.values(productsByDate).flat().length;
 
@@ -67,39 +48,47 @@ export const ProductCalendar: React.FC<ProductCalendarProps> = ({
                         <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Wyrzucone: {stats?.wasted ?? '...'}</span>
                         <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">Zużyte: {stats?.used ?? '...'}</span>
                     </div>
-                        <p className="mt-3 text-xs text-gray-400">Pełne statystyki znajdziesz w zakładce{" "}<span className="underline text-blue-500 cursor-pointer" onClick={() => window.location.href = '/stats'}>Statystyki</span>.</p>
+                    <p className="mt-3 text-xs text-gray-400">Pełne statystyki znajdziesz w zakładce{" "}<span className="underline text-blue-500 cursor-pointer" onClick={() => window.location.href = '/stats'}>Statystyki</span>.</p>
                 </div>
 
-                {selectedDate && (
-                    <ProductModal
-                        isOpen={isProductModalOpen}
-                        date={selectedDate}
-                        products={productsForSelectedDate}
-                        onClose={handleCloseProductModal}
-                        onDelete={handleDeleteProduct}
-                        onUpdate={handleProductUpdate}
-                        onAddProduct={handleOpenAddModal}
-                        onUseProduct={(product) => handleOpenConsumptionModal(product, 'use')}
-                        onWaste={(product) => handleOpenConsumptionModal(product, 'waste')}
-                        onHide={onHideProduct}
-                    />
-                )}
+                <Suspense fallback={null}>
+                    {isProductModalOpen && (
+                        <ProductModal
+                            isOpen={isProductModalOpen}
+                            isContentLoaded={isProductModalContentLoaded}
+                            date={selectedDate!}
+                            products={productsForSelectedDate}
+                            onClose={handleCloseProductModal}
+                            onDelete={handleDeleteProduct}
+                            onUpdate={handleProductUpdate}
+                            onAddProduct={handleOpenAddModal}
+                            onUseProduct={(product) => handleOpenConsumptionModal(product, 'use')}
+                            onWaste={(product) => handleOpenConsumptionModal(product, 'waste')}
+                            onHide={onHideProduct}
+                        />
+                    )}
 
-                <AddProductModal
-                    isOpen={isAddModalOpen}
-                    onClose={handleCloseAddModal}
-                    onProductAdded={handleProductAdded}
-                    defaultDate={selectedDate}
-                />
+                    {isAddModalOpen && (
+                         <AddProductModal
+                            isOpen={isAddModalOpen}
+                            isContentLoaded={isAddModalContentLoaded}
+                            onClose={handleCloseAddModal}
+                            onProductAdded={handleProductAdded}
+                            defaultDate={selectedDate}
+                        />
+                    )}
 
-                {consumptionModalOpen && productToConsume && (
-                    <ConsumptionModal
-                        product={productToConsume}
-                        actionType={actionType}
-                        onClose={handleCloseConsumptionModal}
-                        onConfirm={handleConfirmConsumption}
-                    />
-                )}
+                    {isConsumptionModalOpen && (
+                        <ConsumptionModal
+                            isOpen={isConsumptionModalOpen}
+                            isContentLoaded={isConsumptionModalContentLoaded}
+                            product={productToConsume!}
+                            actionType={actionType}
+                            onClose={handleCloseConsumptionModal}
+                            onConfirm={handleConfirmConsumption}
+                        />
+                    )}
+                </Suspense>
             </div>
         </div>
     );

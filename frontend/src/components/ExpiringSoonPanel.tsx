@@ -1,68 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { ExpiringProduct, productsService } from '../services/productService';
 import { usePantry } from '../context/PantryContext';
 
-export default function ExpiringSoonPanel() {
-  const { selectedPantry } = usePantry();
-  const [products, setProducts] = useState<ExpiringProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchExpiring = async () => {
-      if (!selectedPantry) {
-        setProducts([]);
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      try {
-        const data = await productsService.getExpiringSoonProducts(selectedPantry.id);
-        setProducts(data);
-      } catch (error) {
-        console.error("Błąd pobierania produktów bliskich ważności:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExpiring();
-
-    const intervalId = setInterval(fetchExpiring, 10000);
-
-    return () => clearInterval(intervalId);
-
-  }, [selectedPantry]);
-
-  const getText = (d: number) => {
+const getText = (d: number) => {
     if (d === 0) return 'Wygasa dziś';
     if (d === 1) return 'Został 1 dzień';
     if (d < 5) return `Zostały ${d} dni`;
     return `Zostało ${d} dni`;
-  };
+};
 
-  const getColor = (d: number) =>
+const getColor = (d: number) =>
     d <= 1 ? 'text-red-600 font-bold' : d <= 3 ? 'text-yellow-600 font-bold' : 'text-gray-500';
 
-  return (
-    <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
-      {loading
-        ? [...Array(5)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-200 rounded animate-pulse mb-3" />
-          ))
-        : products.length === 0
-        ? <p className="text-center text-gray-500">Brak produktów.</p>
-        : (
-          <ul className="space-y-3 pr-2">
-            {products.map(p => (
-              <li key={p.id} className="flex justify-between items-center p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
-                <span>{p.name}</span>
-                <span className={`text-sm ${getColor(p.days_left)}`}>{getText(p.days_left)}</span>
-              </li>
-            ))}
-          </ul>
-        )
+
+const ExpiringSoonListItem = React.memo(({ product }: { product: ExpiringProduct }) => (
+    <li className="flex justify-between items-center p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
+        <span>{product.name}</span>
+        <span className={`text-sm ${getColor(product.days_left)}`}>{getText(product.days_left)}</span>
+    </li>
+));
+
+
+export default function ExpiringSoonPanel() {
+    const { selectedPantry } = usePantry();
+
+    const swrKey = selectedPantry ? `expiring/${selectedPantry.id}` : null;
+
+    const {
+      data: products = [],
+      error,
+      isLoading
+    } = useSWR(
+      swrKey,
+      () => productsService.getExpiringSoonProducts(selectedPantry!.id),
+      {
+        refreshInterval: 30000,
+        revalidateOnFocus: true,
       }
-    </div>
-  );
+    );
+
+    if (error) {
+        console.error("Błąd SWR w ExpiringSoonPanel:", error);
+        return <p className="text-center text-gray-500 p-4">Błąd ładowania produktów.</p>;
+    }
+
+    return (
+        <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+            {isLoading
+                ? [...Array(5)].map((_, i) => (
+                      <div key={i} className="h-12 bg-gray-200 rounded animate-pulse mb-3 mx-2" />
+                  ))
+                : products.length === 0
+                ? <p className="text-center text-gray-500 p-4">Brak produktów bliskich ważności.</p>
+                : (
+                    <ul className="space-y-3 pr-2">
+                        {products.map(p => (
+                            <ExpiringSoonListItem key={p.id} product={p} />
+                        ))}
+                    </ul>
+                )
+            }
+        </div>
+    );
 }

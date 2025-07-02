@@ -110,7 +110,6 @@ async def _notify_expiring_products(db_session: AsyncSession = None):
                     )
                 ]
 
-                # ✅ POPRAWKA: Dodajemy `now` do kontekstu szablonu
                 html_body = await render_template(
                     "email_expiration_notification.html",
                     email=user.email,
@@ -122,7 +121,7 @@ async def _notify_expiring_products(db_session: AsyncSession = None):
                     await send_email_async(
                         to_email=user.email,
                         subject="🔔 Food Tracker: Twoje produkty wkrótce stracą ważność!",
-                        html=html_body,
+                        body=html_body,
                     )
                     logger.info(f"Pomyślnie wysłano powiadomienie do {user.email}.")
                 except Exception as email_exc:
