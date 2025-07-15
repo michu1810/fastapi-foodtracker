@@ -10,6 +10,8 @@ __pycache__/
 *.pyo
 *.pyd
 
+# Celery state files
+celerybeat-schedule
 
 # Testy i logi
 .pytest_cache/

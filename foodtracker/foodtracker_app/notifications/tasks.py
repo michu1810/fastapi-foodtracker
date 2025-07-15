@@ -1,13 +1,10 @@
-import asyncio
 import logging
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
-from contextlib import asynccontextmanager
 
 from celery import shared_task
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from foodtracker_app.db.database import async_session_maker
 from foodtracker_app.models import Product, Pantry, PantryUser, User
@@ -21,35 +18,18 @@ EXPIRATION_NOTIFICATION_DAYS = getattr(settings, "EXPIRATION_NOTIFICATION_DAYS",
 
 
 @shared_task
-def notify_expiring_products():
+async def notify_expiring_products():
     """
-    Główne zadanie Celery, uruchamiane asynchronicznie.
+    Główne asynchroniczne zadanie Celery.
     Pobiera produkty bliskie daty ważności i wysyła powiadomienia do użytkowników.
-    """
-    asyncio.run(_notify_expiring_products())
-
-
-async def _notify_expiring_products(db_session: AsyncSession = None):
-    """
-    Asynchroniczna logika biznesowa zadania.
     """
     start_time = datetime.now(timezone.utc)
     logger.info(
         f"Rozpoczynam zadanie notify_expiring_products o {start_time.isoformat()}"
     )
 
-    @asynccontextmanager
-    async def get_session():
-        if db_session:
-            yield db_session
-        else:
-            session = async_session_maker()
-            try:
-                yield session
-            finally:
-                await session.close()
-
-    async with get_session() as db:
+    session_maker = async_session_maker()
+    async with session_maker() as db:
         try:
             today_utc_date = start_time.date()
             expiration_threshold_date = today_utc_date + timedelta(
@@ -121,7 +101,8 @@ async def _notify_expiring_products(db_session: AsyncSession = None):
                     await send_email_async(
                         to_email=user.email,
                         subject="🔔 Food Tracker: Twoje produkty wkrótce stracą ważność!",
-                        body=html_body,
+                        body="Twoje produkty wkrótce stracą ważność. Otwórz tę wiadomość w kliencie poczty, który obsługuje HTML, aby zobaczyć szczegóły.",
+                        html=html_body,
                     )
                     logger.info(f"Pomyślnie wysłano powiadomienie do {user.email}.")
                 except Exception as email_exc:
@@ -131,6 +112,7 @@ async def _notify_expiring_products(db_session: AsyncSession = None):
                     )
 
         except Exception as e:
+            await db.rollback()
             logger.error(
                 f"Wystąpił krytyczny błąd podczas zadania notify_expiring_products: {e}",
                 exc_info=True,
