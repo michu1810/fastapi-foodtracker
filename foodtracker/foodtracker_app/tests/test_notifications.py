@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from foodtracker_app.notifications import tasks
+from foodtracker_app.notifications.tasks import _run_notification_logic_async
 from foodtracker_app.notifications.utils import send_email_reminder
 import foodtracker_app.notifications.celery_worker as worker
 
@@ -25,14 +25,13 @@ async def test_notify_expiring_products_sends_mail(db: AsyncSession, mocker):
         return_value=mock_session_context,
     )
 
-    await tasks.notify_expiring_products()
+    await _run_notification_logic_async()
 
     send_mail.assert_not_awaited()
 
 
 @pytest.mark.asyncio
 async def test_send_email_reminder_sends_email(mocker):
-    # Ten test był poprawny
     mock_send = mocker.patch(
         "foodtracker_app.notifications.utils.send_email_async", new=AsyncMock()
     )
@@ -53,7 +52,6 @@ async def test_send_email_reminder_sends_email(mocker):
 
 @pytest.mark.asyncio
 async def test_send_email_reminder_no_products_does_nothing(mocker):
-    # Ten test był poprawny
     mock_send = mocker.patch(
         "foodtracker_app.notifications.utils.send_email_async", new=AsyncMock()
     )
@@ -70,7 +68,7 @@ async def test_send_email_reminder_no_products_does_nothing(mocker):
 @pytest.mark.asyncio
 async def test_run_expiration_check_route(authenticated_client):
     with patch(
-        "foodtracker_app.notifications.routes.notify_expiring_products.delay"
+        "foodtracker_app.notifications.routes.notify_expiring_products_task.delay"
     ) as mock_delay:
         response = await authenticated_client.post("/notifications/run-check")
         assert response.status_code == 202

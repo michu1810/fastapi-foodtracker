@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, status
 from foodtracker_app.auth.dependancies import get_current_user
 from foodtracker_app.models.user import User
-from foodtracker_app.notifications.tasks import notify_expiring_products
+from foodtracker_app.notifications.tasks import notify_expiring_products_task
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
 
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("/run-check", status_code=status.HTTP_202_ACCEPTED)
 async def run_expiration_check(user: User = Depends(get_current_user)):
-    notify_expiring_products.delay()
+    notify_expiring_products_task.delay()
     return {"message": "Expiration check task triggered."}
 
 

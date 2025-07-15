@@ -3,7 +3,7 @@ from unittest.mock import patch, AsyncMock, MagicMock
 from datetime import date, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from foodtracker_app.notifications.tasks import notify_expiring_products
+from foodtracker_app.notifications.tasks import _run_notification_logic_async
 from foodtracker_app.models import User, Pantry, PantryUser, Product
 
 pytestmark = pytest.mark.asyncio
@@ -38,8 +38,8 @@ async def pantry_with_users(db: AsyncSession):
     db.add_all([link1, link2])
     await db.commit()
 
-    await db.refresh(pantry)
-    await db.refresh(user_ok)
+    await db.refresh(pantry, attribute_names=["member_associations", "products"])
+    await db.refresh(user_ok, attribute_names=["pantry_associations"])
 
     return {
         "db": db,
@@ -79,7 +79,8 @@ async def test_notify_expiring_products_sends_to_correct_user(
     await db.commit()
 
     db.expire_all()
-    await notify_expiring_products()
+
+    await _run_notification_logic_async()
 
     mock_send.assert_awaited_once()
     _args, kwargs = mock_send.await_args
@@ -98,8 +99,7 @@ async def test_notify_no_expiring_products_does_nothing(
         return_value=mock_session_context,
     )
 
-    db.expire_all()
-    await notify_expiring_products()
+    await _run_notification_logic_async()
 
     mock_send.assert_not_awaited()
 
@@ -138,10 +138,11 @@ async def test_notify_email_send_failure_is_logged(
     db.add(product)
     await db.commit()
 
+    db.expire_all()
+
     mock_send.side_effect = Exception("SMTP server is down")
 
-    db.expire_all()
-    await notify_expiring_products()
+    await _run_notification_logic_async()
 
     mock_logger.error.assert_called_once()
     log_msg, *_ = mock_logger.error.call_args[0]
@@ -162,7 +163,7 @@ async def test_notify_general_failure_is_logged(mock_logger, mocker):
         return_value=mock_session_context,
     )
 
-    await notify_expiring_products()
+    await _run_notification_logic_async()
 
     mock_logger.error.assert_called_once()
     args, kwargs = mock_logger.error.call_args

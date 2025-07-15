@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
@@ -7,7 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from foodtracker_app.db.database import async_session_maker
-from foodtracker_app.models import Product, PantryUser, User
+from foodtracker_app.models import PantryUser, User, Pantry
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
 from foodtracker_app.settings import settings
@@ -17,15 +18,13 @@ logger = logging.getLogger(__name__)
 EXPIRATION_NOTIFICATION_DAYS = getattr(settings, "EXPIRATION_NOTIFICATION_DAYS", 7)
 
 
-@shared_task
-async def notify_expiring_products():
+async def _run_notification_logic_async():
     """
-    Główne asynchroniczne zadanie Celery.
-    Pobiera produkty bliskie daty ważności i wysyła powiadomienia do użytkowników.
+    Prywatna funkcja asynchroniczna zawierająca całą logikę.
     """
     start_time = datetime.now(timezone.utc)
     logger.info(
-        f"Rozpoczynam zadanie notify_expiring_products o {start_time.isoformat()}"
+        f"Uruchamiam wewnętrzną logikę asynchroniczną o {start_time.isoformat()}"
     )
 
     async with async_session_maker() as db:
@@ -35,50 +34,41 @@ async def notify_expiring_products():
                 days=EXPIRATION_NOTIFICATION_DAYS
             )
 
-            # === NOWA, PROSTA I NIEZAWODNA LOGIKA ===
-
-            # KROK 1: Pobierz WSZYSTKIE produkty, które wkrótce się przeterminują.
-            # Bez żadnych skomplikowanych JOINów do użytkownika.
-            stmt_products = (
-                select(Product)
-                .where(
-                    Product.current_amount > 0,
-                    Product.expiration_date <= expiration_threshold_date,
+            stmt = (
+                select(User)
+                .options(
+                    selectinload(User.pantry_associations)
+                    .selectinload(PantryUser.pantry)
+                    .selectinload(Pantry.products)
                 )
-                .options(selectinload(Product.pantry))
-            )  # Dociągamy tylko spiżarnię, to jest bezpieczne.
+                .where(
+                    User.is_verified,
+                    User.send_expiration_notifications,
+                )
+            )
 
-            result_products = await db.execute(stmt_products)
-            expiring_products = result_products.scalars().unique().all()
-
-            if not expiring_products:
-                logger.info("Brak produktów do powiadomienia. Kończę zadanie.")
-                return
+            result = await db.execute(stmt)
+            users_with_pantries = result.scalars().unique().all()
 
             notifications = defaultdict(list)
 
-            # KROK 2: Dla każdego produktu, osobno znajdź jego użytkowników.
-            # To jest mniej wydajne (N+1 zapytań), ale jest absolutnie niezawodne.
-            for product in expiring_products:
-                stmt_users = (
-                    select(User)
-                    .join(PantryUser, User.id == PantryUser.user_id)
-                    .where(PantryUser.pantry_id == product.pantry_id)
-                )
-                result_users = await db.execute(stmt_users)
-                users_of_pantry = result_users.scalars().all()
-
-                for user in users_of_pantry:
-                    if user.is_verified and user.send_expiration_notifications:
-                        notifications[user].append(product)
+            for user in users_with_pantries:
+                for pantry_user_assoc in user.pantry_associations:
+                    pantry = pantry_user_assoc.pantry
+                    for product in pantry.products:
+                        if (
+                            product.current_amount > 0
+                            and product.expiration_date
+                            and today_utc_date
+                            <= product.expiration_date
+                            <= expiration_threshold_date
+                        ):
+                            notifications[user].append(product)
 
             if not notifications:
-                logger.info(
-                    "Znaleziono produkty, ale żaden użytkownik nie kwalifikuje się do powiadomienia."
-                )
-                return
+                logger.info("Brak produktów do powiadomienia. Kończę zadanie.")
+                return {"status": "success", "message": "No products to notify."}
 
-            # KROK 3: Wysyłanie maili (ten kod był już dobry)
             for user, products_to_notify in notifications.items():
                 logger.info(
                     f"Przygotowuję powiadomienie dla {user.email} o {len(products_to_notify)} produktach."
@@ -114,14 +104,30 @@ async def notify_expiring_products():
                         exc_info=True,
                     )
 
+            return {"status": "success", "users_notified": len(notifications)}
+
         except Exception as e:
-            await db.rollback()
             logger.error(
                 f"Wystąpił krytyczny błąd podczas zadania notify_expiring_products: {e}",
                 exc_info=True,
             )
+            return {"status": "error", "error_message": str(e)}
 
-    end_time = datetime.now(timezone.utc)
+
+@shared_task(name="notifications.notify_expiring_products")
+def notify_expiring_products_task():
+    """
+    Synchroniczne zadanie Celery, które uruchamia logikę asynchroniczną.
+    """
     logger.info(
-        f"Zakończono zadanie notify_expiring_products o {end_time.isoformat()}. Czas trwania: {end_time - start_time}"
+        "Otrzymano zadanie Celery: notify_expiring_products_task. Uruchamiam asyncio.run()."
     )
+    try:
+        result = asyncio.run(_run_notification_logic_async())
+        logger.info(f"Logika asynchroniczna zakończona z wynikiem: {result}")
+        return result
+    except Exception as e:
+        logger.error(
+            f"Błąd na poziomie synchronicznego wrappera Celery: {e}", exc_info=True
+        )
+        return {"status": "critical_error", "error_message": str(e)}
