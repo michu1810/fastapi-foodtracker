@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from foodtracker_app.db.database import async_session_maker
-from foodtracker_app.models import Product, Pantry, PantryUser, User
+from foodtracker_app.models import Product, PantryUser, User
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
 from foodtracker_app.settings import settings
@@ -35,47 +35,50 @@ async def notify_expiring_products():
                 days=EXPIRATION_NOTIFICATION_DAYS
             )
 
-            stmt = (
+            # === NOWA, PROSTA I NIEZAWODNA LOGIKA ===
+
+            # KROK 1: Pobierz WSZYSTKIE produkty, które wkrótce się przeterminują.
+            # Bez żadnych skomplikowanych JOINów do użytkownika.
+            stmt_products = (
                 select(Product)
-                .join(Pantry, Product.pantry_id == Pantry.id)
-                .join(PantryUser, Pantry.id == PantryUser.pantry_id)
-                .join(User, PantryUser.user_id == User.id)
                 .where(
                     Product.current_amount > 0,
                     Product.expiration_date <= expiration_threshold_date,
-                    User.is_verified,
-                    User.send_expiration_notifications,
                 )
-                .options(
-                    selectinload(Product.pantry)
-                    .selectinload(Pantry.member_associations)
-                    .selectinload(PantryUser.user)
-                )
-            )
-            result = await db.execute(stmt)
-            expiring_products = result.unique().scalars().all()
+                .options(selectinload(Product.pantry))
+            )  # Dociągamy tylko spiżarnię, to jest bezpieczne.
+
+            result_products = await db.execute(stmt_products)
+            expiring_products = result_products.scalars().unique().all()
 
             if not expiring_products:
                 logger.info("Brak produktów do powiadomienia. Kończę zadanie.")
                 return
 
-            logger.info(
-                f"Znaleziono {len(expiring_products)} produktów do powiadomienia."
-            )
-
             notifications = defaultdict(list)
+
+            # KROK 2: Dla każdego produktu, osobno znajdź jego użytkowników.
+            # To jest mniej wydajne (N+1 zapytań), ale jest absolutnie niezawodne.
             for product in expiring_products:
-                for association in product.pantry.member_associations:
-                    user = association.user
+                stmt_users = (
+                    select(User)
+                    .join(PantryUser, User.id == PantryUser.user_id)
+                    .where(PantryUser.pantry_id == product.pantry_id)
+                )
+                result_users = await db.execute(stmt_users)
+                users_of_pantry = result_users.scalars().all()
+
+                for user in users_of_pantry:
                     if user.is_verified and user.send_expiration_notifications:
                         notifications[user].append(product)
 
             if not notifications:
                 logger.info(
-                    "Znaleziono produkty, ale po weryfikacji żaden użytkownik nie kwalifikuje się do powiadomienia."
+                    "Znaleziono produkty, ale żaden użytkownik nie kwalifikuje się do powiadomienia."
                 )
                 return
 
+            # KROK 3: Wysyłanie maili (ten kod był już dobry)
             for user, products_to_notify in notifications.items():
                 logger.info(
                     f"Przygotowuję powiadomienie dla {user.email} o {len(products_to_notify)} produktach."
