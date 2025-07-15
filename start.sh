@@ -8,10 +8,6 @@ echo "▶️ Redis start…"
 /usr/bin/redis-server --port 6379 --bind 0.0.0.0 --protected-mode no &
 REDIS_PID=$!
 
-echo "▶️ Tworzę celerybeat-schedule (jeśli nie istnieje)…"
-touch /app/celerybeat-schedule
-chmod 666 /app/celerybeat-schedule
-
 echo "▶️ Uvicorn start…"
 uvicorn foodtracker_app.main:app --host 0.0.0.0 --port 8000 &
 UVICORN_PID=$!
