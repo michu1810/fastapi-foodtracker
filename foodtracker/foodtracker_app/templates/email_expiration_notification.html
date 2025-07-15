@@ -33,7 +33,7 @@
                         {% for product in products %}
                         <tr>
                             <td style="padding: 12px 0; color: #333333; font-weight: 600;">{{ product.name }}</td>
-                            <td style="padding: 12px 0; {% if product.is_expired %}color: #d9534f;{% else %}#f0ad4e{% endif %}; font-weight: 600; text-align: right;">
+                            <td style="padding: 12px 0; color: {% if product.is_expired %}#d9534f{% else %}#f0ad4e{% endif %}; font-weight: 600; text-align: right;">
                                 {{ product.expiration_date }}
                                 {% if product.is_expired %}(Dziś się przeterminuje!){% endif %}
                             </td>
