@@ -9,28 +9,30 @@ import foodtracker_app.notifications.celery_worker as worker
 
 
 @pytest.mark.asyncio
-async def test_notify_expiring_products_sends_mail(
-    db: AsyncSession, mocker
-):  # Zmienione argumenty
+async def test_notify_expiring_products_sends_mail(db: AsyncSession, mocker):
     """
     Testuje, czy funkcja NIE wysyła e-maili, gdy baza jest pusta.
-    Używa prawdziwej, pustej bazy danych `db` zamiast starych mocków.
     """
-    # Patchujemy tylko zewnętrzne serwisy
     send_mail = mocker.patch(
         "foodtracker_app.notifications.tasks.send_email_async",
         new=AsyncMock(),
     )
 
-    # Wywołujemy funkcję, podając jej naszą pustą bazę danych
-    await tasks._notify_expiring_products(db_session=db)
+    mock_session_context = MagicMock()
+    mock_session_context.__aenter__.return_value = db
+    mocker.patch(
+        "foodtracker_app.notifications.tasks.async_session_maker",
+        return_value=mock_session_context,
+    )
 
-    # Assert – nic nie powinno zostać wysłane
+    await tasks.notify_expiring_products()
+
     send_mail.assert_not_awaited()
 
 
 @pytest.mark.asyncio
 async def test_send_email_reminder_sends_email(mocker):
+    # Ten test był poprawny
     mock_send = mocker.patch(
         "foodtracker_app.notifications.utils.send_email_async", new=AsyncMock()
     )
@@ -51,6 +53,7 @@ async def test_send_email_reminder_sends_email(mocker):
 
 @pytest.mark.asyncio
 async def test_send_email_reminder_no_products_does_nothing(mocker):
+    # Ten test był poprawny
     mock_send = mocker.patch(
         "foodtracker_app.notifications.utils.send_email_async", new=AsyncMock()
     )
@@ -92,9 +95,6 @@ async def test_send_test_email_route(mocker, authenticated_client):
     mock_render.assert_awaited_once()
 
 
-# --- Testy do celery_worker.py ---
-
-
 def test_wait_for_redis_success(monkeypatch):
     mock_redis = MagicMock()
     mock_redis.ping.return_value = True
@@ -102,13 +102,11 @@ def test_wait_for_redis_success(monkeypatch):
     monkeypatch.setattr(redis, "StrictRedis", lambda *args, **kwargs: mock_redis)
     monkeypatch.setattr(worker.settings, "SKIP_REDIS", False)
 
-    # Dodajemy przykładowy URL, który i tak nie zostanie użyty
     worker.wait_for_redis("redis://localhost:6379/0")
 
 
 def test_wait_for_redis_skip(monkeypatch):
     monkeypatch.setattr(worker.settings, "SKIP_REDIS", True)
-    # Dodajemy przykładowy URL, który i tak nie zostanie użyty
     worker.wait_for_redis("redis://localhost:6379/0")
 
 
@@ -124,5 +122,4 @@ def test_wait_for_redis_failure(monkeypatch):
     monkeypatch.setattr(redis, "StrictRedis", lambda *args, **kwargs: FailingRedis())
 
     with pytest.raises(RuntimeError, match="Redis not available"):
-        # Dodajemy przykładowy URL, który i tak nie zostanie użyty
         worker.wait_for_redis("redis://localhost:6379/0")

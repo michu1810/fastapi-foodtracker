@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from foodtracker_app.db.database import async_session_maker
-from foodtracker_app.models import Product, Pantry, PantryUser, User
+from foodtracker_app.models import Product, PantryUser, User
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
 from foodtracker_app.settings import settings
@@ -28,48 +28,51 @@ async def notify_expiring_products():
         f"Rozpoczynam zadanie notify_expiring_products o {start_time.isoformat()}"
     )
 
-    session_maker = async_session_maker()
-    async with session_maker() as db:
+    async with async_session_maker() as db:
         try:
             today_utc_date = start_time.date()
             expiration_threshold_date = today_utc_date + timedelta(
                 days=EXPIRATION_NOTIFICATION_DAYS
             )
 
-            stmt = (
+            stmt_products = (
                 select(Product)
-                .join(Product.pantry)
-                .join(Pantry.member_associations)
-                .join(PantryUser.user)
-                .options(
-                    selectinload(Product.pantry)
-                    .selectinload(Pantry.member_associations)
-                    .selectinload(PantryUser.user)
-                )
                 .where(
                     Product.current_amount > 0,
                     Product.expiration_date <= expiration_threshold_date,
-                    User.is_verified,
-                    User.send_expiration_notifications,
                 )
+                .options(selectinload(Product.pantry))
             )
-            result = await db.execute(stmt)
-            expiring_products = result.scalars().unique().all()
+
+            result_products = await db.execute(stmt_products)
+            expiring_products = result_products.scalars().unique().all()
 
             if not expiring_products:
                 logger.info("Brak produktów do powiadomienia. Kończę zadanie.")
                 return
 
-            logger.info(
-                f"Znaleziono {len(expiring_products)} produktów do powiadomienia."
-            )
+            logger.info(f"Znaleziono {len(expiring_products)} potencjalnych produktów.")
 
             notifications = defaultdict(list)
+
             for product in expiring_products:
-                for association in product.pantry.member_associations:
-                    user_to_notify = association.user
-                    if user_to_notify.send_expiration_notifications:
-                        notifications[user_to_notify].append(product)
+                stmt_users = (
+                    select(User)
+                    .join(PantryUser, User.id == PantryUser.user_id)
+                    .where(PantryUser.pantry_id == product.pantry_id)
+                )
+                result_users = await db.execute(stmt_users)
+                users_of_pantry = result_users.scalars().all()
+
+                for user in users_of_pantry:
+                    if user.is_verified and user.send_expiration_notifications:
+                        notifications[user].append(product)
+
+            if not notifications:
+                logger.info(
+                    "Znaleziono produkty, ale żaden użytkownik nie kwalifikuje się do powiadomienia."
+                )
+                return
 
             for user, products_to_notify in notifications.items():
                 logger.info(
@@ -78,16 +81,14 @@ async def notify_expiring_products():
 
                 products_data_for_template = [
                     {
-                        "name": product.name,
-                        "pantry_name": product.pantry.name,
-                        "expiration_date": product.expiration_date.strftime("%Y-%m-%d"),
-                        "is_expired": product.expiration_date < today_utc_date,
-                        "quantity": product.current_amount,
-                        "unit": product.unit,
+                        "name": p.name,
+                        "pantry_name": p.pantry.name,
+                        "expiration_date": p.expiration_date.strftime("%Y-%m-%d"),
+                        "is_expired": p.expiration_date < today_utc_date,
+                        "quantity": p.current_amount,
+                        "unit": p.unit,
                     }
-                    for product in sorted(
-                        products_to_notify, key=lambda p: p.expiration_date
-                    )
+                    for p in sorted(products_to_notify, key=lambda p: p.expiration_date)
                 ]
 
                 html_body = await render_template(

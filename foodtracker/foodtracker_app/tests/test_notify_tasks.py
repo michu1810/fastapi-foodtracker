@@ -11,9 +11,6 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.fixture
 async def pantry_with_users(db: AsyncSession):
-    """
-    Fixtura pozostaje bez zmian - jest świetna, bo tworzy dane w testowej bazie.
-    """
     user_ok = User(
         email="notify_me@example.com",
         hashed_password="pwd",
@@ -40,6 +37,9 @@ async def pantry_with_users(db: AsyncSession):
     link2 = PantryUser(user_id=user_no_notify.id, pantry_id=pantry.id, role="member")
     db.add_all([link1, link2])
     await db.commit()
+
+    await db.refresh(pantry)
+    await db.refresh(user_ok)
 
     return {
         "db": db,
@@ -78,6 +78,7 @@ async def test_notify_expiring_products_sends_to_correct_user(
     db.add(expiring_product)
     await db.commit()
 
+    db.expire_all()
     await notify_expiring_products()
 
     mock_send.assert_awaited_once()
@@ -90,7 +91,6 @@ async def test_notify_expiring_products_sends_to_correct_user(
 async def test_notify_no_expiring_products_does_nothing(
     mock_send, db: AsyncSession, mocker
 ):
-    # Tak jak w teście powyżej, mockujemy sesję
     mock_session_context = MagicMock()
     mock_session_context.__aenter__.return_value = db
     mocker.patch(
@@ -98,6 +98,7 @@ async def test_notify_no_expiring_products_does_nothing(
         return_value=mock_session_context,
     )
 
+    db.expire_all()
     await notify_expiring_products()
 
     mock_send.assert_not_awaited()
@@ -118,7 +119,6 @@ async def test_notify_email_send_failure_is_logged(
     db = pantry_with_users["db"]
     pantry = pantry_with_users["pantry"]
 
-    # Mockujemy sesję
     mock_session_context = MagicMock()
     mock_session_context.__aenter__.return_value = db
     mocker.patch(
@@ -140,6 +140,7 @@ async def test_notify_email_send_failure_is_logged(
 
     mock_send.side_effect = Exception("SMTP server is down")
 
+    db.expire_all()
     await notify_expiring_products()
 
     mock_logger.error.assert_called_once()
@@ -150,13 +151,10 @@ async def test_notify_email_send_failure_is_logged(
 @pytest.mark.asyncio
 @patch("foodtracker_app.notifications.tasks.logger")
 async def test_notify_general_failure_is_logged(mock_logger, mocker):
-    # W tym teście symulujemy błąd samej bazy, więc nie potrzebujemy fixtury z danymi
-
     mock_session = AsyncMock()
     mock_session.execute.side_effect = Exception("Critical DB Error")
     mock_session.rollback = AsyncMock()
 
-    # Patchujemy `async_session_maker`, aby zwracał naszego zepsutego mocka sesji
     mock_session_context = MagicMock()
     mock_session_context.__aenter__.return_value = mock_session
     mocker.patch(
