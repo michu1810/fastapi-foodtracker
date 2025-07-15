@@ -14,18 +14,10 @@ async def test_notify_expiring_products_sends_mail(db: AsyncSession, mocker):
     Testuje, czy funkcja NIE wysyła e-maili, gdy baza jest pusta.
     """
     send_mail = mocker.patch(
-        "foodtracker_app.notifications.tasks.send_email_async",
-        new=AsyncMock(),
+        "foodtracker_app.notifications.tasks.send_email_async", new=AsyncMock()
     )
 
-    mock_session_context = MagicMock()
-    mock_session_context.__aenter__.return_value = db
-    mocker.patch(
-        "foodtracker_app.notifications.tasks.async_session_maker",
-        return_value=mock_session_context,
-    )
-
-    await _run_notification_logic_async()
+    await _run_notification_logic_async(db=db)
 
     send_mail.assert_not_awaited()
 
