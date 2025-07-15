@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     RECAPTCHA_SECRET_KEY: str
     CORS_ORIGINS: list[str] = []
 
-    EXPIRATION_NOTIFICATION_DAYS = 3
+    EXPIRATION_NOTIFICATION_DAYS: int = 3
     FRONTEND_URL: str
     BACKEND_URL: str
     REDIS_URL: str
