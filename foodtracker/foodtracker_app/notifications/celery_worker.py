@@ -24,8 +24,8 @@ celery_app.conf.update(
     enable_utc=True,
     beat_schedule={
         "run-expiration-check-daily": {
-            "task": "foodtracker_app.notifications.tasks.notify_expiring_products",
-            "schedule": crontab(hour=8, minute=0),  # 08:00 UTC = 10:00 CET
+            "task": "notifications.notify_expiring_products",
+            "schedule": crontab(minute="*/2"),  # 08:00 UTC = 10:00 w Polsce
         }
     },
     broker_connection_retry_on_startup=True,
