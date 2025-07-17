@@ -32,10 +32,15 @@
                     <tbody>
                         {% for product in products %}
                         <tr>
-                            <td style="padding: 12px 0; color: #333333; font-weight: 600;">{{ product.name }}</td>
+                            <td style="padding: 12px 0; color: #333333; font-weight: 600; line-height: 1.4;">
+                                {{ product.name }}
+                                <br>
+                                <span style="font-size: 13px; color: #888888; font-weight: 400;">
+                                    w spiżarni: {{ product.pantry_name }}
+                                </span>
+                            </td>
                             <td style="padding: 12px 0; color: {% if product.is_expired %}#d9534f{% else %}#f0ad4e{% endif %}; font-weight: 600; text-align: right;">
                                 {{ product.expiration_date }}
-                                {% if product.is_expired %}(Dziś się przeterminuje!){% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -47,7 +52,6 @@
                         Zajrzyj do FoodTrackera i oznacz jako zużyte!
                     </a>
                 </p>
-
             </td>
         </tr>
         <tr>

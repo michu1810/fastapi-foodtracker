@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import sessionmaker, selectinload
 
-from foodtracker_app.models import PantryUser, User, Pantry
+from foodtracker_app.models import PantryUser, User, Pantry, Product  # noqa
 from foodtracker_app.utils.email_utils import send_email_async
 from foodtracker_app.utils.template_utils import render_template
 from foodtracker_app.settings import settings
