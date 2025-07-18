@@ -86,22 +86,25 @@ const ProductModal: React.FC<ProductModalProps> = ({
     if (!editingProduct || !selectedPantry) return;
     setError(null);
 
-    if (formData.current_amount < editingProduct.current_amount) {
-        setError(`Ilość nie może być mniejsza niż ${editingProduct.current_amount}.`);
+    const newQuantity = formData.current_amount;
+
+    if (newQuantity < 1) {
+        setError(`Ilość nie może być mniejsza niż 1.`);
         return;
     }
 
     try {
+        const oldInitial = editingProduct.initial_amount;
+
         const updatePayload = {
             name: formData.name,
             expiration_date: formData.expiration_date,
-            current_amount: formData.current_amount,
             price: editingProduct.price,
-
             unit: editingProduct.unit as 'szt.' | 'g' | 'kg' | 'ml' | 'l',
+            category_id: editingProduct.category?.id,
 
-            initial_amount: formData.current_amount > editingProduct.initial_amount ? formData.current_amount : editingProduct.initial_amount,
-            category_id: editingProduct.category?.id
+            current_amount: newQuantity,
+            initial_amount: newQuantity > oldInitial ? newQuantity : oldInitial
         };
 
         const updatedProduct = await productsService.updateProduct(selectedPantry.id, editingProduct.id, updatePayload);
@@ -131,7 +134,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                         name="current_amount"
                         value={formData.current_amount}
                         onChange={(e) => setFormData({ ...formData, current_amount: parseInt(e.target.value, 10) || 0 })}
-                        min={editingProduct?.current_amount}
+                        min="1"
                         step="1"
                         className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                     />
