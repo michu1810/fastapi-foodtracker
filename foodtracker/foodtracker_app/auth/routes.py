@@ -477,8 +477,20 @@ async def update_product(
         raise HTTPException(
             status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
         )
-
     product_data = updated_data.model_dump(exclude_unset=True)
+
+    if "current_amount" in product_data:
+        new_amount = Decimal(str(product_data["current_amount"]))
+
+        if new_amount < product.current_amount:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Ilość produktu nie może być mniejsza niż aktualna ({product.current_amount}).",
+            )
+
+        if new_amount > product.current_amount:
+            product_data["initial_amount"] = new_amount
+
     for key, value in product_data.items():
         if hasattr(product, key):
             setattr(product, key, value)
