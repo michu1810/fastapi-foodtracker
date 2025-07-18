@@ -5,6 +5,13 @@ import { usePantry } from '../../context/PantryContext';
 import Portal from '../Portal';
 import ProductListItem from '../ProductListItem';
 
+interface ApiError extends Error {
+    response?: {
+        data?: {
+            detail?: string;
+        };
+    };
+}
 interface ProductModalProps {
     isOpen: boolean;
     isContentLoaded: boolean;
@@ -19,7 +26,10 @@ interface ProductModalProps {
     onHide: (product: Product) => void;
 }
 
-type EditFormData = Pick<CreateProductRequest, 'name'> & { expiration_date: string };
+type EditFormData = Pick<CreateProductRequest, 'name'> & {
+    expiration_date: string;
+    current_amount: number;
+};
 
 const backdropVariants: Variants = {
     visible: { opacity: 1 },
@@ -46,13 +56,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
 }) => {
     const { selectedPantry } = usePantry();
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-    const [formData, setFormData] = useState<EditFormData>({ name: '', expiration_date: '' });
+
+    const [formData, setFormData] = useState<EditFormData>({ name: '', expiration_date: '', current_amount: 0 });
+
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!isOpen) {
             const timer = setTimeout(() => {
                 setEditingProduct(null);
-                setFormData({ name: '', expiration_date: '' });
+                setFormData({ name: '', expiration_date: '', current_amount: 0 });
+                setError(null);
             }, 300);
             return () => clearTimeout(timer);
         }
@@ -60,25 +74,46 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
     const handleEditClick = (product: Product) => {
         setEditingProduct(product);
-        setFormData({ name: product.name, expiration_date: product.expiration_date });
+        setFormData({
+            name: product.name,
+            expiration_date: product.expiration_date,
+            current_amount: product.current_amount
+        });
+        setError(null);
     };
 
     const handleSaveUpdate = async () => {
-        if (!editingProduct || !selectedPantry) return;
-        try {
-            const updatePayload: CreateProductRequest = {
-                name: formData.name,
-                expiration_date: formData.expiration_date,
-                price: editingProduct.price,
-                unit: editingProduct.unit as 'szt.' | 'g' | 'kg' | 'ml' | 'l',
-                initial_amount: editingProduct.initial_amount,
-                category_id: editingProduct.category?.id
-            };
-            const updatedProduct = await productsService.updateProduct(selectedPantry.id, editingProduct.id, updatePayload);
-            onUpdate(updatedProduct);
-            setEditingProduct(null);
-        } catch (err) { console.error("Błąd aktualizacji:", err); }
-    };
+    if (!editingProduct || !selectedPantry) return;
+    setError(null);
+
+    if (formData.current_amount < editingProduct.current_amount) {
+        setError(`Ilość nie może być mniejsza niż ${editingProduct.current_amount}.`);
+        return;
+    }
+
+    try {
+        const updatePayload = {
+            name: formData.name,
+            expiration_date: formData.expiration_date,
+            current_amount: formData.current_amount,
+            price: editingProduct.price,
+
+            unit: editingProduct.unit as 'szt.' | 'g' | 'kg' | 'ml' | 'l',
+
+            initial_amount: formData.current_amount > editingProduct.initial_amount ? formData.current_amount : editingProduct.initial_amount,
+            category_id: editingProduct.category?.id
+        };
+
+        const updatedProduct = await productsService.updateProduct(selectedPantry.id, editingProduct.id, updatePayload);
+        onUpdate(updatedProduct);
+        setEditingProduct(null);
+
+    } catch (err) {
+        const apiError = err as ApiError;
+        console.error("Błąd aktualizacji:", apiError);
+        setError(apiError.response?.data?.detail || "Wystąpił nieoczekiwany błąd.");
+    }
+};
 
     const renderEditForm = () => (
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -88,11 +123,28 @@ const ProductModal: React.FC<ProductModalProps> = ({
                     <label className="block text-sm font-medium text-gray-700">Nazwa produktu</label>
                     <input type="text" name="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"/>
                 </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Ilość ({editingProduct?.unit})</label>
+                    <input
+                        type="number"
+                        name="current_amount"
+                        value={formData.current_amount}
+                        onChange={(e) => setFormData({ ...formData, current_amount: parseFloat(e.target.value) || 0 })}
+                        min={editingProduct?.current_amount}
+                        step="0.01"
+                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                </div>
+
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Data ważności</label>
                     <input type="date" name="expiration_date" value={formData.expiration_date || ''} onChange={(e) => setFormData({ ...formData, expiration_date: e.target.value })} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"/>
                 </div>
             </div>
+
+            {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
+
             <div className="flex justify-end gap-3 mt-4">
                 <button onClick={() => setEditingProduct(null)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg">Anuluj</button>
                 <button onClick={handleSaveUpdate} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Zapisz zmiany</button>
