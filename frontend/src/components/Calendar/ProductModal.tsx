@@ -130,9 +130,9 @@ const ProductModal: React.FC<ProductModalProps> = ({
                         type="number"
                         name="current_amount"
                         value={formData.current_amount}
-                        onChange={(e) => setFormData({ ...formData, current_amount: parseFloat(e.target.value) || 0 })}
+                        onChange={(e) => setFormData({ ...formData, current_amount: parseInt(e.target.value, 10) || 0 })}
                         min={editingProduct?.current_amount}
-                        step="0.01"
+                        step="1"
                         className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                     />
                 </div>
