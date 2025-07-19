@@ -19,7 +19,6 @@ async def test_create_product_success(
         "unit": "l",
         "initial_amount": 1.0,
     }
-    # POPRAWKA: Pełny i poprawny URL
     response = await authenticated_client.post(
         f"/pantries/{pantry_id}/products/create", json=payload
     )
@@ -32,15 +31,12 @@ async def test_create_product_success(
 
 async def test_get_products_authenticated(authenticated_client: AsyncClient):
     pantry_id = authenticated_client.pantry.id  # type: ignore
-    # POPRAWKA: Pełny i poprawny URL
     response = await authenticated_client.get(f"/pantries/{pantry_id}/products/get")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 async def test_get_products_unauthenticated(client: AsyncClient):
-    # Testujemy na losowym ID, oczekując 401 Unauthorized, ponieważ ścieżka istnieje
-    # (FastAPI najpierw sprawdzi zabezpieczenia, zanim zwróci 404 dla braku spiżarni)
     response = await client.get("/pantries/999/products/get")
     assert response.status_code == 401
 
@@ -63,7 +59,6 @@ async def test_create_product_with_past_expiration(authenticated_client: AsyncCl
 async def test_use_product(authenticated_client: AsyncClient, fixed_date: date):
     pantry_id = authenticated_client.pantry.id  # type: ignore
 
-    # Najpierw stwórz produkt
     create_payload = {
         "name": "Produkt do zużycia",
         "expiration_date": str(fixed_date),
@@ -81,8 +76,6 @@ async def test_use_product(authenticated_client: AsyncClient, fixed_date: date):
     initial_amount = Decimal(product["initial_amount"])
     amount_to_use = Decimal("1.0")
 
-    # Teraz go zużyj
-    # POPRAWKA: Pełny i poprawny URL do zużywania
     use_response = await authenticated_client.post(
         f"/pantries/{pantry_id}/products/use/{product_id}",
         json={"amount": float(amount_to_use)},
@@ -98,7 +91,6 @@ async def test_user_cannot_access_other_users_pantry_products(
     ],
     fixed_date: date,
 ):
-    # Użytkownik A tworzy produkt w swojej spiżarni A
     client_a, pantry_a = await authenticated_client_factory(
         "user.a@example.com", "password123"
     )
@@ -115,16 +107,13 @@ async def test_user_cannot_access_other_users_pantry_products(
     assert create_response.status_code == 201
     product_id_a = create_response.json()["id"]
 
-    # Użytkownik B próbuje uzyskać dostęp do produktów w spiżarni A
     client_b, _ = await authenticated_client_factory(
         "user.b@example.com", "password456"
     )
 
-    # Próba pobrania listy produktów ze spiżarni A (powinno być 403 Forbidden lub 404 Not Found)
     get_list_response = await client_b.get(f"/pantries/{pantry_a.id}/products/get")
     assert get_list_response.status_code in [403, 404]
 
-    # Próba pobrania konkretnego produktu A ze spiżarni A
     get_product_response = await client_b.get(
         f"/pantries/{pantry_a.id}/products/get/{product_id_a}"
     )

@@ -10,7 +10,6 @@ from foodtracker_app.models.user import User
 from foodtracker_app.settings import settings
 from foodtracker_app.tests.conftest import TestingSessionLocal
 
-# Stałe z fałszywymi danymi
 GOOGLE_USER_INFO = {"email": "test.google@example.com", "name": "Test Google User"}
 GITHUB_USER_INFO = {"email": "test.github@example.com", "name": "Test GitHub User"}
 GITHUB_USER_EMAILS = [
@@ -90,7 +89,6 @@ async def test_google_callback_existing_password_user(client: AsyncClient, mocke
 
 @pytest.mark.asyncio
 async def test_google_callback_no_email(client: AsyncClient, mocker):
-    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.google.authorize_access_token",
         new=AsyncMock(return_value={"access_token": "fake-token"}),
@@ -102,7 +100,6 @@ async def test_google_callback_no_email(client: AsyncClient, mocker):
     response = await client.get(
         "/google/callback?code=fakecode", follow_redirects=False
     )
-    # Sprawdzamy, czy jest przekierowanie z błędem
     assert response.status_code == 307
     assert response.headers["location"].startswith(
         f"{settings.FRONTEND_URL}/login?error="
@@ -111,7 +108,6 @@ async def test_google_callback_no_email(client: AsyncClient, mocker):
 
 @pytest.mark.asyncio
 async def test_google_callback_auth_error(client: AsyncClient, mocker):
-    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.google.authorize_access_token",
         new=AsyncMock(side_effect=Exception("Auth error")),
@@ -119,7 +115,6 @@ async def test_google_callback_auth_error(client: AsyncClient, mocker):
     response = await client.get(
         "/google/callback?code=fakecode", follow_redirects=False
     )
-    # Sprawdzamy, czy jest przekierowanie z błędem
     assert response.status_code == 307
     assert response.headers["location"].startswith(
         f"{settings.FRONTEND_URL}/login?error="
@@ -187,7 +182,6 @@ async def test_github_callback_secondary_email_used(client: AsyncClient, mocker)
 
 @pytest.mark.asyncio
 async def test_github_callback_no_email_at_all(client: AsyncClient, mocker):
-    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.github.authorize_access_token",
         new=AsyncMock(return_value={"access_token": "fake-github-token"}),
@@ -204,7 +198,6 @@ async def test_github_callback_no_email_at_all(client: AsyncClient, mocker):
     response = await client.get(
         "/github/callback?code=fakecode", follow_redirects=False
     )
-    # Sprawdzamy, czy jest przekierowanie z błędem
     assert response.status_code == 307
     assert response.headers["location"].startswith(
         f"{settings.FRONTEND_URL}/login?error="
@@ -232,7 +225,6 @@ async def test_get_or_create_user_existing_social_user(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_github_callback_auth_error(client: AsyncClient, mocker):
-    # POPRAWIONY TEST
     mocker.patch(
         "foodtracker_app.auth.social.oauth.github.authorize_access_token",
         new=AsyncMock(side_effect=Exception("Auth error")),
@@ -240,7 +232,6 @@ async def test_github_callback_auth_error(client: AsyncClient, mocker):
     response = await client.get(
         "/github/callback?code=fakecode", follow_redirects=False
     )
-    # Sprawdzamy, czy jest przekierowanie z błędem
     assert response.status_code == 307
     assert response.headers["location"].startswith(
         f"{settings.FRONTEND_URL}/login?error="
@@ -261,7 +252,6 @@ async def test_resolve_user_data_handles_bad_type():
 
 @pytest.mark.asyncio
 async def test_get_or_create_user_conflicting_provider(client: AsyncClient):
-    # POPRAWIONY TEST
     email = "conflict@example.com"
     async with TestingSessionLocal() as db:
         db.add(

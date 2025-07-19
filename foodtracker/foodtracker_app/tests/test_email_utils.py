@@ -7,7 +7,6 @@ from foodtracker_app.utils import email_utils
 async def test_send_email_async_demo_mode(monkeypatch):
     monkeypatch.setattr(email_utils.settings, "DEMO_MODE", True)
     await email_utils.send_email_async("test@example.com", "Temat", "Treść")
-    # Nie powinno być żadnego błędu – tylko print
     assert True
 
 

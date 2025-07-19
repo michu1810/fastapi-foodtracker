@@ -60,16 +60,16 @@ async def test_notify_expiring_products_sends_to_correct_user(
     expiring_product = Product(
         name="Mleko",
         pantry_id=pantry_id,
-        expiration_date=date.today() + timedelta(days=3),
+        expiration_date=date.today() + timedelta(days=2),
         price=Decimal("3.50"),
-        unit="l",
+        unit="szt.",
         initial_amount=Decimal("1.0"),
         current_amount=Decimal("1.0"),
     )
     db.add(expiring_product)
     await db.commit()
-    db.expire_all()
 
+    db.expire_all()
     await _run_notification_logic_async(db=db)
 
     mock_send.assert_awaited_once()
@@ -100,7 +100,7 @@ async def test_notify_email_send_failure_is_logged(
         pantry_id=pantry_id,
         expiration_date=date.today() + timedelta(days=1),
         price=Decimal("10.0"),
-        unit="szt.",  # <-- To jest pole, którego brakowało
+        unit="szt.",
         initial_amount=Decimal("1.0"),
         current_amount=Decimal("1.0"),
     )

@@ -2,6 +2,7 @@ from datetime import date, datetime
 from typing import List, Literal, Optional
 from foodtracker_app.schemas.category import CategoryRead
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, constr, field_validator
+from decimal import Decimal
 
 
 class UserCreate(BaseModel):
@@ -55,6 +56,20 @@ class ProductCreate(BaseModel):
     @field_validator("expiration_date", "is_fresh_product")
     def validate_dates(cls, v, values):
         return v
+
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    expiration_date: Optional[date] = None
+    price: Optional[Decimal] = Field(None, ge=0)
+    unit: Optional[str] = None
+    category_id: Optional[int] = None
+
+    current_amount: Optional[Decimal] = Field(None, ge=1)
+    initial_amount: Optional[Decimal] = Field(None, ge=1)
+
+    class Config:
+        from_attributes = True
 
 
 class ProductOut(ProductBase):

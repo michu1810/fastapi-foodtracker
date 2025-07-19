@@ -240,7 +240,6 @@ async def test_resend_verification_email_too_soon(authenticated_client_factory, 
             )
         )
         await db.commit()
-    # POPRAWKA: Rozpakowanie wyniku z fabryki
     client, _ = await authenticated_client_factory(
         user_email, "x", is_verified=False, login=False
     )

@@ -1,71 +1,74 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Product, productsService, CreateProductRequest } from '../../services/productService';
+import { Product, productsService } from '../../services/productService';
+import { categoryService, Category } from '../../services/categoryService';
 import { usePantry } from '../../context/PantryContext';
 import Portal from '../Portal';
 import ProductListItem from '../ProductListItem';
 
-interface ApiError extends Error {
-    response?: {
-        data?: {
-            detail?: string;
-        };
-    };
-}
+const TextIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" /><path strokeLinecap="round" strokeLinejoin="round" d="M6 9h.008v.008H6V9z" /></svg>;
+const ScaleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.153.542c-1.12.23-2.295.328-3.418.328-1.123 0-2.298-.1-3.418-.328a5.988 5.988 0 01-2.153-.542c-.483-.174-.711-.703-.59-1.202L18.75 4.971z" /></svg>;
+const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const CalendarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18" /></svg>;
+const CategoryIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" /></svg>;
+
+interface ApiError extends Error { response?: { data?: { detail?: string; }; }; }
+const UNITS = ['szt.', 'g'] as const;
+type Unit = typeof UNITS[number];
+
+type EditFormData = {
+    name: string;
+    expiration_date: string;
+    current_amount: number;
+    price: number;
+    unit: Unit;
+    category_id: number | null;
+};
+
 interface ProductModalProps {
-    isOpen: boolean;
-    isContentLoaded: boolean;
-    date: Date;
-    products: Product[];
-    onClose: () => void;
-    onUseProduct: (product: Product) => void;
-    onDelete: (product: Product) => void;
-    onUpdate: (updatedProduct: Product) => void;
-    onAddProduct: () => void;
-    onWaste: (product: Product) => void;
+    isOpen: boolean; isContentLoaded: boolean; date: Date; products: Product[];
+    onClose: () => void; onUseProduct: (product: Product) => void;
+    onDelete: (product: Product) => void; onUpdate: (updatedProduct: Product) => void;
+    onAddProduct: () => void; onWaste: (product: Product) => void;
     onHide: (product: Product) => void;
 }
 
-type EditFormData = Pick<CreateProductRequest, 'name'> & {
-    expiration_date: string;
-    current_amount: number;
-};
-
-const backdropVariants: Variants = {
-    visible: { opacity: 1 },
-    hidden: { opacity: 0 },
-};
-
+const backdropVariants: Variants = { visible: { opacity: 1 }, hidden: { opacity: 0 } };
 const modalVariants: Variants = {
-    hidden: { y: "50px", opacity: 0, transition: { type: "spring", stiffness: 400, damping: 40 } },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } },
+    hidden: { y: "30px", opacity: 0, scale: 0.98 },
+    visible: { y: 0, opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 30 } },
+};
+const formItemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
 const ProductModal: React.FC<ProductModalProps> = ({
-    isOpen,
-    isContentLoaded,
-    date,
-    products,
-    onClose,
-    onUseProduct,
-    onDelete,
-    onUpdate,
-    onAddProduct,
-    onWaste,
-    onHide
+    isOpen, isContentLoaded, date, products, onClose, onUpdate, onAddProduct, ...rest
 }) => {
     const { selectedPantry } = usePantry();
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
-    const [formData, setFormData] = useState<EditFormData>({ name: '', expiration_date: '', current_amount: 0 });
-
+    const [formData, setFormData] = useState<EditFormData>({ name: '', expiration_date: '', current_amount: 0, price: 0, unit: 'szt.', category_id: null });
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const fetchedCategories = await categoryService.getAllCategories();
+                setCategories(fetchedCategories);
+            } catch (e) {
+                console.error("Failed to fetch categories", e);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         if (!isOpen) {
             const timer = setTimeout(() => {
                 setEditingProduct(null);
-                setFormData({ name: '', expiration_date: '', current_amount: 0 });
                 setError(null);
             }, 300);
             return () => clearTimeout(timer);
@@ -77,97 +80,137 @@ const ProductModal: React.FC<ProductModalProps> = ({
         setFormData({
             name: product.name,
             expiration_date: product.expiration_date,
-            current_amount: product.current_amount
+            current_amount: product.current_amount,
+            price: product.price,
+            unit: product.unit as Unit,
+            category_id: product.category?.id ?? null
         });
         setError(null);
     };
 
+    const handleFormChange = (field: keyof EditFormData, value: string | number | null) => {
+        let processedValue = value;
+        if (field === 'current_amount' || field === 'price') {
+            const isPieces = formData.unit === 'szt.' && field === 'current_amount';
+            const numericValue = isPieces ? parseInt(value as string, 10) : parseFloat(value as string);
+            processedValue = isNaN(numericValue) ? 0 : numericValue;
+        }
+
+        if (field === 'unit' && value === 'szt.') {
+            setFormData(prev => ({ ...prev, unit: value as Unit, current_amount: Math.round(prev.current_amount) }));
+        } else {
+            setFormData(prev => ({ ...prev, [field]: processedValue }));
+        }
+    };
+
     const handleSaveUpdate = async () => {
-    if (!editingProduct || !selectedPantry) return;
-    setError(null);
+        if (!editingProduct || !selectedPantry) return;
+        setError(null);
+        setIsSaving(true);
 
-    const newQuantity = formData.current_amount;
+        const { current_amount, unit } = formData;
 
-    if (newQuantity < 1) {
-        setError(`Ilość nie może być mniejsza niż 1.`);
-        return;
-    }
+        if (unit === 'szt.' && current_amount % 1 !== 0) {
+            setError("Dla jednostki 'szt.' ilość musi być liczbą całkowitą.");
+            setIsSaving(false);
+            return;
+        }
+        if (current_amount < 1) {
+            setError(`Ilość nie może być mniejsza niż 1.`);
+            setIsSaving(false);
+            return;
+        }
 
-    try {
-        const oldInitial = editingProduct.initial_amount;
+        try {
+            const newInitialAmount = (
+                formData.unit !== editingProduct.unit ||
+                current_amount > editingProduct.initial_amount
+            ) ? current_amount : editingProduct.initial_amount;
 
-        const updatePayload = {
-            name: formData.name,
-            expiration_date: formData.expiration_date,
-            price: editingProduct.price,
-            unit: editingProduct.unit as 'szt.' | 'g' | 'kg' | 'ml' | 'l',
-            category_id: editingProduct.category?.id,
+            const updatePayload = {
+                ...formData,
+                category_id: formData.category_id === null ? undefined : formData.category_id,
+                initial_amount: newInitialAmount,
+            };
 
-            current_amount: newQuantity,
-            initial_amount: newQuantity > oldInitial ? newQuantity : oldInitial
-        };
-
-        const updatedProduct = await productsService.updateProduct(selectedPantry.id, editingProduct.id, updatePayload);
-        onUpdate(updatedProduct);
-        setEditingProduct(null);
-
-    } catch (err) {
-        const apiError = err as ApiError;
-        console.error("Błąd aktualizacji:", apiError);
-        setError(apiError.response?.data?.detail || "Wystąpił nieoczekiwany błąd.");
-    }
-};
+            const updatedProduct = await productsService.updateProduct(selectedPantry.id, editingProduct.id, updatePayload);
+            onUpdate(updatedProduct);
+            setEditingProduct(null);
+        } catch (err) {
+            const apiError = err as ApiError;
+            console.error("Błąd aktualizacji:", apiError);
+            setError(apiError.response?.data?.detail || "Wystąpił nieoczekiwany błąd.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const renderEditForm = () => (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <h3 className="font-semibold text-lg mb-4">Edytuj produkt</h3>
-            <div className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Nazwa produktu</label>
-                    <input type="text" name="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"/>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Ilość ({editingProduct?.unit})</label>
-                    <input
-                        type="number"
-                        name="current_amount"
-                        value={formData.current_amount}
-                        onChange={(e) => setFormData({ ...formData, current_amount: parseInt(e.target.value, 10) || 0 })}
-                        min="1"
-                        step="1"
-                        className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Data ważności</label>
-                    <input type="date" name="expiration_date" value={formData.expiration_date || ''} onChange={(e) => setFormData({ ...formData, expiration_date: e.target.value })} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"/>
-                </div>
+        <motion.div
+            className="bg-slate-50 p-4 sm:p-6 rounded-lg"
+            variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+            initial="hidden" animate="visible"
+        >
+            <h3 className="font-semibold text-lg text-slate-800 mb-6">Edytuj produkt</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                <motion.div variants={formItemVariants} className="md:col-span-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-slate-600 mb-1">Nazwa produktu</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><TextIcon /></div>
+                        <input id="name" type="text" value={formData.name} onChange={(e) => handleFormChange('name', e.target.value)} className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                    </div>
+                </motion.div>
+                <motion.div variants={formItemVariants}>
+                    <label htmlFor="current_amount" className="block text-sm font-medium text-slate-600 mb-1">Ilość</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><ScaleIcon /></div>
+                        <input id="current_amount" type="number" value={formData.current_amount} onChange={(e) => handleFormChange('current_amount', e.target.value)} min="1" step={formData.unit === 'szt.' ? 1 : 0.01} className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                    </div>
+                </motion.div>
+                <motion.div variants={formItemVariants}>
+                    <label htmlFor="unit" className="block text-sm font-medium text-slate-600 mb-1">Jednostka</label>
+                    <select id="unit" value={formData.unit} onChange={(e) => handleFormChange('unit', e.target.value as Unit)} className="w-full h-[42px] px-2 border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        {UNITS.map(u => <option key={u} value={u}>{u}</option>)}
+                    </select>
+                </motion.div>
+                <motion.div variants={formItemVariants}>
+                    <label htmlFor="price" className="block text-sm font-medium text-slate-600 mb-1">Cena (PLN)</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><PriceIcon /></div>
+                        <input id="price" type="number" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} min="0" step="0.01" className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                    </div>
+                </motion.div>
+                <motion.div variants={formItemVariants}>
+                    <label htmlFor="category_id" className="block text-sm font-medium text-slate-600 mb-1">Kategoria</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><CategoryIcon /></div>
+                        <select id="category_id" value={formData.category_id ?? ''} onChange={(e) => handleFormChange('category_id', e.target.value ? parseInt(e.target.value, 10) : null)} className="w-full pl-10 pr-3 py-2 border h-[42px] border-slate-300 rounded-md shadow-sm appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">Brak kategorii</option>
+                            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                        </select>
+                    </div>
+                </motion.div>
+                <motion.div variants={formItemVariants} className="md:col-span-2">
+                    <label htmlFor="expiration_date" className="block text-sm font-medium text-slate-600 mb-1">Data ważności</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><CalendarIcon /></div>
+                        <input id="expiration_date" type="date" value={formData.expiration_date || ''} onChange={(e) => handleFormChange('expiration_date', e.target.value)} className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                    </div>
+                </motion.div>
             </div>
-
-            {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
-
-            <div className="flex justify-end gap-3 mt-4">
-                <button onClick={() => setEditingProduct(null)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg">Anuluj</button>
-                <button onClick={handleSaveUpdate} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Zapisz zmiany</button>
-            </div>
-        </div>
+            {error && <p className="text-red-600 bg-red-100 p-3 rounded-md text-sm mt-4">{error}</p>}
+            <motion.div variants={formItemVariants} className="flex justify-end gap-3 mt-6">
+                <motion.button whileTap={{ scale: 0.95 }} onClick={() => setEditingProduct(null)} className="bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">Anuluj</motion.button>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={handleSaveUpdate} disabled={isSaving} className="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isSaving ? 'Zapisywanie...' : 'Zapisz zmiany'}
+                </motion.button>
+            </motion.div>
+        </motion.div>
     );
 
     const renderProductList = () => (
         <div className="space-y-4">
-            {products.map((product) => (
-                <ProductListItem
-                    key={product.id}
-                    product={product}
-                    onEdit={handleEditClick}
-                    onUseProduct={onUseProduct}
-                    onWaste={onWaste}
-                    onDelete={onDelete}
-                    onHide={onHide}
-                />
-            ))}
+            {products.map((product) => (<ProductListItem key={product.id} product={product} onEdit={handleEditClick} {...rest} />))}
         </div>
     );
 
@@ -176,38 +219,23 @@ const ProductModal: React.FC<ProductModalProps> = ({
             <AnimatePresence>
                 {isOpen && (
                     <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
-                        <motion.div
-                            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-                            variants={backdropVariants}
-                            initial="hidden" animate="visible" exit="hidden"
-                        />
-                        <motion.div
-                            className="relative w-full max-w-2xl bg-white rounded-lg shadow-xl flex flex-col"
-                            variants={modalVariants}
-                            initial="hidden" animate="visible" exit="hidden"
-                            onClick={(e) => e.stopPropagation()}
-                        >
+                        <motion.div className="absolute inset-0 bg-black/40 backdrop-blur-sm" variants={backdropVariants} initial="hidden" animate="visible" exit="hidden"/>
+                        <motion.div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden" variants={modalVariants} initial="hidden" animate="visible" exit="hidden" onClick={(e) => e.stopPropagation()}>
                             {isContentLoaded && (
                                 <>
-                                    <div className="p-4 sm:p-6 border-b">
+                                    <div className="p-4 sm:p-6 border-b border-slate-200">
                                         <div className="flex justify-between items-center">
-                                            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-                                                {editingProduct ? `Edycja: ${editingProduct.name}` : `Produkty na dzień ${date.toLocaleDateString('pl-PL')}`}
+                                            <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
+                                                {editingProduct ? `Edytuj produkt` : `Produkty na dzień ${date.toLocaleDateString('pl-PL')}`}
                                             </h2>
-                                            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-2 -mr-2 rounded-full transition-colors hover:bg-gray-100">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                            </button>
+                                            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-2 -mr-2 rounded-full transition-colors hover:bg-slate-100"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
                                         </div>
                                     </div>
-                                    <div className="p-4 sm:p-6 max-h-[70vh] overflow-y-auto">
-                                        {products.length === 0 && !editingProduct ? (
-                                            <p className="text-center text-gray-500 py-8">Brak produktów na ten dzień.</p>
-                                        ) : (
-                                            editingProduct ? renderEditForm() : renderProductList()
-                                        )}
+                                    <div className="p-4 sm:p-6 max-h-[70vh] overflow-y-auto bg-slate-100/50">
+                                        {products.length === 0 && !editingProduct ? <p className="text-center text-slate-500 py-8">Brak produktów na ten dzień.</p> : (editingProduct ? renderEditForm() : renderProductList())}
                                     </div>
-                                    <div className="bg-gray-50 px-4 sm:px-6 py-4 border-t flex justify-end">
-                                        <button onClick={onAddProduct} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto">+ Dodaj nowy produkt</button>
+                                    <div className="bg-white px-4 sm:px-6 py-4 border-t border-slate-200 flex justify-end">
+                                        <motion.button whileTap={{ scale: 0.97 }} onClick={onAddProduct} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-lg transition-colors shadow-sm">+ Dodaj nowy produkt</motion.button>
                                     </div>
                                 </>
                             )}

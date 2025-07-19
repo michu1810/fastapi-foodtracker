@@ -14,7 +14,6 @@ from foodtracker_app.models import Category, Pantry
 pytestmark = pytest.mark.asyncio
 
 
-# Fikstura do przygotowania kategorii w bazie danych przed testami
 @pytest.fixture(autouse=True)
 async def seed_categories_for_service(db: AsyncSession):
     """Automatycznie dodaje podstawowe kategorie do bazy przed każdym testem w tym module."""
@@ -27,7 +26,6 @@ async def seed_categories_for_service(db: AsyncSession):
     await db.commit()
 
 
-# Fikstura do stworzenia testowej spiżarni
 @pytest.fixture
 async def test_pantry(db: AsyncSession):
     """Tworzy i zwraca testową spiżarnię."""
@@ -35,9 +33,6 @@ async def test_pantry(db: AsyncSession):
     db.add(pantry)
     await db.commit()
     return pantry
-
-
-# === Testy dla logiki "świeżych produktów" ===
 
 
 async def test_create_fresh_product_calculates_expiration_date(
@@ -80,7 +75,6 @@ async def test_create_fresh_product_missing_data_raises_error(
         unit="szt.",
         initial_amount=1,
         is_fresh_product=True,
-        # Celowo brak `purchase_date` i `shelf_life_days`
     )
 
     with pytest.raises(HTTPException) as excinfo:
@@ -90,9 +84,6 @@ async def test_create_fresh_product_missing_data_raises_error(
     assert "Brakuje daty zakupu" in excinfo.value.detail
 
 
-# === Testy dla automatycznego przypisywania kategorii z Open Food Facts ===
-
-
 async def test_create_product_with_category_from_off(
     db: AsyncSession, test_pantry: Pantry, mocker
 ):
@@ -100,32 +91,27 @@ async def test_create_product_with_category_from_off(
     Testuje automatyczne przypisanie kategorii z Open Food Facts, gdy category_id nie jest podane.
     To pokryje całą logikę funkcji _get_category_from_off.
     """
-    # 1. Mockujemy odpowiedź z API, aby nie robić prawdziwego zapytania sieciowego
     mock_off_response = mocker.patch(
         "foodtracker_app.services.product_service._get_category_from_off",
         new=AsyncMock(),
     )
 
-    # Symulujemy, że dla podanego kodu kreskowego znaleziono kategorię "Mięso"
-    meat_category = await db.get(Category, 1)  # Zakładając, że "Mięso" ma ID 1
+    meat_category = await db.get(Category, 1)
     mock_off_response.return_value = meat_category
 
-    # 2. Tworzymy produkt bez `category_id`, ale z `external_id`
     product_data = ProductCreate(
         name="Kiełbasa z Kodu",
         price=25.50,
         unit="kg",
         initial_amount=0.5,
         expiration_date=date.today() + timedelta(days=10),
-        external_id="123456789",  # Fikcyjny kod kreskowy
+        external_id="123456789",
     )
 
-    # 3. Wywołujemy serwis i sprawdzamy wynik
     created_product = await product_service.create_product(
         db, test_pantry.id, product_data
     )
 
-    # 4. Asercje
     mock_off_response.assert_awaited_once_with(db, "123456789")
     assert created_product.category is not None
     assert created_product.category.name == "Mięso"
@@ -139,7 +125,6 @@ async def test_create_product_fallback_to_other_category_if_off_fails(
     Testuje przypisanie kategorii "Inne", gdy Open Food Facts nie zwróciło pasującej kategorii.
     To pokryje ścieżkę: else: ... (fallback do "Inne")
     """
-    # 1. Mockujemy odpowiedź z API, symulując brak znalezienia kategorii
     mock_off_response = mocker.patch(
         "foodtracker_app.services.product_service._get_category_from_off",
         new=AsyncMock(return_value=None),
@@ -147,7 +132,6 @@ async def test_create_product_fallback_to_other_category_if_off_fails(
 
     other_category = await db.scalar(select(Category).where(Category.name == "Inne"))
 
-    # 2. Tworzymy produkt bez `category_id`, ale z `external_id`
     product_data = ProductCreate(
         name="Dziwny produkt z OFF",
         price=5.0,
@@ -157,19 +141,14 @@ async def test_create_product_fallback_to_other_category_if_off_fails(
         external_id="987654321",
     )
 
-    # 3. Wywołujemy serwis
     created_product = await product_service.create_product(
         db, test_pantry.id, product_data
     )
 
-    # 4. Asercje
     mock_off_response.assert_awaited_once_with(db, "987654321")
     assert created_product.category is not None
     assert created_product.category.name == "Inne"
     assert created_product.category_id == other_category.id
-
-
-# === Test dla ostatniej brakującej funkcji ===
 
 
 async def test_resolve_category_from_external_id(db: AsyncSession, mocker):

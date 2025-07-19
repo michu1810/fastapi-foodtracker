@@ -24,6 +24,7 @@ from foodtracker_app.auth.schemas import (
     UserCreate,
     UserProfile,
     UserSettingsUpdate,
+    ProductUpdate,
 )
 from foodtracker_app.auth.utils import (
     create_access_token,
@@ -468,7 +469,7 @@ async def delete_product(
 @product_router.put("/update/{product_id}", response_model=ProductOut)
 async def update_product(
     product_id: int,
-    updated_data: ProductCreate,
+    updated_data: ProductUpdate,
     pantry: Pantry = Depends(get_pantry_for_user),
     db: AsyncSession = Depends(get_async_session),
 ):
@@ -477,19 +478,33 @@ async def update_product(
         raise HTTPException(
             status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
         )
+
     product_data = updated_data.model_dump(exclude_unset=True)
 
     if "current_amount" in product_data:
-        new_amount = Decimal(str(product_data["current_amount"]))
+        new_current_amount = Decimal(str(product_data["current_amount"]))
+        final_unit = product_data.get("unit", product.unit)
 
-        if new_amount < product.current_amount:
+        if final_unit == "szt." and new_current_amount % 1 != 0:
             raise HTTPException(
                 status_code=400,
-                detail=f"Ilość produktu nie może być mniejsza niż aktualna ({product.current_amount}).",
+                detail="Dla jednostki 'szt.' ilość musi być liczbą całkowitą.",
             )
 
-        if new_amount > product.current_amount:
-            product_data["initial_amount"] = new_amount
+        if new_current_amount < 1:
+            raise HTTPException(
+                status_code=400, detail="Ilość produktu nie może być mniejsza niż 1."
+            )
+
+        product.initial_amount = new_current_amount
+        product.current_amount = new_current_amount
+        product.wasted_amount = 0
+
+        del product_data["current_amount"]
+        if "initial_amount" in product_data:
+            del product_data["initial_amount"]
+        if "wasted_amount" in product_data:
+            del product_data["wasted_amount"]
 
     for key, value in product_data.items():
         if hasattr(product, key):
@@ -497,6 +512,7 @@ async def update_product(
 
     await db.commit()
     await db.refresh(product)
+
     return product
 
 
