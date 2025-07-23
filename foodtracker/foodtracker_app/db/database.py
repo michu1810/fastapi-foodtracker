@@ -5,7 +5,6 @@ from foodtracker_app.settings import settings
 from sqlalchemy import TypeDecorator, DateTime
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.engine.url import make_url
 
 
 class TZDateTime(TypeDecorator):
@@ -25,20 +24,9 @@ class TZDateTime(TypeDecorator):
         return None
 
 
-raw_url = settings.DATABASE_URL
-url_object = make_url(raw_url)
+DATABASE_URL = settings.DATABASE_URL
 
-if settings.IS_PRODUCTION:
-    url_object = url_object.update_query_pairs([("ssl", "require")])
-
-engine = create_async_engine(
-    url_object,
-    echo=True,
-    connect_args={
-        "statement_cache_size": 0,
-    },
-)
-
+engine = create_async_engine(DATABASE_URL, echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 Base = declarative_base()
