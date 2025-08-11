@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../services/api';
+import AuthBlobs from '../components/AuthBlobs';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
@@ -26,8 +27,9 @@ const ResetPassword = () => {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
-        <div className="bg-white/20 backdrop-blur-md text-red-600 p-6 rounded-lg shadow-md">
+      <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-white to-emerald-50">
+        <AuthBlobs />
+        <div className="bg-red-50 text-red-700 p-6 rounded-lg shadow-md border border-red-200">
           ❌ Brak lub nieprawidłowy token resetu.
         </div>
       </div>
@@ -35,11 +37,12 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-2xl p-8 max-w-md w-full space-y-4 border border-white/20 animate-fade-in-up">
-        <h2 className="text-3xl font-bold text-center text-white">🔐 Ustaw nowe hasło</h2>
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-white to-emerald-50">
+      <AuthBlobs />
+      <div className="relative bg-white shadow-xl rounded-2xl p-8 max-w-md w-full space-y-4 border border-gray-100 animate-fade-in">
+        <h2 className="text-3xl font-bold text-center text-gray-900">🔐 Ustaw nowe hasło</h2>
         {status === 'success' ? (
-          <p className="text-green-300 text-center">
+          <p className="text-emerald-700 text-center">
             ✅ Hasło zostało zresetowane! Za chwilę nastąpi przekierowanie...
           </p>
         ) : (
@@ -49,16 +52,16 @@ const ResetPassword = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Nowe hasło"
-              className="w-full px-4 py-2 bg-white/30 placeholder-white text-white border border-white/30 rounded focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
               required
               minLength={6}
             />
             {status === 'error' && (
-              <p className="text-red-200 text-sm">{errorMsg}</p>
+              <p className="text-red-700 text-sm">{errorMsg}</p>
             )}
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 transition-colors text-white font-semibold py-2 rounded-lg"
+              className="w-full bg-teal-600 hover:bg-teal-700 transition-colors text-white font-semibold py-2 rounded-lg shadow-sm"
             >
               Resetuj hasło
             </button>

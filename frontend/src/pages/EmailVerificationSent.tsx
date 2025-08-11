@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiClient from '../services/api';
+import AuthBlobs from '../components/AuthBlobs';
 
 const EmailVerificationSent = () => {
   const navigate = useNavigate();
@@ -43,41 +44,44 @@ const EmailVerificationSent = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-2xl p-8 w-full max-w-md border border-white/20 text-center text-white animate-fade-in-smooth">
-        <h2 className="text-3xl font-bold mb-4">📬 Sprawdź skrzynkę mailową</h2>
-        <p className="mb-4">
-          Wysłaliśmy maila z linkiem aktywacyjnym{email ? ` na: ${email}` : ''}.
-        </p>
-        <p className="text-sm text-white/70 mb-6">
-          Jeśli nie widzisz emaila, sprawdź SPAM lub poczekaj chwilę.
-        </p>
+   return (
+    <div className="relative min-h-screen">
+      <AuthBlobs />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4">
+        <div className="pointer-events-auto bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100 text-center text-gray-900 animate-fade-in">
+          <h2 className="text-3xl font-bold mb-4">📬 Sprawdź skrzynkę mailową</h2>
+          <p className="mb-4">
+            Wysłaliśmy maila z linkiem aktywacyjnym{email ? ` na: ${email}` : ''}.
+          </p>
+          <p className="text-sm text-gray-600 mb-6">
+            Jeśli nie widzisz emaila, sprawdź SPAM lub poczekaj chwilę.
+          </p>
 
-        {message && <div className="text-blue-300 text-sm mb-3">{message}</div>}
+          {message && <div className="text-teal-700 text-sm mb-3">{message}</div>}
 
-        <button
-          onClick={resendVerification}
-          disabled={!canResend || loading}
-          className={`w-full py-2 px-4 rounded-lg font-medium transition-colors mb-3 ${
-            canResend
-              ? 'bg-blue-500 hover:bg-blue-600 text-white'
-              : 'bg-gray-300 text-white/40 cursor-not-allowed'
-          }`}
-        >
-          {loading
-            ? 'Wysyłanie...'
-            : canResend
-            ? 'Wyślij ponownie email weryfikacyjny'
-            : `Spróbuj ponownie za ${cooldown}s`}
-        </button>
+          <button
+            onClick={resendVerification}
+            disabled={!canResend || loading}
+            className={`w-full py-2 px-4 rounded-lg font-medium transition-colors mb-3 shadow-sm ${
+              canResend
+                ? 'bg-teal-600 hover:bg-teal-700 text-white'
+                : 'bg-gray-300 text-white cursor-not-allowed'
+            }`}
+          >
+            {loading
+              ? 'Wysyłanie...'
+              : canResend
+              ? 'Wyślij ponownie email weryfikacyjny'
+              : `Spróbuj ponownie za ${cooldown}s`}
+          </button>
 
-        <button
-          onClick={() => navigate('/login')}
-          className="w-full py-2 px-4 bg-gray-100 text-gray-800 rounded-lg font-medium hover:bg-white transition"
-        >
-          Powrót do logowania
-        </button>
+          <button
+            onClick={() => navigate('/login')}
+            className="w-full py-2 px-4 bg-gray-100 text-gray-800 rounded-lg font-medium hover:bg-white transition border border-gray-200"
+          >
+            Powrót do logowania
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { verifyAccount } from '../services/api';
+import AuthBlobs from '../components/AuthBlobs';
 
 type Status = 'success' | 'used' | 'expired' | 'invalid' | 'missing';
 
@@ -12,13 +13,13 @@ const VerifyAccount = () => {
   useEffect(() => {
     const token = new URLSearchParams(location.search).get('token');
     if (!token) {
-      setMessage('❌ Brak tokenu weryfikacyjnym.');
+      setMessage('❌ Brak tokenu weryfikacyjnego.');
       setStatus('missing');
       return;
     }
     verifyAccount(token)
       .then((res) => {
-        setStatus(res.status);
+        setStatus(res.status as Status);
         switch (res.status) {
           case 'success':
             setMessage('✅ Konto zweryfikowane!');
@@ -39,21 +40,23 @@ const VerifyAccount = () => {
       });
   }, [location]);
 
-  const color = status === 'success'
-    ? 'text-green-300'
-    : status === 'used'
-    ? 'text-blue-300'
-    : 'text-red-300';
+  const color =
+    status === 'success'
+      ? 'text-emerald-700'
+      : status === 'used'
+      ? 'text-teal-700'
+      : 'text-red-700';
 
   return (
-    <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-2xl p-8 max-w-md w-full text-center text-white border border-white/20 animate-fade-in">
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-white to-emerald-50">
+      <AuthBlobs />
+      <div className="relative bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center border border-gray-100 animate-fade-in">
         <h2 className={`text-3xl font-bold mb-4 ${color}`}>Weryfikacja konta</h2>
-        <p className="mb-6">{message}</p>
+        <p className="mb-6 text-gray-700">{message}</p>
         {(status === 'success' || status === 'used') && (
           <Link
             to="/login"
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition"
+            className="inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg transition shadow-sm"
           >
             Przejdź do logowania
           </Link>

@@ -3,6 +3,9 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import Regulamin from './pages/terms';
+import PolitykaPrywatnosci from "./pages/privacy";
+import Footer from './components/Footer';
 import Header from './components/Header';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -19,26 +22,36 @@ import AchievementsPage from './pages/AchievementsPage';
 import { PantryManagementPage } from './pages/PantryManagementPage';
 import JoinPantryPage from './pages/JoinPantryPage';
 
-
 export default function App() {
   const location = useLocation();
-  // Poprawiona ścieżka do weryfikacji, aby pasowała do prawdziwego URL
-  const minimal = ['/login','/register','/forgot-password','/reset-password','/email-verification-sent','/verify'];
-  const isMinimal = minimal.some(path => location.pathname.startsWith(path));
+
+  // Ścieżki z "minimalnym" widokiem (bez Header/Footer)
+  const minimal = [
+    '/login','/register','/forgot-password','/reset-password','/email-verification-sent','/verify'
+  ];
+
+  // Dodatkowo: jeśli wchodzimy na /regulamin lub /polityka-prywatnosci z ?from=register
+  const search = new URLSearchParams(location.search);
+  const fromRegister = search.get('from') === 'register';
+  const isLegalStandalone =
+    fromRegister &&
+    (location.pathname.startsWith('/regulamin') || location.pathname.startsWith('/polityka-prywatnosci'));
+
+  const isMinimal = isLegalStandalone || minimal.some(path => location.pathname.startsWith(path));
 
   return (
     <>
       {!isMinimal && <Header />}
       <AnimatePresence mode="wait">
         <motion.main
-          key={location.pathname}
+          key={location.pathname + location.search}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
           className={isMinimal ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}
         >
-          <Routes location={location} key={location.pathname}>
+          <Routes location={location} key={location.pathname + location.search}>
             {/* Minimal routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -47,10 +60,14 @@ export default function App() {
             <Route path="/email-verification-sent" element={<EmailVerificationSent />} />
             <Route path="/verify" element={<VerifyAccount />} />
 
-            {/* Strona dołączania do spiżarni musi być dostępna dla niezalogowanych */}
+            {/* Public: dołączanie do spiżarni */}
             <Route path="/join-pantry/:token" element={<JoinPantryPage />} />
 
-            {/* Protected pages */}
+            {/* Public: dokumenty (działają też w trybie standalone z ?from=register) */}
+            <Route path="/regulamin" element={<Regulamin />} />
+            <Route path="/polityka-prywatnosci" element={<PolitykaPrywatnosci />} />
+
+            {/* Protected */}
             <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
             <Route path="/stats" element={<RequireAuth><StatsPage /></RequireAuth>} />
             <Route path="/profile" element={<RequireAuth><UserProfilePage /></RequireAuth>} />
@@ -63,7 +80,11 @@ export default function App() {
           </Routes>
         </motion.main>
       </AnimatePresence>
-      <Toaster position="bottom-right" toastOptions={{ duration: 4000, style: { background: '#333', color: '#fff' } }} />
+      {!isMinimal && <Footer />}
+      <Toaster
+        position="bottom-right"
+        toastOptions={{ duration: 4000, style: { background: '#333', color: '#fff' } }}
+      />
     </>
   );
 }

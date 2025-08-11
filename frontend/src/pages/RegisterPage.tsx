@@ -1,13 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
+import AuthBlobs from '../components/AuthBlobs';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -17,14 +19,20 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+
     if (password !== confirmPassword) {
       setErrorMessage('Hasła nie są identyczne.');
+      return;
+    }
+    if (!acceptedTerms) {
+      setErrorMessage('Musisz zaakceptować Regulamin i zapoznać się z Polityką prywatności.');
       return;
     }
     if (!recaptchaToken) {
       setErrorMessage('Potwierdź, że nie jesteś robotem.');
       return;
     }
+
     try {
       await register(email, password, recaptchaToken);
       navigate('/email-verification-sent', { state: { email } });
@@ -42,41 +50,69 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-login-bg bg-cover bg-center flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-2xl p-8 w-full max-w-md border border-white/20 animate-fade-in">
-        <h1 className="text-3xl font-bold mb-6 text-center text-white">📝 Rejestracja</h1>
+    <div className="relative min-h-screen flex items-center justify-center px-4">
+      <AuthBlobs />
+      <div className="relative bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100 animate-fade-in">
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-900">Rejestracja</h1>
+
         {errorMessage && (
-          <div className="mb-4 p-3 bg-red-500/20 border border-red-500 text-red-100 rounded text-sm text-center">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm text-center">
             {errorMessage}
           </div>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setErrorMessage(null); }}
             placeholder="Email"
-            className="w-full px-4 py-2 bg-white/30 placeholder-white text-white border border-white/30 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
           />
+
           <input
             type="password"
             value={password}
             onChange={(e) => { setPassword(e.target.value); setErrorMessage(null); }}
             placeholder="Hasło"
-            className="w-full px-4 py-2 bg-white/30 placeholder-white text-white border border-white/30 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
             minLength={6}
           />
+
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => { setConfirmPassword(e.target.value); setErrorMessage(null); }}
             placeholder="Powtórz hasło"
-            className="w-full px-4 py-2 bg-white/30 placeholder-white text-white border border-white/30 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
             minLength={6}
           />
+
+          {/* Checkbox akceptacji regulaminu i polityki */}
+          <label className="flex items-start gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              required
+            />
+            <span>
+              Akceptuję{' '}
+              <Link to="/regulamin?from=register" className="text-teal-600 hover:underline">
+                Regulamin
+              </Link>{' '}
+              i zapoznałem(-am) się z{' '}
+              <Link to="/polityka-prywatnosci?from=register" className="text-teal-600 hover:underline">
+                Polityką prywatności
+              </Link>.
+            </span>
+          </label>
+
+          {/* ReCAPTCHA */}
           <div className="flex justify-center mt-2">
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -84,20 +120,28 @@ const RegisterPage = () => {
               onChange={(token) => setRecaptchaToken(token)}
             />
           </div>
+
           <button
             type="submit"
-            disabled={isLoading}
-            className={`w-full py-2 rounded-lg font-semibold transition ${
-              isLoading ? 'bg-blue-300 cursor-not-allowed text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
+            disabled={isLoading || !acceptedTerms}
+            className={`w-full py-2 rounded-lg font-semibold transition shadow-sm ${
+              isLoading || !acceptedTerms
+                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                : 'bg-teal-600 hover:bg-teal-700 text-white active:scale-[0.99]'
             }`}
           >
             {isLoading ? 'Rejestrowanie...' : 'Zarejestruj się'}
           </button>
+
+          <p className="text-xs text-gray-500 text-center">
+            Rejestrując się potwierdzasz, że masz co najmniej 16 lat lub zgodę opiekuna.
+          </p>
         </form>
+
         <div className="mt-6 text-center">
           <button
             onClick={() => navigate('/login')}
-            className="text-sm text-blue-200 hover:underline"
+            className="text-sm text-gray-600 hover:underline"
           >
             Masz już konto? Zaloguj się
           </button>
