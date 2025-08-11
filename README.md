@@ -1,6 +1,6 @@
 # 🍲 Food Tracker – Reducing Food Waste with Code
 
-![MIT License](https://img.shields.io/github/license/michu1810/fastapi-foodtracker?style=flat-square)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 ![Tests](https://github.com/michu1810/fastapi-foodtracker/actions/workflows/tests.yml/badge.svg?style=flat-square)
 [![codecov](https://codecov.io/gh/michu1810/fastapi-foodtracker/branch/main/graph/badge.svg?token=87SFXHBP46)](https://codecov.io/gh/michu1810/fastapi-foodtracker)
 
@@ -37,7 +37,7 @@ Food Tracker is a full-stack web application designed and built from the ground 
 * **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
 * **Collaborative Pantries:** Users can create their own pantries, invite friends or family via unique, time-limited links, and manage shared grocery lists together. The system supports distinct roles (owner, member) and enforces ownership rules.
 * **Product Management (CRUD):** Full control over pantry items with smart expiration date suggestions for fresh, unlabeled products.
-* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggest product details, including automatic category assignment.
+* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggests product details, including automatic category assignment.
 * **Automated Notifications:** Daily, asynchronous email notifications for expiring products, powered by **Celery Beat** and background workers.
 * **Data Analytics & Gamification:** Per-pantry financial statistics, data visualization charts with proper timezone handling, and a global achievement system that aggregates user progress across all their pantries to boost engagement.
 * **Modern & Responsive UI:** A **Mobile-First** design approach ensures the application is fully functional and beautiful on any device.
@@ -66,7 +66,7 @@ The entire project is containerized, allowing for a one-command setup.
 #### Steps
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/michu1810/fastapi-foodtracker.git](https://github.com/michu1810/fastapi-foodtracker.git)
+    git clone https://github.com/michu1810/fastapi-foodtracker.git
     cd fastapi-foodtracker
     ```
 
@@ -89,18 +89,18 @@ The entire project is containerized, allowing for a one-command setup.
 
 <br>
 
-Every year, millions of tons of food are wasted. In Poland alone, this figure is close to 5 million tons. We throw food away because we forget about expiration dates, buy too much, or plan poorly. I decided to leverage my technical skills to create a tool that actively helps combat this ubiquitous problem at the individual level.
+Every year, millions of tons of food are wasted. In Poland alone, this figure is close to five million tons. We throw food away because we forget about expiration dates, buy too much, or plan poorly. I decided to leverage my technical skills to create a tool that actively helps combat this ubiquitous problem at the individual level.
 
 **Food Tracker** is my answer to this challenge. It is a fully functional web application that I designed and built from scratch to give users a simple and effective way to manage their home pantry—alone or with others—to save money, and to care for our planet. This repository is not just code—it's a demonstration of my approach to building complex, secure, and efficient full-stack systems.
 
 </details>
 
 <details>
-<summary><h3>🛡️ Backend Architecture - A Deep Dive (Click to expand)</h3></summary>
+<summary><h3>🛡️ Backend Architecture — A Deep Dive (Click to expand)</h3></summary>
 
 When designing the backend architecture, I set several key goals: **security, performance, and scalability**. Below are the most important technical decisions I made to achieve them:
 
--   **API Design (FastAPI):** I chose the asynchronous framework **FastAPI** to ensure extremely high performance and low latency, even under heavy load. I utilized the built-in **Dependency Injection** system to manage database sessions and user authentication, making the code clean and highly testable.
+-   **API Design (FastAPI):** I chose the asynchronous framework **FastAPI** to ensure extremely high performance and low latency, even under a heavy load. I used the built-in **Dependency Injection** system to manage database sessions and user authentication, making the code clean and highly testable.
 
 -   **Authentication and Security:** I implemented authentication based on **JWTs**. The long-lived `refresh_token` is stored in a secure **`HttpOnly` cookie**, which is an industry standard for protection against **XSS** attacks. User passwords are protected with the strong, adaptive **bcrypt** algorithm.
 
@@ -116,7 +116,7 @@ When designing the backend architecture, I set several key goals: **security, pe
 </details>
 
 <details>
-<summary><h3>🧪 Automated Testing - A Solid Foundation (Click to expand)</h3></summary>
+<summary><h3>🧪 Automated Testing — A Solid Foundation (Click to expand)</h3></summary>
 
 -   **Code Quality & Linting:** The entire codebase is formatted and validated using **Ruff**, the state-of-the-art Python linter and formatter. **Pre-commit** hooks are configured to automatically check code quality before every commit.
 -   **Code Coverage:** I aim for the highest possible code coverage (currently over 85% and growing), with a strong focus on achieving 100% coverage for critical service modules like `pantry_service`.
@@ -129,6 +129,13 @@ When designing the backend architecture, I set several key goals: **security, pe
 
 This comprehensive testing approach allows me to develop the application quickly and safely, confident that its foundations are solid and reliable.
 </details>
+
+---
+
+## License & Collaboration
+The source code is available under the **CC BY-NC 4.0** license — for **non-commercial use** with attribution.
+Pull Requests and forks are welcome.
+Details: see `LICENSE`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md`.
 
 ---
 
