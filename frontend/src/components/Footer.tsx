@@ -10,7 +10,7 @@ type FooterProps = {
 
 export default function Footer({
   landingUrl = "https://ipurel.pl",
-  email = "ipurel@outlook.com",
+  email = "support@ipurel.pl",
   facebook = "https://www.facebook.com/profile.php?id=61578936944815",
   instagram = "https://www.instagram.com/ipurel_official/",
   tiktok = "https://www.tiktok.com/@ipurel_official",

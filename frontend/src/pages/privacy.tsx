@@ -11,7 +11,7 @@ export default function PolitykaPrywatnosci() {
       <p><strong>Data wejścia w życie:</strong> 11.08.2025</p>
 
       <h2>1. Administrator danych</h2>
-      <p>Administratorem danych osobowych jest iPurel, e-mail: <strong>ipurel@outlook.com</strong>.</p>
+      <p>Administratorem danych osobowych jest iPurel, e-mail: <strong>support@ipurel.pl</strong>.</p>
 
       <h2>2. Cele i podstawy przetwarzania</h2>
       <ol>
@@ -57,7 +57,7 @@ export default function PolitykaPrywatnosci() {
       <p>Projekt FoodTracker jest udostępniony na licencji <strong>CC BY-NC 4.0</strong>. Kod źródłowy jest publicznie dostępny, ale bez prawa do komercyjnego wykorzystania.</p>
 
       <h2>11. Kontakt w sprawach danych osobowych</h2>
-      <p>iPurel, e-mail: <strong>ipurel@outlook.com</strong></p>
+      <p>iPurel, e-mail: <strong>support@ipurel.pl</strong></p>
     </div>
   );
 

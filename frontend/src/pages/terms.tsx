@@ -12,7 +12,7 @@ export default function Regulamin() {
 
       <h2>1. Postanowienia ogólne</h2>
       <ol>
-        <li>FoodTracker jest aplikacją internetową dostarczaną przez iPurel (dalej: „Usługodawca”), e-mail: <strong>ipurel@outlook.com</strong>.</li>
+        <li>FoodTracker jest aplikacją internetową dostarczaną przez iPurel (dalej: „Usługodawca”), e-mail: <strong>support@ipurel.pl</strong>.</li>
         <li>Regulamin określa zasady korzystania z aplikacji oraz prawa i obowiązki Użytkowników.</li>
         <li>Korzystając z aplikacji, Użytkownik akceptuje niniejszy Regulamin oraz Politykę prywatności.</li>
         <li>Usługodawca świadczy usługi drogą elektroniczną zgodnie z prawem polskim.</li>
@@ -66,7 +66,7 @@ export default function Regulamin() {
       <p>Wszelkie spory rozstrzygane będą przez sąd właściwy dla siedziby Usługodawcy, zgodnie z prawem polskim.</p>
 
       <h2>10. Kontakt</h2>
-      <p>W sprawach związanych z Aplikacją prosimy o kontakt: <strong>ipurel@outlook.com</strong></p>
+      <p>W sprawach związanych z Aplikacją prosimy o kontakt: <strong>support@ipurel.pl</strong></p>
     </div>
   );
 
