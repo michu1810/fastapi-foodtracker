@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type FooterProps = {
   landingUrl?: string;
@@ -15,24 +16,26 @@ export default function Footer({
   instagram = "https://www.instagram.com/ipurel_official/",
   tiktok = "https://www.tiktok.com/@ipurel_official",
 }: FooterProps) {
+  const { t } = useTranslation();
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="mt-12 border-t bg-white">
+    <footer className="mt-12 border-t bg-white dark:bg-slate-900 dark:border-slate-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 animate-fade-in">
 
-        {/* Brand + opis (logo obok tekstu) */}
+        {/* Brand + opis */}
         <div className="sm:col-span-2">
           <div className="flex flex-col md:flex-row md:items-start md:gap-6">
             <img
-                src="/nazwabeztla.svg"
-                alt="ipurel"
-                className="h-28 sm:h-20 md:h-28 w-auto select-none shrink-0"
-                loading="eager"
-                />
+              src="/nazwabeztla.svg"
+              alt="ipurel"
+              className="h-28 sm:h-20 md:h-28 w-auto select-none shrink-0"
+              loading="eager"
+            />
 
             <div className="mt-4 md:mt-0">
-              <p className="text-sm text-gray-600 max-w-prose">
-                FoodTracker by iPurel — prosty sposób, żeby nie marnować jedzenia.
-                Prowadzisz firmę? Sprawdź nasz widget rezerwacji.
+              <p className="text-sm text-gray-600 dark:text-slate-300 max-w-prose">
+                {t("footer.description")}
               </p>
 
               <div className="mt-4 flex items-center gap-3">
@@ -41,7 +44,8 @@ export default function Footer({
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Facebook"
-                  className="p-2 rounded-lg border hover:bg-gray-50 transition transform hover:scale-105 active:scale-95"
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition transform hover:scale-110 active:scale-95
+                             dark:border-slate-600 dark:hover:bg-slate-800 dark:text-slate-200"
                 >
                   <IconFacebook className="h-5 w-5" />
                 </a>
@@ -50,7 +54,8 @@ export default function Footer({
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Instagram"
-                  className="p-2 rounded-lg border hover:bg-gray-50 transition transform hover:scale-105 active:scale-95"
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition transform hover:scale-110 active:scale-95
+                             dark:border-slate-600 dark:hover:bg-slate-800 dark:text-slate-200"
                 >
                   <IconInstagram className="h-5 w-5" />
                 </a>
@@ -59,7 +64,8 @@ export default function Footer({
                   target="_blank"
                   rel="noreferrer"
                   aria-label="TikTok"
-                  className="p-2 rounded-lg border hover:bg-gray-50 transition transform hover:scale-105 active:scale-95"
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition transform hover:scale-110 active:scale-95
+                             dark:border-slate-600 dark:hover:bg-slate-800 dark:text-slate-200"
                 >
                   <IconTiktok className="h-5 w-5" />
                 </a>
@@ -70,19 +76,23 @@ export default function Footer({
 
         {/* Linki */}
         <div>
-          <h3 className="text-sm font-semibold tracking-wide uppercase text-gray-500">Informacje</h3>
+          <h3 className="text-sm font-semibold tracking-wide uppercase text-gray-500 dark:text-slate-400">{t("footer.info")}</h3>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><Link to="https://ipurel.pl" className="hover:underline">O nas</Link></li>
-            <li><Link to="/polityka-prywatnosci" className="hover:underline">Polityka prywatności</Link></li>
-            <li><Link to="/regulamin" className="hover:underline">Regulamin</Link></li>
+            <li>
+              <a href="https://ipurel.pl" target="_blank" rel="noreferrer" className="hover:underline text-gray-700 dark:text-slate-200">
+                {t("footer.about")}
+              </a>
+            </li>
+            <li><Link to="/polityka-prywatnosci" className="hover:underline text-gray-700 dark:text-slate-200">{t("footer.privacy")}</Link></li>
+            <li><Link to="/regulamin" className="hover:underline text-gray-700 dark:text-slate-200">{t("footer.terms")}</Link></li>
           </ul>
         </div>
 
         {/* Kontakt + CTA */}
         <div>
-          <h3 className="text-sm font-semibold tracking-wide uppercase text-gray-500">Kontakt</h3>
+          <h3 className="text-sm font-semibold tracking-wide uppercase text-gray-500 dark:text-slate-400">{t("footer.contact")}</h3>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><a href={`mailto:${email}`} className="hover:underline">{email}</a></li>
+            <li><a href={`mailto:${email}`} className="hover:underline text-gray-700 dark:text-slate-200">{email}</a></li>
           </ul>
 
           <a
@@ -91,16 +101,16 @@ export default function Footer({
             rel="noreferrer"
             className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2 font-semibold text-white hover:bg-teal-700 active:scale-95 transition shadow-sm"
           >
-            Interesuje Cię widget rezerwacji?
+            {t("footer.cta")}
           </a>
         </div>
       </div>
 
-      {/* Dolny pasek — prosty tekst */}
-      <div className="border-t">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 text-xs text-gray-500 flex items-center justify-between">
-          <span>© {new Date().getFullYear()} iPurel. All rights reserved.</span>
-          <span className="text-gray-600">FoodTracker</span>
+      {/* Dolny pasek */}
+      <div className="border-t dark:border-slate-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 text-xs text-gray-500 dark:text-slate-400 flex items-center justify-between">
+          <span>{t("footer.rights", { year })}</span>
+          <span className="text-gray-600 dark:text-slate-300">{t("appName", { defaultValue: "FoodTracker" })}</span>
         </div>
       </div>
     </footer>

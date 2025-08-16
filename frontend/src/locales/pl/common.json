@@ -1,0 +1,467 @@
+{
+  "appName": "Food Tracker",
+  "calendar": "Kalendarz",
+  "stats": "Statystyki",
+  "achievements": "Osiągnięcia",
+  "pleaseWait": "Proszę czekać...",
+  "somethingWentWrong": "Coś poszło nie tak.",
+  "by": "by",
+  "tools": "Narzędzia",
+  "triggerExpirationCheck": "Wywołaj sprawdzenie terminów",
+  "expirationCheckStarted": "Sprawdzanie rozpoczęte!",
+  "sendTestEmail": "Wyślij e-mail testowy",
+  "testEmailSent": "Wysłano e-mail testowy!",
+  "loggedInAs": "Zalogowano jako",
+  "profile": "Profil",
+  "logout": "Wyloguj się",
+  "openMenu": "Otwórz menu",
+  "noPantry": "Brak spiżarni",
+  "switchPantry": "Zmień spiżarnię",
+  "managePantries": "Zarządzaj spiżarniami",
+  "expiringToday": "Wygasa dziś",
+  "daysLeft_one": "Pozostał {{count}} dzień",
+  "daysLeft_other": "Pozostało {{count}} dni",
+  "loadingError": "Nie udało się wczytać produktów.",
+  "noExpiringProducts": "Brak produktów bliskich końca ważności.",
+  "expiresTodayShort": "wygasa dziś!",
+  "loadingPantry": "Ładowanie spiżarni...",
+  "createOrSelectPantry": "Utwórz lub wybierz spiżarnię, aby zacząć.",
+  "expiringSoon": "Wygasa wkrótce",
+
+  "barcodeScannedNoDb": "Zeskanowano kod {{code}}, ale nie znaleziono w bazie. Wpisz dane ręcznie.",
+  "serverCommunicationError": "Wystąpił błąd podczas komunikacji z serwerem.",
+  "noPantrySelectedRefresh": "Nie wybrano spiżarni. Odśwież stronę.",
+  "namePriceAmountRequired": "Wymagane są nazwa, cena i poprawna ilość/waga.",
+  "purchaseDateRequired": "Wymagana jest data zakupu.",
+  "expirationDateRequired": "Wymagana jest data ważności.",
+  "cantAddPastExpiration": "Nie możesz dodać produktu z przeszłą datą ważności.",
+  "unknownError": "Wystąpił nieznany błąd.",
+  "serverError": "Błąd serwera.",
+  "noServerResponse": "Brak odpowiedzi z serwera. Sprawdź połączenie.",
+
+  "addNamedProduct": "Dodaj „{{name}}”",
+  "addProductManually": "Dodaj produkt ręcznie",
+  "productName": "Nazwa produktu",
+  "category": "Kategoria",
+  "chooseCategoryOptional": "Wybierz kategorię (opcjonalnie)",
+  "categoryAutoHint": "Kategoria dopasowywana jest automatycznie i może być niedokładna. Zawsze możesz zmienić ją ręcznie.",
+
+  "productType": "Rodzaj produktu",
+  "byPieces": "Po sztukach",
+  "byWeight": "Na wagę",
+  "quantityPieces": "Ilość (szt.)",
+  "weightGrams": "Waga (g)",
+  "exampleWeight": "np. 500",
+  "priceTotal": "Łączna cena (PLN)",
+  "examplePrice": "np. 12.50",
+  "freshProduct": "Produkt świeży (np. owoce/warzywa)",
+  "freshProductHint": "Termin ważności szacowany na podstawie średnich dla kategorii. Traktuj jako wskazówkę.",
+  "purchaseDate": "Data zakupu",
+  "expirationDate": "Data ważności",
+
+  "addNewProduct": "Dodaj nowy produkt",
+  "startBySearching": "Zacznij od wyszukania produktu",
+  "searchPlaceholder": "np. Mleko, Szynka, Ser...",
+  "scanBarcode": "Zeskanuj kod",
+  "searching": "Wyszukiwanie",
+  "cantFindEnterManually": "Nie możesz znaleźć? Wpisz ręcznie",
+
+  "addingDots": "Dodawanie...",
+  "addProduct": "Dodaj produkt",
+  "cancel": "Anuluj",
+
+  "editProduct": "Edytuj produkt",
+  "amount": "Ilość",
+  "unit": "Jednostka",
+  "pricePLN": "Cena (PLN)",
+  "noCategory": "Brak kategorii",
+  "savingDots": "Zapisywanie...",
+  "saveChanges": "Zapisz zmiany",
+  "productsForDate": "Produkty na {{date}}",
+  "noProductsForDay": "Brak produktów tego dnia.",
+  "piecesMustBeInteger": "Dla jednostki „szt.” ilość musi być liczbą całkowitą.",
+  "amountCantBeLessThanOne": "Ilość nie może być mniejsza niż 1.",
+  "unexpectedError": "Wystąpił nieoczekiwany błąd.",
+
+  "useVerb": "zużyć",
+  "wasteVerb": "wyrzucić",
+  "howMuchDoAction": "Ile z „{{name}}” chcesz {{verb}}?",
+  "allPieces": "Wszystkie ({{count}} {{unit}})",
+  "aboutQuarter": "Około 1/4",
+  "aboutHalf": "Około 1/2",
+  "allAmount": "Wszystko",
+  "enterValueGreaterThanZero": "Wpisz lub wybierz wartość większą od zera.",
+  "cantMoreThanOwned": "Nie możesz {{amount}} {{unit}} więcej niż posiadasz.",
+  "remaining": "Pozostało",
+  "orEnterExact": "lub wpisz dokładną wartość:",
+  "amountInUnit": "Ilość ({{unit}})",
+  "confirm": "Potwierdź",
+  "unitPiecesShort": "szt.",
+  "unitGramsShort": "g",
+  "productCalendar": "Kalendarz produktów",
+  "overallStats": "Podsumowanie",
+  "active": "Aktywne",
+  "wasted": "Wyrzucone",
+  "used": "Zużyte",
+  "fullStatsHint": "Pełne szczegóły znajdziesz w",
+  "statistics": "Statystykach",
+  "expiresAt": "Wygasa: {{date}}",
+  "remainingOf": "(pozostało: {{left}}/{{total}}) {{unit}}",
+  "edit": "Edytuj",
+  "use": "Zużyj",
+  "waste": "Wyrzuć",
+  "delete": "Usuń",
+  "hide": "Ukryj",
+
+  "toasts": {
+    "productAdded": "Dodano produkt!",
+    "productUpdated": "Zaktualizowano produkt!",
+    "deleted": "Produkt usunięty",
+    "consumed": "Zużyto {{amount}} {{unit}} produktu „{{name}}”",
+    "wasted": "Wyrzucono {{amount}} {{unit}} produktu „{{name}}”",
+    "hidden": "Ukryto „{{name}}”",
+    "actionFailed": "Operacja nie powiodła się. Przywracanie...",
+    "achievementUnlocked": "Osiągnięcie odblokowane!"
+  },
+
+  "categories": {
+    "dairy": "Nabiał",
+    "vegetables": "Warzywa",
+    "fruits": "Owoce",
+    "meat": "Mięso",
+    "fish_seafood": "Ryby i owoce morza",
+    "bakery": "Pieczywo",
+    "beverages": "Napoje",
+    "sweets_snacks": "Słodycze i przekąski",
+    "dry_goods": "Produkty sypkie",
+    "frozen": "Mrożonki",
+    "other": "Inne"
+  },
+
+  "footer": {
+    "description": "FoodTracker by iPurel — prosty sposób, by nie marnować jedzenia. Prowadzisz firmę? Sprawdź nasz widget rezerwacji.",
+    "info": "Informacje",
+    "about": "O nas",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "contact": "Kontakt",
+    "cta": "Zainteresował Cię nasz widget rezerwacji?",
+    "rights": "© {{year}} iPurel. Wszelkie prawa zastrzeżone."
+  },
+
+  "currency": {
+    "pln": "zł"
+  },
+
+  "statsPage": {
+    "dashboardTitle": "Panel statystyk",
+    "forPantry": "dla spiżarni:",
+    "productStatsTitle": "Statystyki produktów",
+    "allProducts": "Wszystkie produkty",
+    "savedProducts": "Uratowane produkty",
+    "wastedProducts": "Wyrzucone produkty",
+    "efficiencyTitle": "Wskaźnik skuteczności",
+    "efficiencyHint": "Procent uratowanych produktów względem wszystkich.",
+    "financialSummaryTitle": "Podsumowanie finansowe",
+    "savedMoney": "Zaoszczędzono",
+    "lostMoney": "Utracono",
+    "trendError": "Błąd wczytywania wykresu trendu.",
+    "trendLoading": "Wczytywanie danych wykresu...",
+    "monthForecastTitle": "Prognoza na ten miesiąc",
+    "monthForecastApprox": "ok. {{value}} zł",
+    "monthForecastApproxPrefix": "ok.",
+    "monthForecastHint": "Jeśli utrzymasz obecne tempo oszczędzania.",
+    "selectPantryPrompt": "Wybierz spiżarnię w górnym menu, aby zobaczyć statystyki.",
+    "loadingStats": "Wczytywanie statystyk...",
+    "fetchError": "Nie udało się pobrać danych dla tej spiżarni.",
+    "noData": "Brak danych do wyświetlenia.",
+    "categoryStats": {
+      "title": "Podział na kategorie",
+      "category": "Kategoria",
+      "saved": "Uratowane",
+      "wasted": "Wyrzucone",
+      "indicator": "Wskaźnik",
+      "noData": "Brak danych o uratowanych lub wyrzuconych produktach w tej spiżarni.",
+      "allSaved": "100% uratowane",
+      "savedPercent": "{{value}}% uratowane"
+    },
+    "financialChart": {
+      "title": "Wizualizacja finansowa",
+      "savedLabel": "Zaoszczędzono",
+      "lostLabel": "Utracono",
+      "value": "Wartość"
+    },
+    "mostWasted": {
+      "title": "Największe straty",
+      "none": "Brak wyrzuconych produktów. Tak trzymać!"
+    },
+    "pieChart": {
+      "all": "Wszystkie",
+      "saved": "Uratowane",
+      "wasted": "Wyrzucone"
+    },
+    "trendChart": {
+      "title": "Trend dodawania produktów (ostatnie 30 dni)",
+      "seriesAdded": "Dodane produkty"
+    }
+  },
+
+  "onboarding": {
+    "title": "Witaj w Food Tracker!",
+    "body": "Aby dodać pierwszy produkt, po prostu",
+    "clickHint": "kliknij dzień w kalendarzu"
+  },
+
+  "achievementsPage": {
+    "title": "Twoje Osiągnięcia",
+    "loading": "Wczytywanie osiągnięć...",
+    "fetchError": "Nie udało się pobrać osiągnięć.",
+    "progress": "Zdobyto: <bold>{{achieved}}</bold> / {{total}}"
+  },
+
+  "achievementsSection": {
+    "groups": {
+      "wasteFighting": "Walka z marnotrawstwem",
+      "financialMastery": "Mistrzostwo finansowe",
+      "activityCollecting": "Aktywność i kolekcjonowanie",
+      "tenureRegularity": "Staż i regularność",
+      "creativeChallenges": "Kreatywne wyzwania"
+    },
+    "requirement": "Wymaganie: {{description}}"
+  },
+
+  "achievementI18n": {
+    "byId": {
+      "saved_1": { "title": "Pierwszy Krok", "desc": "Uratuj {{value}} produkt." },
+      "saved_10": { "title": "Strażnik Żywności", "desc": "Uratuj {{value}} produktów." },
+      "saved_50": { "title": "Superbohater", "desc": "Uratuj {{value}} produktów." },
+      "saved_100": { "title": "Legenda", "desc": "Uratuj {{value}} produktów." },
+      "saved_250": { "title": "Arcymistrz Oszczędzania", "desc": "Uratuj {{value}} produktów." },
+
+      "efficiency_90": { "title": "Pogromca Marnotrawstwa", "desc": "Osiągnij {{value}}% wskaźnik skuteczności." },
+
+      "pioneer_1": { "title": "Pionier", "desc": "Dodaj swój pierwszy produkt." },
+      "collector_25": { "title": "Kolekcjoner", "desc": "Dodaj {{value}} produktów." },
+      "collector_100": { "title": "Władca Spiżarni", "desc": "Dodaj {{value}} produktów." },
+      "work_titan_10": { "title": "Tytan Pracy", "desc": "Dodaj {{value}} różnych produktów w jeden dzień." },
+      "full_house_20": { "title": "Pełna Chata", "desc": "Miej jednocześnie {{value}} różnych aktywnych produktów." },
+
+      "money_saver_10": { "title": "Oszczędny Start", "desc": "Zaoszczędź {{value}} zł." },
+      "money_saver_100": { "title": "Mistrz Budżetu", "desc": "Zaoszczędź {{value}} zł." },
+      "money_saver_500": { "title": "Finansowy Czarodziej", "desc": "Zaoszczędź {{value}} zł." },
+      "money_saver_1000": { "title": "Finansowy Magnat", "desc": "Zaoszczędź {{value}} zł." },
+      "investor_250": { "title": "Koneser Zakupów", "desc": "Kup produkty o łącznej wartości {{value}} zł." },
+
+      "veteran_30": { "title": "Weteran", "desc": "Korzystaj z aplikacji przez {{value}} dni." },
+      "veteran_90": { "title": "Stary Wyga", "desc": "Korzystaj z aplikacji przez {{value}} dni." },
+      "sunday_planner_5": { "title": "Niedzielny Planista", "desc": "Dodaj co najmniej {{value}} produktów w niedzielę." },
+      "weekend_chef_5": { "title": "Weekendowy Kucharz", "desc": "Dodaj {{value}} produktów w jeden weekend." },
+
+      "night_owl": { "title": "Nocny Marek", "desc": "Dodaj produkt między północą a 4:00." },
+      "cheese_connoisseur": { "title": "Koneser Sera", "desc": "Dodaj {{value}} różnych produktów z „ser” w nazwie." },
+      "healthy_monday": { "title": "Zdrowy Poniedziałek", "desc": "Dodaj zdrowy produkt w poniedziałek." },
+      "morning_caffeine": { "title": "Poranna Kofeina", "desc": "Dodaj kawę lub herbatę przed 9:00." }
+    }
+  },
+
+  "profilePage": {
+    "changeAvatarTitle": "Zmień zdjęcie profilowe",
+    "registeredAt": "Zarejestrowano:",
+    "backHome": "Powrót do strony głównej",
+    "notificationsTitle": "Powiadomienia",
+    "expiringLabel": "Powiadomienia o wygasających produktach",
+    "expiringHint": "Otrzymuj e-maile o produktach, które wkrótce stracą ważność.",
+    "notificationsUpdated": "Ustawienia powiadomień zaktualizowane!",
+    "notificationsSaveFailed": "Nie udało się zapisać ustawień.",
+    "changePasswordTitle": "Zmień hasło",
+    "oldPasswordPlaceholder": "Obecne hasło",
+    "newPasswordPlaceholder": "Nowe hasło",
+    "passwordChanged": "Hasło zmienione!",
+    "passwordChangeFailed": "Nie udało się zmienić hasła.",
+    "changePassword": "Zmień hasło",
+    "externalPasswordInfo": "Twoje konto jest połączone z dostawcą zewnętrznym. Hasłem zarządzasz w ustawieniach tego serwisu.",
+    "deleteTitle": "Usuń konto",
+    "deleteDescription": "Ta operacja jest nieodwracalna. Wszystkie dane zostaną usunięte.",
+    "deleteButton": "Usuń konto",
+    "deleteModalTitle": "Na pewno?",
+    "deleteModalDescription": "Tej operacji nie można cofnąć. Wszystkie dane zostaną usunięte.",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "deleteFailed": "Nie udało się usunąć konta.",
+    "avatarUpdated": "Avatar zaktualizowany!",
+    "avatarUploadFailed": "Nie udało się wysłać avatara."
+  },
+
+  "pantryMgmt": {
+    "createSectionTitle": "Stwórz nową spiżarnię",
+    "createSectionHint": "Możesz stworzyć maksymalnie 3 własne spiżarnie. Dołączanie do cudzych nie ma limitu.",
+    "createButton": "Dodaj spiżarnię",
+    "renameTitle": "Zmień nazwę spiżarni",
+    "save": "Zapisz",
+    "ownerOnlyRenameHint": "Tylko właściciel może zmienić nazwę spiżarni.",
+    "membersInvitesTitle": "Członkowie i zaproszenia",
+    "role": { "owner": "Właściciel", "member": "Członek" },
+    "removeMember": "Usuń",
+    "inviteNew": "Zaproś nową osobę",
+    "copy": "Kopiuj",
+    "inviteValid15m": "Pamiętaj, ten link jest ważny tylko przez 15 minut!",
+    "generateInvite": "Wygeneruj link zaproszenia",
+    "generating": "Generowanie...",
+    "generatedActive15m": "Wygenerowany link będzie aktywny przez 15 minut.",
+    "irreversibleTitle": "Opcje nieodwracalne",
+    "leavePantry": "Opuść spiżarnię",
+    "deletePantry": "Usuń spiżarnię",
+    "modals": {
+      "removeTitle": "Potwierdź usunięcie członka",
+      "removeMsg": "Czy na pewno chcesz usunąć tego użytkownika ze spiżarni? Utraci on dostęp.",
+      "deleteTitle": "NA PEWNO USUNĄĆ SPIŻARNIĘ?",
+      "deleteMsg": "Ta operacja jest nieodwracalna. Wszystkie produkty i dane w spiżarni „{{name}}” zostaną bezpowrotnie usunięte.",
+      "leaveTitle": "Potwierdź opuszczenie spiżarni",
+      "leaveMsg": "Czy na pewno chcesz opuścić tę spiżarnię? Aby dołączyć ponownie, będziesz potrzebować nowego zaproszenia.",
+      "cancel": "Anuluj",
+      "confirm": "Potwierdź",
+      "createTitle": "Stwórz nową spiżarnię",
+      "namePlaceholder": "Nazwa spiżarni...",
+      "create": "Stwórz"
+    },
+    "toasts": {
+      "nameEmpty": "Nazwa nie może być pusta i musi różnić się od obecnej.",
+      "renameOk": "Nazwa spiżarni została zmieniona!",
+      "renameFail": "Nie udało się zmienić nazwy spiżarni.",
+      "inviteOk": "Link wygenerowany!",
+      "inviteFail": "Nie udało się wygenerować linku.",
+      "copyOk": "Skopiowano do schowka!",
+      "removeOk": "Usunięto członka.",
+      "removeFail": "Nie udało się usunąć członka.",
+      "deleteOk": "Spiżarnia została usunięta.",
+      "deleteFail": "Nie udało się usunąć spiżarni.",
+      "leaveOk": "Opuściłeś spiżarnię „{{name}}”.",
+      "leaveFail": "Nie udało się opuścić spiżarni.",
+      "createNameTooShort": "Nazwa spiżarni musi mieć co najmniej 2 znaki.",
+      "createOk": "Spiżarnia „{{name}}” została utworzona!",
+      "createFail": "Nie udało się stworzyć spiżarni."
+    },
+    "page": {
+      "title": "Zarządzanie spiżarniami",
+      "subtitle": "Zmień nazwę, zaproś członków lub usuń swoją spiżarnię."
+    }
+  },
+   "auth": {
+    "email": "E-mail",
+    "password": "Hasło",
+    "confirmPassword": "Powtórz hasło",
+    "rememberMe": "Zapamiętaj mnie",
+    "forgotPassword": "Nie pamiętasz hasła?",
+    "login": "Zaloguj się",
+    "register": "Załóż konto",
+    "haveAccount": "Masz już konto?",
+    "noAccount": "Nie masz konta?",
+    "back": "Wróć",
+
+    "errors": {
+      "required": "To pole jest wymagane",
+      "invalidEmail": "Podaj poprawny adres e-mail",
+      "minChars": "Co najmniej {{n}} znaków",
+      "passwordsDontMatch": "Hasła nie są takie same",
+      "termsRequired": "Musisz zaakceptować Regulamin i zapoznać się z Polityką prywatności.",
+      "recaptchaRequired": "Potwierdź, że nie jesteś robotem.",
+      "socialEmail": "Ten e-mail jest powiązany z kontem społecznościowym. Użyj logowania społecznościowego.",
+      "emailExists": "Ten e-mail jest już zarejestrowany. Zaloguj się lub zresetuj hasło."
+    },
+
+    "toasts": {
+      "loginOk": "Zalogowano.",
+      "loginFail": "Logowanie nie powiodło się.",
+      "registerOk": "Konto utworzone. Sprawdź e-mail.",
+      "registerFail": "Rejestracja nie powiodła się.",
+      "logoutOk": "Wylogowano.",
+      "resetSentOk": "Wysłano link do resetu hasła.",
+      "resetSentFail": "Nie udało się wysłać linku.",
+      "passwordSetOk": "Hasło zaktualizowane.",
+      "passwordSetFail": "Nie udało się zaktualizować hasła."
+    },
+
+    "loginPage": {
+      "title": "Zaloguj się",
+      "ctaRegister": "Utwórz konto"
+    },
+
+    "registerPage": {
+      "title": "Utwórz konto",
+      "passwordHint": "Minimum {{n}} znaków",
+      "agree": "Akceptuję <privacy>Politykę prywatności</privacy> oraz <terms>Regulamin</terms>.",
+      "ageNotice": "Rejestrując się potwierdzasz, że masz co najmniej 16 lat lub zgodę opiekuna."
+
+    },
+
+    "forgotPage": {
+      "title": "Przypomnienie hasła",
+      "body": "Podaj swój e-mail, a wyślemy link do resetu hasła.",
+      "send": "Wyślij link resetujący"
+    },
+
+    "resetPage": {
+      "title": "Ustaw nowe hasło",
+      "set": "Ustaw hasło"
+    },
+
+    "verifyPage": {
+      "title": "Zweryfikuj adres e-mail",
+      "body": "Wysłaliśmy link weryfikacyjny na {{email}}.",
+      "resend": "Wyślij ponownie",
+      "resendOk": "Wysłano e-mail weryfikacyjny.",
+      "resendFail": "Nie udało się wysłać e-maila weryfikacyjnego."
+    },
+
+    "emailSentPage": {
+      "title": "Sprawdź skrzynkę",
+      "body": "Wysłaliśmy link weryfikacyjny na {{email}}."
+    },
+
+    "joinPantry": {
+      "title": "Dołącz do spiżarni",
+      "join": "Dołącz",
+      "joinedOk": "Dołączono do spiżarni.",
+      "invalid": "Link zaproszenia jest nieprawidłowy lub wygasł.",
+      "fail": "Nie udało się dołączyć do spiżarni."
+    },
+    "or": "lub",
+    "oauth": {
+        "google": "Zaloguj przez Google",
+        "github": "Zaloguj przez GitHub"
+    },
+    "loading": {
+        "login": "Logowanie...",
+        "register": "Rejestrowanie..."
+    },
+    "verifyResult": {
+    "title": "Weryfikacja konta",
+    "goLogin": "Przejdź do logowania",
+        "status": {
+        "success": "✅ Konto zweryfikowane!",
+        "used": "ℹ️ Konto już było zweryfikowane.",
+        "expired": "❌ Token wygasł.",
+        "invalid": "❌ Token nieprawidłowy.",
+        "missing": "❌ Brak tokenu weryfikacyjnego."
+         }
+        }
+    },
+  "language": "Język",
+  "appearance": "Wygląd",
+  "dayMode": "Dzień",
+  "nightMode": "Noc",
+  "actions": {
+    "cancel": "Anuluj"
+  },
+  "barcode": {
+    "prompt": "Skieruj aparat na kod kreskowy",
+    "cameraErrorLog": "Błąd inicjalizacji kamery:",
+    "cameraErrorAlert": "Nie udało się uzyskać dostępu do kamery. Sprawdź uprawnienia przeglądarki.",
+    "videoAria": "Podgląd z kamery do skanowania kodu kreskowego"
+  },
+  "cookie": {
+  "title": "Pliki cookie",
+  "body": "Korzystając z aplikacji, zgadzasz się na użycie plików cookie niezbędnych do działania (np. zapamiętanie motywu, języka i sesji).",
+  "ok": "OK, rozumiem"
+}
+}

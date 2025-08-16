@@ -1,0 +1,468 @@
+{
+  "appName": "Food Tracker",
+  "calendar": "Calendar",
+  "stats": "Statistics",
+  "achievements": "Achievements",
+  "pleaseWait": "Please wait...",
+  "somethingWentWrong": "Something went wrong.",
+  "by": "by",
+  "tools": "Tools",
+  "triggerExpirationCheck": "Trigger Expiration Check",
+  "expirationCheckStarted": "Check started!",
+  "sendTestEmail": "Send test e-mail",
+  "testEmailSent": "Test e-mail sent!",
+  "loggedInAs": "Logged in as",
+  "profile": "Profile",
+  "logout": "Log out",
+  "openMenu": "Open menu",
+  "noPantry": "No pantry",
+  "switchPantry": "Switch pantry",
+  "managePantries": "Manage pantries",
+  "expiringToday": "Expires today",
+  "daysLeft_one": "{{count}} day left",
+  "daysLeft_other": "{{count}} days left",
+  "loadingError": "Failed to load products.",
+  "noExpiringProducts": "No products close to expiry.",
+  "expiresTodayShort": "expires today!",
+  "loadingPantry": "Loading pantry...",
+  "createOrSelectPantry": "Create or select a pantry to start.",
+  "expiringSoon": "Expiring soon",
+
+  "barcodeScannedNoDb": "Barcode {{code}} was scanned but not found in database. Enter details manually.",
+  "serverCommunicationError": "An error occurred while communicating with the server.",
+  "noPantrySelectedRefresh": "No pantry selected. Please refresh the page.",
+  "namePriceAmountRequired": "Name, price, and a valid amount/weight are required.",
+  "purchaseDateRequired": "Purchase date is required.",
+  "expirationDateRequired": "Expiration date is required.",
+  "cantAddPastExpiration": "You can't add products with a past expiration date.",
+  "unknownError": "Unknown error occurred.",
+  "serverError": "Server error.",
+  "noServerResponse": "No response from server. Check your connection.",
+
+  "addNamedProduct": "Add \"{{name}}\"",
+  "addProductManually": "Add product manually",
+  "productName": "Product name",
+  "category": "Category",
+  "chooseCategoryOptional": "Choose category (optional)",
+  "categoryAutoHint": "Category is auto-matched and may be inaccurate. You can always adjust it manually.",
+
+  "productType": "Product type",
+  "byPieces": "By pieces",
+  "byWeight": "By weight",
+  "quantityPieces": "Quantity (pcs.)",
+  "weightGrams": "Weight (g)",
+  "exampleWeight": "e.g. 500",
+  "priceTotal": "Total price (PLN)",
+  "examplePrice": "e.g. 12.50",
+  "freshProduct": "Fresh product (e.g., fruit/vegetable)",
+  "freshProductHint": "Expiration is estimated from category averages. Treat it as guidance.",
+  "purchaseDate": "Purchase date",
+  "expirationDate": "Expiration date",
+
+  "addNewProduct": "Add new product",
+  "startBySearching": "Start by searching for a product",
+  "searchPlaceholder": "e.g. Milk, Ham, Cheese...",
+  "scanBarcode": "Scan barcode",
+  "searching": "Searching",
+  "cantFindEnterManually": "Can't find the product? Enter it manually",
+
+  "addingDots": "Adding...",
+  "addProduct": "Add product",
+  "cancel": "Cancel",
+
+  "editProduct": "Edit product",
+  "amount": "Amount",
+  "unit": "Unit",
+  "pricePLN": "Price (PLN)",
+  "noCategory": "No category",
+  "savingDots": "Saving...",
+  "saveChanges": "Save changes",
+  "productsForDate": "Products for {{date}}",
+  "noProductsForDay": "No products for this day.",
+  "piecesMustBeInteger": "For 'pcs.' unit the amount must be an integer.",
+  "amountCantBeLessThanOne": "Amount cannot be less than 1.",
+  "unexpectedError": "An unexpected error occurred.",
+
+  "useVerb": "use",
+  "wasteVerb": "discard",
+  "howMuchDoAction": "How much of \"{{name}}\" do you want to {{verb}}?",
+  "allPieces": "All ({{count}} {{unit}})",
+  "aboutQuarter": "About 1/4",
+  "aboutHalf": "About 1/2",
+  "allAmount": "All",
+  "enterValueGreaterThanZero": "Enter or choose a value greater than zero.",
+  "cantMoreThanOwned": "You can't {{amount}} {{unit}} more than you own.",
+  "remaining": "Remaining",
+  "orEnterExact": "or enter an exact amount:",
+  "amountInUnit": "Amount in ({{unit}})",
+  "confirm": "Confirm",
+  "unitPiecesShort": "pcs.",
+  "unitGramsShort": "g",
+  "productCalendar": "Product calendar",
+  "overallStats": "Overall statistics",
+  "active": "Active",
+  "wasted": "Wasted",
+  "used": "Used",
+  "fullStatsHint": "You can see full details in",
+  "statistics": "Statistics",
+  "expiresAt": "Expires: {{date}}",
+  "remainingOf": "(remaining: {{left}}/{{total}}) {{unit}}",
+  "edit": "Edit",
+  "use": "Use",
+  "waste": "Waste",
+  "delete": "Delete",
+  "hide": "Hide",
+
+  "toasts": {
+    "productAdded": "Product added!",
+    "productUpdated": "Product updated!",
+    "deleted": "Product deleted",
+    "consumed": "Used {{amount}} {{unit}} of \"{{name}}\"",
+    "wasted": "Wasted {{amount}} {{unit}} of \"{{name}}\"",
+    "hidden": "Hidden \"{{name}}\"",
+    "actionFailed": "Operation failed. Restoring...",
+    "achievementUnlocked": "Achievement unlocked!"
+  },
+
+  "categories": {
+    "dairy": "Dairy",
+    "vegetables": "Vegetables",
+    "fruits": "Fruit",
+    "meat": "Meat",
+    "fish_seafood": "Fish & seafood",
+    "bakery": "Bakery",
+    "beverages": "Drinks",
+    "sweets_snacks": "Snacks & sweets",
+    "dry_goods": "Dry goods",
+    "frozen": "Frozen",
+    "other": "Other"
+  },
+
+  "footer": {
+    "description": "FoodTracker by iPurel — a simple way to avoid food waste. Running a business? Check out our booking widget.",
+    "info": "Information",
+    "about": "About us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "contact": "Contact",
+    "cta": "Interested in our booking widget?",
+    "rights": "© {{year}} iPurel. All rights reserved."
+  },
+
+  "currency": {
+    "pln": "zł"
+  },
+
+  "statsPage": {
+    "dashboardTitle": "Statistics Dashboard",
+    "forPantry": "for pantry:",
+    "productStatsTitle": "Product Statistics",
+    "allProducts": "All products",
+    "savedProducts": "Saved products",
+    "wastedProducts": "Wasted products",
+    "efficiencyTitle": "Efficiency Rate",
+    "efficiencyHint": "Percentage of saved products compared to all.",
+    "financialSummaryTitle": "Financial Summary",
+    "savedMoney": "Saved",
+    "lostMoney": "Lost",
+    "trendError": "Error loading trend chart.",
+    "trendLoading": "Loading chart data...",
+    "monthForecastTitle": "Forecast for this month",
+    "monthForecastApprox": "approx. {{value}} zł",
+    "monthForecastApproxPrefix": "approx.",
+    "monthForecastHint": "If you maintain the current saving pace.",
+    "selectPantryPrompt": "Select a pantry in the top menu to see statistics.",
+    "loadingStats": "Loading statistics...",
+    "fetchError": "Failed to fetch data for this pantry.",
+    "noData": "No data to display.",
+    "categoryStats": {
+      "title": "Category breakdown",
+      "category": "Category",
+      "saved": "Saved",
+      "wasted": "Wasted",
+      "indicator": "Rate",
+      "noData": "No data about saved or wasted products in this pantry.",
+      "allSaved": "100% saved",
+      "savedPercent": "{{value}}% saved"
+    },
+    "financialChart": {
+      "title": "Financial visualization",
+      "savedLabel": "Saved",
+      "lostLabel": "Lost",
+      "value": "Value"
+    },
+    "mostWasted": {
+      "title": "Biggest Losses",
+      "none": "No wasted products. Keep it up!"
+    },
+    "pieChart": {
+      "all": "All",
+      "saved": "Saved",
+      "wasted": "Wasted"
+    },
+    "trendChart": {
+      "title": "Product adding trend (last 30 days)",
+      "seriesAdded": "Added products"
+    }
+  },
+
+  "onboarding": {
+    "title": "Welcome to Food Tracker!",
+    "body": "To add your first product, simply",
+    "clickHint": "click a day on the calendar"
+  },
+
+  "achievementsPage": {
+    "title": "Your Achievements",
+    "loading": "Loading achievements...",
+    "fetchError": "Failed to fetch achievements.",
+    "progress": "Obtained: <bold>{{achieved}}</bold> / {{total}}"
+  },
+
+  "achievementsSection": {
+    "groups": {
+      "wasteFighting": "Fighting Food Waste",
+      "financialMastery": "Financial Mastery",
+      "activityCollecting": "Activity & Collecting",
+      "tenureRegularity": "Tenure & Regularity",
+      "creativeChallenges": "Creative Challenges"
+    },
+    "requirement": "Requirement: {{description}}"
+  },
+
+  "achievementI18n": {
+    "byId": {
+      "saved_1": { "title": "First Step", "desc": "Save {{value}} product." },
+      "saved_10": { "title": "Food Guardian", "desc": "Save {{value}} products." },
+      "saved_50": { "title": "Superhero", "desc": "Save {{value}} products." },
+      "saved_100": { "title": "Legend", "desc": "Save {{value}} products." },
+      "saved_250": { "title": "Grandmaster Saver", "desc": "Save {{value}} products." },
+
+      "efficiency_90": { "title": "Waste Buster", "desc": "Reach {{value}}% efficiency." },
+
+      "pioneer_1": { "title": "Pioneer", "desc": "Add your first product." },
+      "collector_25": { "title": "Collector", "desc": "Add {{value}} products." },
+      "collector_100": { "title": "Pantry Overlord", "desc": "Add {{value}} products." },
+      "work_titan_10": { "title": "Work Titan", "desc": "Add {{value}} different products in one day." },
+      "full_house_20": { "title": "Full House", "desc": "Have {{value}} different active products at once." },
+
+      "money_saver_10": { "title": "Saving Start", "desc": "Save {{value}} PLN." },
+      "money_saver_100": { "title": "Budget Master", "desc": "Save {{value}} PLN." },
+      "money_saver_500": { "title": "Financial Wizard", "desc": "Save {{value}} PLN." },
+      "money_saver_1000": { "title": "Financial Magnate", "desc": "Save {{value}} PLN." },
+      "investor_250": { "title": "Shopping Connoisseur", "desc": "Buy products worth a total of {{value}} PLN." },
+
+      "veteran_30": { "title": "Veteran", "desc": "Use the app for {{value}} days." },
+      "veteran_90": { "title": "Old Hand", "desc": "Use the app for {{value}} days." },
+      "sunday_planner_5": { "title": "Sunday Planner", "desc": "Add at least {{value}} products on a Sunday." },
+      "weekend_chef_5": { "title": "Weekend Chef", "desc": "Add {{value}} products during one weekend." },
+
+      "night_owl": { "title": "Night Owl", "desc": "Add a product between midnight and 4:00 AM." },
+      "cheese_connoisseur": { "title": "Cheese Connoisseur", "desc": "Add {{value}} different products with 'cheese' in the name." },
+      "healthy_monday": { "title": "Healthy Monday", "desc": "Add a healthy product on Monday." },
+      "morning_caffeine": { "title": "Morning Caffeine", "desc": "Add coffee or tea before 9:00 AM." }
+    }
+  },
+
+  "profilePage": {
+    "changeAvatarTitle": "Change profile photo",
+    "registeredAt": "Registered:",
+    "backHome": "Back to home",
+    "notificationsTitle": "Notifications",
+    "expiringLabel": "Notifications about expiring products",
+    "expiringHint": "Receive emails about products that will expire soon.",
+    "notificationsUpdated": "Notification settings updated!",
+    "notificationsSaveFailed": "Couldn't save settings.",
+    "changePasswordTitle": "Change password",
+    "oldPasswordPlaceholder": "Current password",
+    "newPasswordPlaceholder": "New password",
+    "passwordChanged": "Password changed!",
+    "passwordChangeFailed": "Password change failed.",
+    "changePassword": "Change password",
+    "externalPasswordInfo": "Your account is linked to an external provider. You can manage your password in that provider's settings.",
+    "deleteTitle": "Delete account",
+    "deleteDescription": "This action is irreversible. All data will be deleted.",
+    "deleteButton": "Delete account",
+    "deleteModalTitle": "Are you sure?",
+    "deleteModalDescription": "This action cannot be undone. All data will be deleted.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteFailed": "Failed to delete the account.",
+    "avatarUpdated": "Avatar updated!",
+    "avatarUploadFailed": "Failed to upload avatar."
+  },
+
+  "pantryMgmt": {
+    "createSectionTitle": "Create new pantry",
+    "createSectionHint": "You can create up to 3 own pantries. Joining other pantries has no limit.",
+    "createButton": "Add pantry",
+    "renameTitle": "Rename pantry",
+    "save": "Save",
+    "ownerOnlyRenameHint": "Only the owner can rename the pantry.",
+    "membersInvitesTitle": "Members & invitations",
+    "role": { "owner": "Owner", "member": "Member" },
+    "removeMember": "Remove",
+    "inviteNew": "Invite a new person",
+    "copy": "Copy",
+    "inviteValid15m": "Remember, this link is valid for 15 minutes only!",
+    "generateInvite": "Generate invitation link",
+    "generating": "Generating...",
+    "generatedActive15m": "The generated link will be active for 15 minutes.",
+    "irreversibleTitle": "Irreversible options",
+    "leavePantry": "Leave pantry",
+    "deletePantry": "Delete pantry",
+    "modals": {
+      "removeTitle": "Confirm member removal",
+      "removeMsg": "Are you sure you want to remove this user from the pantry? They will lose access.",
+      "deleteTitle": "REALLY DELETE THE PANTRY?",
+      "deleteMsg": "This action is irreversible. All products and data in the \"{{name}}\" pantry will be permanently deleted.",
+      "leaveTitle": "Confirm leaving the pantry",
+      "leaveMsg": "Are you sure you want to leave this pantry? To join again, you'll need a new invitation.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "createTitle": "Create new pantry",
+      "namePlaceholder": "Pantry name...",
+      "create": "Create"
+    },
+    "toasts": {
+      "nameEmpty": "Name cannot be empty and must differ from the current one.",
+      "renameOk": "Pantry name has been changed!",
+      "renameFail": "Failed to change pantry name.",
+      "inviteOk": "Link generated!",
+      "inviteFail": "Failed to generate link.",
+      "copyOk": "Copied to clipboard!",
+      "removeOk": "Member removed.",
+      "removeFail": "Failed to remove member.",
+      "deleteOk": "Pantry has been deleted.",
+      "deleteFail": "Failed to delete pantry.",
+      "leaveOk": "You left the \"{{name}}\" pantry.",
+      "leaveFail": "Failed to leave the pantry.",
+      "createNameTooShort": "Pantry name must be at least 2 characters.",
+      "createOk": "Pantry \"{{name}}\" has been created!",
+      "createFail": "Failed to create pantry."
+    },
+    "page": {
+      "title": "Pantry Management",
+      "subtitle": "Change the name, invite members or delete your pantry."
+    }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "login": "Log in",
+    "register": "Sign up",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "back": "Back",
+
+    "errors": {
+      "required": "This field is required",
+      "invalidEmail": "Enter a valid email",
+      "minChars": "Must be at least {{n}} characters",
+      "passwordsDontMatch": "Passwords do not match",
+      "termsRequired": "You must accept the Terms and review the Privacy Policy.",
+      "recaptchaRequired": "Please confirm you are not a robot.",
+      "socialEmail": "This email is linked to a social account. Use social login.",
+      "emailExists": "This email is already registered. Sign in or reset your password."
+  },
+
+    "toasts": {
+      "loginOk": "Logged in.",
+      "loginFail": "Login failed.",
+      "registerOk": "Account created. Check your email.",
+      "registerFail": "Registration failed.",
+      "logoutOk": "Logged out.",
+      "resetSentOk": "Password reset link sent.",
+      "resetSentFail": "Failed to send reset link.",
+      "passwordSetOk": "Password updated.",
+      "passwordSetFail": "Failed to update password."
+    },
+
+    "loginPage": {
+      "title": "Log in",
+      "ctaRegister": "Create account"
+    },
+
+    "registerPage": {
+      "title": "Create your account",
+      "passwordHint": "Minimum {{n}} characters",
+      "agree": "I accept the <privacy>Privacy Policy</privacy> and <terms>Terms & Conditions</terms>.",
+      "ageNotice": "By signing up you confirm you are at least 16 or have guardian consent."
+    },
+
+    "forgotPage": {
+      "title": "Forgot password",
+      "body": "Enter your email and we'll send you a reset link.",
+      "send": "Send reset link"
+    },
+
+    "resetPage": {
+      "title": "Set new password",
+      "set": "Set password"
+    },
+
+    "verifyPage": {
+      "title": "Verify your email",
+      "body": "We sent a verification link to {{email}}.",
+      "resend": "Resend",
+      "resendOk": "Verification email sent.",
+      "resendFail": "Failed to send verification email."
+    },
+
+    "emailSentPage": {
+      "title": "Check your inbox",
+      "body": "We sent a verification link to {{email}}."
+    },
+
+    "joinPantry": {
+      "title": "Join pantry",
+      "join": "Join",
+      "joinedOk": "Joined the pantry.",
+      "invalid": "Invitation link is invalid or expired.",
+      "fail": "Failed to join the pantry."
+    },
+    "or": "or",
+    "oauth": {
+        "google": "Continue with Google",
+        "github": "Continue with GitHub"
+    },
+    "loading": {
+        "login": "Logging in...",
+        "register": "Registering..."
+    },
+
+    "verifyResult": {
+    "title": "Account verification",
+    "goLogin": "Go to login",
+        "status": {
+        "success": "✅ Account verified!",
+        "used": "ℹ️ Your account was already verified.",
+        "expired": "❌ Token expired.",
+        "invalid": "❌ Invalid token.",
+        "missing": "❌ Verification token missing."
+            }
+        }
+    },
+
+  "language": "Language",
+  "appearance": "Appearance",
+  "dayMode": "Day",
+  "nightMode": "Night",
+  "actions": {
+    "cancel": "Cancel"
+  },
+  "barcode": {
+    "prompt": "Point the camera at the barcode",
+    "cameraErrorLog": "Camera initialization error:",
+    "cameraErrorAlert": "Could not access the camera. Check your browser permissions.",
+    "videoAria": "Camera preview for barcode scanning"
+  },
+  "cookie": {
+  "title": "Cookies",
+  "body": "By using the app you agree to the use of cookies that are necessary for the service (e.g. remembering theme, language and session).",
+  "ok": "OK, got it"
+}
+}

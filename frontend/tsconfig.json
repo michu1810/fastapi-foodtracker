@@ -4,7 +4,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "strict": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,

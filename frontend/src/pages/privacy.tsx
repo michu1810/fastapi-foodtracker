@@ -1,12 +1,18 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function PolitykaPrywatnosci() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
   const standalone = params.get("from") === "register";
+  const lang: "pl" | "en" = i18n.language?.toLowerCase().startsWith("pl") ? "pl" : "en";
 
-  const content = (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
+  const pl = (
+    <div
+      style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}
+      className="text-gray-900 dark:text-slate-200"
+    >
       <h1>Polityka prywatności FoodTracker</h1>
       <p><strong>Data wejścia w życie:</strong> 11.08.2025</p>
 
@@ -61,16 +67,79 @@ export default function PolitykaPrywatnosci() {
     </div>
   );
 
+  const en = (
+    <div
+      style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}
+      className="text-gray-900 dark:text-slate-200"
+    >
+      <h1>FoodTracker Privacy Policy</h1>
+      <p><strong>Effective date:</strong> 11.08.2025</p>
+
+      <h2>1. Data Controller</h2>
+      <p>The data controller is iPurel, e-mail: <strong>support@ipurel.pl</strong>.</p>
+
+      <h2>2. Purposes and Legal Bases</h2>
+      <ol>
+        <li>User account handling (GDPR Art. 6(1)(b)).</li>
+        <li>Ensuring the App works, security and abuse prevention (GDPR Art. 6(1)(f)).</li>
+        <li>Compliance with legal obligations (GDPR Art. 6(1)(c)).</li>
+        <li>Sending e-mail notifications or marketing if you consent (GDPR Art. 6(1)(a)).</li>
+      </ol>
+
+      <h2>3. Scope of Data</h2>
+      <p>We process: e-mail, device technical data, IP address, system logs, and in-app activity data.</p>
+
+      <h2>4. Data Recipients</h2>
+      <p>Data may be shared with IT providers (Render, Supabase), e-mail services, analytics (e.g. Google Analytics), and competent authorities under the law.</p>
+
+      <h2>5. Transfers outside the EEA</h2>
+      <p>We use Render and Supabase which may process data in the USA. Standard Contractual Clauses approved by the European Commission are applied.</p>
+
+      <h2>6. Cookies</h2>
+      <p>
+        The App uses cookies necessary for proper operation, including an <strong>HttpOnly session cookie</strong> that stores a refresh token.
+        We do not use cookies for marketing or cross-site tracking.
+      </p>
+
+      <h2>7. Storage Periods</h2>
+      <p>Data is kept for as long as you use the App. After account deletion, data is removed immediately. System logs are kept up to 6 months.</p>
+
+      <h2>8. Your Rights</h2>
+      <ul>
+        <li>access,</li>
+        <li>rectification,</li>
+        <li>erasure,</li>
+        <li>restriction,</li>
+        <li>objection,</li>
+        <li>data portability,</li>
+        <li>withdraw consent at any time.</li>
+      </ul>
+
+      <h2>9. Data Security</h2>
+      <p>We use TLS/SSL, store passwords hashed, and restrict access to authorized personnel only.</p>
+
+      <h2>10. Open Source & License</h2>
+      <p>FoodTracker is released under <strong>CC BY-NC 4.0</strong>. The source code is public, without rights for commercial use.</p>
+
+      <h2>11. Contact</h2>
+      <p>iPurel, e-mail: <strong>support@ipurel.pl</strong></p>
+    </div>
+  );
+
+  const content = lang === "pl" ? pl : en;
+
   if (!standalone) return content;
 
+  const backLabel = lang === "pl" ? "Wróć do rejestracji" : "Back to registration";
+
   return (
-    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-white">
+    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-white dark:bg-slate-900">
       <div className="max-w-3xl mx-auto px-4 py-4">
         <button
           onClick={() => navigate("/register")}
-          className="mb-4 inline-flex items-center gap-2 text-teal-700 hover:underline"
+          className="mb-4 inline-flex items-center gap-2 text-teal-700 dark:text-teal-400 hover:underline"
         >
-          <span className="text-xl">←</span> Wróć do rejestracji
+          <span className="text-xl">←</span> {backLabel}
         </button>
         {content}
       </div>

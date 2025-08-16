@@ -6,7 +6,7 @@ import { usePantry } from '../context/PantryContext';
 import { useAuth } from '../context/AuthContext';
 import { saveToStorage } from '../utils/localStorage';
 import axios from 'axios';
-import AuthBlobs from '../components/AuthBlobs';
+import AuthLayout from '../components/auth/AuthLayout';
 
 const JoinPantryPage: React.FC = () => {
   const { token } = useParams<{ token: string }>();
@@ -57,7 +57,7 @@ const JoinPantryPage: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
-      <AuthBlobs />
+      <AuthLayout>
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4">
         <div className="pointer-events-auto bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100 text-center text-gray-900 animate-fade-in">
           {status === 'loading' && <p className="text-xl">Przetwarzanie zaproszenia...</p>}
@@ -76,6 +76,7 @@ const JoinPantryPage: React.FC = () => {
           )}
         </div>
       </div>
+      </AuthLayout>
     </div>
   );
 };

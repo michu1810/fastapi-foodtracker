@@ -2,9 +2,11 @@ import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
-import AuthBlobs from '../components/AuthBlobs';
+import { useTranslation, Trans } from 'react-i18next';
+import AuthLayout from '../components/auth/AuthLayout';
 
-const RegisterPage = () => {
+const RegisterPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,15 +23,20 @@ const RegisterPage = () => {
     setErrorMessage(null);
 
     if (password !== confirmPassword) {
-      setErrorMessage('Hasła nie są identyczne.');
+      setErrorMessage(t('auth.errors.passwordsDontMatch'));
       return;
     }
     if (!acceptedTerms) {
-      setErrorMessage('Musisz zaakceptować Regulamin i zapoznać się z Polityką prywatności.');
+      // prosty tekst – w tłumaczeniach mamy całe zdanie w agree, ale tu walidacja
+      setErrorMessage(i18n.language.startsWith('pl')
+        ? 'Musisz zaakceptować Regulamin i zapoznać się z Polityką prywatności.'
+        : 'You must accept Terms and read the Privacy Policy.');
       return;
     }
     if (!recaptchaToken) {
-      setErrorMessage('Potwierdź, że nie jesteś robotem.');
+      setErrorMessage(i18n.language.startsWith('pl')
+        ? 'Potwierdź, że nie jesteś robotem.'
+        : 'Please confirm you are not a robot.');
       return;
     }
 
@@ -38,11 +45,19 @@ const RegisterPage = () => {
       navigate('/email-verification-sent', { state: { email } });
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { detail?: string } } };
-      const detail = axiosErr.response?.data?.detail || 'Błąd rejestracji.';
+      const detail = axiosErr.response?.data?.detail || (i18n.language.startsWith('pl') ? 'Błąd rejestracji.' : 'Registration failed.');
       if (detail.includes('Google') || detail.includes('GitHub')) {
-        setErrorMessage('Ten email jest powiązany z kontem społecznościowym. Użyj logowania społecznościowego.');
+        setErrorMessage(
+          i18n.language.startsWith('pl')
+            ? 'Ten email jest powiązany z kontem społecznościowym. Użyj logowania społecznościowego.'
+            : 'This email is linked to a social account. Use social login.'
+        );
       } else if (detail.includes('already registered')) {
-        setErrorMessage('Ten email jest już zarejestrowany. Zaloguj się lub zresetuj hasło.');
+        setErrorMessage(
+          i18n.language.startsWith('pl')
+            ? 'Ten email jest już zarejestrowany. Zaloguj się lub zresetuj hasło.'
+            : 'This email is already registered. Log in or reset your password.'
+        );
       } else {
         setErrorMessage(detail);
       }
@@ -50,13 +65,12 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4">
-      <AuthBlobs />
-      <div className="relative bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100 animate-fade-in">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-900">Rejestracja</h1>
+    <AuthLayout>
+      <div className="relative bg-white/90 backdrop-blur rounded-2xl p-8 w-full border border-gray-100 shadow-xl space-y-6">
+        <h1 className="text-3xl font-bold text-center text-gray-900">{t('auth.registerPage.title')}</h1>
 
         {errorMessage && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm text-center">
+          <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm text-center">
             {errorMessage}
           </div>
         )}
@@ -66,7 +80,7 @@ const RegisterPage = () => {
             type="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setErrorMessage(null); }}
-            placeholder="Email"
+            placeholder={t('auth.email') || 'Email'}
             className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
           />
@@ -75,7 +89,7 @@ const RegisterPage = () => {
             type="password"
             value={password}
             onChange={(e) => { setPassword(e.target.value); setErrorMessage(null); }}
-            placeholder="Hasło"
+            placeholder={t('auth.password') || 'Password'}
             className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
             minLength={6}
@@ -85,13 +99,13 @@ const RegisterPage = () => {
             type="password"
             value={confirmPassword}
             onChange={(e) => { setConfirmPassword(e.target.value); setErrorMessage(null); }}
-            placeholder="Powtórz hasło"
+            placeholder={t('auth.confirmPassword') || 'Confirm password'}
             className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             required
             minLength={6}
           />
 
-          {/* Checkbox akceptacji regulaminu i polityki */}
+          {/* akceptacja – tłumaczona z linkami przez <Trans/> */}
           <label className="flex items-start gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
@@ -101,18 +115,16 @@ const RegisterPage = () => {
               required
             />
             <span>
-              Akceptuję{' '}
-              <Link to="/regulamin?from=register" className="text-teal-600 hover:underline">
-                Regulamin
-              </Link>{' '}
-              i zapoznałem(-am) się z{' '}
-              <Link to="/polityka-prywatnosci?from=register" className="text-teal-600 hover:underline">
-                Polityką prywatności
-              </Link>.
+              <Trans
+                i18nKey="auth.registerPage.agree"
+                components={{
+                  privacy: <Link to="/polityka-prywatnosci?from=register" className="text-teal-600 hover:underline" />,
+                  terms: <Link to="/regulamin?from=register" className="text-teal-600 hover:underline" />,
+                }}
+              />
             </span>
           </label>
 
-          {/* ReCAPTCHA */}
           <div className="flex justify-center mt-2">
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -130,24 +142,23 @@ const RegisterPage = () => {
                 : 'bg-teal-600 hover:bg-teal-700 text-white active:scale-[0.99]'
             }`}
           >
-            {isLoading ? 'Rejestrowanie...' : 'Zarejestruj się'}
+            {isLoading ? `${t('auth.register')}...` : t('auth.register')}
           </button>
 
           <p className="text-xs text-gray-500 text-center">
-            Rejestrując się potwierdzasz, że masz co najmniej 16 lat lub zgodę opiekuna.
+            {i18n.language.startsWith('pl')
+              ? 'Rejestrując się potwierdzasz, że masz co najmniej 16 lat lub zgodę opiekuna.'
+              : 'By signing up you confirm you are at least 16 or have guardian consent.'}
           </p>
         </form>
 
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => navigate('/login')}
-            className="text-sm text-gray-600 hover:underline"
-          >
-            Masz już konto? Zaloguj się
-          </button>
+        <div className="mt-2 text-center">
+          <Link to="/login" className="text-sm text-gray-600 hover:underline">
+            {i18n.language.startsWith('pl') ? 'Masz już konto? Zaloguj się' : 'Already have an account? Log in'}
+          </Link>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 
