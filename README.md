@@ -34,24 +34,39 @@ Food Tracker is a full-stack web application designed and built from the ground 
 
 ### 🌟 Key Features
 
-* **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
-* **Collaborative Pantries:** Users can create their own pantries, invite friends or family via unique, time-limited links, and manage shared grocery lists together. The system supports distinct roles (owner, member) and enforces ownership rules.
-* **Product Management (CRUD):** Full control over pantry items with smart expiration date suggestions for fresh, unlabeled products.
-* **External API Integration:** Product search functionality that connects to a third-party API to fetch and suggests product details, including automatic category assignment.
-* **Automated Notifications:** Daily, asynchronous email notifications for expiring products, powered by **Celery Beat** and background workers.
-* **Data Analytics & Gamification:** Per-pantry financial statistics, data visualization charts with proper timezone handling, and a global achievement system that aggregates user progress across all their pantries to boost engagement.
-* **Modern & Responsive UI:** A **Mobile-First** design approach ensures the application is fully functional and beautiful on any device.
+- **Full User Lifecycle:** Secure user registration with email verification, password/social login (Google & GitHub), and comprehensive account management.
+- **Collaborative Pantries:** Create pantries, invite members via unique, time-limited links, and manage shared groceries with roles (owner/member).
+- **Product Management (CRUD):** Full control over items with smart expiration suggestions for fresh products.
+- **External API Integration:** Product search with automatic category assignment.
+- **Automated Notifications:** Daily e-mails for expiring products via **Celery Beat**.
+- **Data Analytics & Gamification:** Per-pantry financial stats, charts, and a global achievement system.
+- **Modern & Responsive UI:** **Mobile-first** design for all devices.
+- **🌗 Dark/Light Theme:** Polished dark mode across the app with smooth transitions. The selected theme is remembered between sessions.
+- **🌍 Language Switcher (EN/PL):** Instant, animated language toggle powered by i18next; your choice persists across visits.
+- **🍪 Cookie Consent (Sticky Toast):** A compact, floating banner informs about essential cookies/local storage and remembers consent after confirmation.
+
+---
 
 ### 🛠️ Tech Stack
 
 | Category | Technologies |
 | :--- | :--- |
 | **Backend** | Python 3.13, FastAPI (Async), PostgreSQL, SQLAlchemy 2.0 (Async), Celery, Pydantic |
-| **Frontend** | React, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
+| **Frontend** | React, TypeScript, Vite, Tailwind CSS (dark mode), Recharts, Framer Motion, **i18next** |
 | **Database** | PostgreSQL, Redis (for Celery), Alembic (for migrations) |
 | **Testing** | Pytest, Pytest-asyncio, HTTPX, Codecov |
 | **DevOps** | Docker, Docker Compose, GitHub Actions (CI/CD), Pre-commit |
 | **Services** | OAuth2 (Google & GitHub), JWT, Bcrypt, Cloudinary, Ruff |
+
+---
+
+### 🌗 Themes & Localization
+
+- **Theme Switcher:** Toggle between **Light** and **Dark**. The app stores your preference locally so the UI loads in your chosen mode every time.
+- **Language Switcher (EN/PL):** A sleek, animated control changes the interface language instantly. The setting is persisted so it sticks across sessions.
+- **Cookie Consent:** A small **sticky toast** (EN/PL) appears after login to inform about essential cookies/local storage used to improve UX (e.g., session, theme, language). Once accepted, it won’t show again.
+
+> We only use **essential** cookies (e.g., a secure `HttpOnly` refresh token) and local storage for preferences. No marketing or cross-site tracking cookies.
 
 ---
 
@@ -60,14 +75,14 @@ Food Tracker is a full-stack web application designed and built from the ground 
 The entire project is containerized, allowing for a one-command setup.
 
 #### Prerequisites
-* [Git](https://git-scm.com/)
-* [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
+- [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
 
 #### Steps
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/michu1810/fastapi-foodtracker.git
-    cd fastapi-foodtracker
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/michu1810/fastapi-foodtracker.git
+   cd fastapi-foodtracker
     ```
 
 2.  **Configure environment variables:**
@@ -150,4 +165,4 @@ Crafted with passion from A to Z by **Michał Jamros**.
     <a href="https://www.linkedin.com/in/michal-jamros/" target="_blank">
         <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
     </a>
-</p>
+</p>**
