@@ -42,6 +42,27 @@ CATEGORY_KEYWORD_MAP = {
 }
 
 
+def match_internal_category_name(off_tags: list[str]) -> Optional[str]:
+    for internal_category, keywords in CATEGORY_KEYWORD_MAP.items():
+        if any(keyword in tag for keyword in keywords for tag in off_tags):
+            return internal_category
+    return None
+
+
+async def find_category_by_off_tags(
+    db: AsyncSession, off_tags: list[str]
+) -> Optional[Category]:
+    if not off_tags:
+        return None
+
+    found_category_name = match_internal_category_name(off_tags)
+    if not found_category_name:
+        return None
+
+    result = await db.execute(select(Category).filter_by(name=found_category_name))
+    return result.scalars().first()
+
+
 async def _get_category_from_off(
     db: AsyncSession, external_id: str
 ) -> Optional[Category]:
@@ -63,22 +84,7 @@ async def _get_category_from_off(
         off_tags = [
             tag.replace("en:", "") for tag in data["product"].get("categories_tags", [])
         ]
-        if not off_tags:
-            return None
-
-        found_category_name: Optional[str] = None
-        for internal_category, keywords in CATEGORY_KEYWORD_MAP.items():
-            if any(keyword in tag for keyword in keywords for tag in off_tags):
-                found_category_name = internal_category
-                break
-
-        if found_category_name:
-            result = await db.execute(
-                select(Category).filter_by(name=found_category_name)
-            )
-            return result.scalars().first()
-
-        return None
+        return await find_category_by_off_tags(db, off_tags)
     except httpx.HTTPStatusError as e:
         logging.error(
             f"Błąd HTTP {e.response.status_code} podczas zapytania do Open Food Facts dla ID {external_id}."

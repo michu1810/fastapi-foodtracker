@@ -43,6 +43,8 @@ export interface ExternalProduct {
     id: string;
     name: string;
     description?: string;
+    brand?: string;
+    category?: Category | null;
 }
 
 export interface BarcodeProductData {
@@ -102,7 +104,11 @@ class ProductsService {
             return response.data;
         } catch (error) {
             console.error('External search failed:', error);
-            return [];
+            if (axios.isAxiosError(error)) {
+                const detail = (error.response?.data as { detail?: string } | undefined)?.detail;
+                throw new Error(detail || 'Wyszukiwanie produktow jest chwilowo niedostepne.');
+            }
+            throw new Error('Wyszukiwanie produktow jest chwilowo niedostepne.');
         }
     }
 

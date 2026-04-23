@@ -101,6 +101,17 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     if (view !== 'search' || debouncedQuery.trim() === '') {
       setResults([]);
       return;
@@ -109,13 +120,26 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       setIsSearching(true);
       productsService
         .searchExternalProducts(debouncedQuery)
-        .then(setResults)
-        .catch(err => console.error('Search error:', err))
+        .then((externalResults) => {
+          const uniqueResults = externalResults.filter(
+            (product, index, array) =>
+              product.id &&
+              array.findIndex((candidate) => candidate.id === product.id) === index
+          );
+          setResults(uniqueResults);
+          setError(null);
+        })
+        .catch(err => {
+          console.error('Search error:', err);
+          setResults([]);
+          setError(err instanceof Error ? err.message : t('serverCommunicationError'));
+        })
         .finally(() => setIsSearching(false));
     } else {
       setResults([]);
+      setError(null);
     }
-  }, [debouncedQuery, view, searchSessionKey]);
+  }, [debouncedQuery, view, searchSessionKey, t]);
 
   const resolveAndSetCategory = async (productId: string) => {
     try {
@@ -130,8 +154,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const handleProductSelect = (selectedProduct: ExternalProduct) => {
     setProductName(selectedProduct.name);
     setSelectedExternalId(selectedProduct.id);
+    setSelectedCategory(selectedProduct.category ?? null);
+    setError(null);
     setView('confirm');
-    resolveAndSetCategory(selectedProduct.id);
+    if (!selectedProduct.category) {
+      resolveAndSetCategory(selectedProduct.id);
+    }
   };
 
   const handleScanSuccess = async (decodedText: string) => {
@@ -463,14 +491,21 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             {isSearching && <p className="text-sm text-gray-500 mt-2 dark:text-slate-400">{t('searching')}...</p>}
             {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
 
-            <div className="mt-2 max-h-48 overflow-y-auto">
-              {results.map((p) => (
+            <div className="mt-3 max-h-[40vh] min-h-[16rem] overflow-y-auto overflow-x-hidden rounded-xl border border-slate-700/60 bg-slate-900/40">
+              {results.map((p, index) => (
                 <div
-                  key={p.id}
+                  key={p.id || `${p.name}-${index}`}
                   onClick={() => handleProductSelect(p)}
-                  className="p-2 -mx-2 hover:bg-blue-50 cursor-pointer rounded-md dark:hover:bg-blue-900/30"
+                  className="border-b border-slate-700/60 px-4 py-3 transition last:border-b-0 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                 >
-                  {p.name}
+                  <div className="cursor-pointer">
+                    <div className="break-words text-sm font-medium text-slate-100">{p.name}</div>
+                    {(p.brand || p.description) && (
+                      <div className="mt-1 break-words text-xs text-slate-400">
+                        {p.brand || p.description}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -491,10 +526,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     <Portal>
       <AnimatePresence>
         {isOpen && (
-          <motion.div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-8 sm:pt-16" onClick={onClose}>
+          <motion.div className="fixed inset-0 z-50 flex items-start justify-center p-3 pt-4 sm:p-4 sm:pt-10 lg:pt-14" onClick={onClose}>
             <motion.div className="absolute inset-0 bg-black/30 backdrop-blur-sm" variants={backdropVariants} initial="hidden" animate="visible" exit="hidden" />
             <motion.div
-              className="relative z-10 bg-white rounded-lg shadow-xl w-full max-w-lg flex flex-col dark:bg-slate-900 dark:text-slate-200"
+              className="relative z-10 flex max-h-[92vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-xl dark:bg-slate-900 dark:text-slate-200"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -503,7 +538,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             >
               {isContentLoaded && (
                 <>
-                  <div className="flex-grow overflow-y-auto max-h-[85vh]">
+                  <div className="flex-grow overflow-y-auto">
                     {renderContent()}
                   </div>
 

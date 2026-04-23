@@ -7,23 +7,40 @@ interface PortalProps {
 
 const Portal: React.FC<PortalProps> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
+  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
 
-  if (!mounted) {
+  useEffect(() => {
+    if (!mounted) return;
+
+    let modalRoot = document.getElementById('modal-root');
+    let created = false;
+
+    if (!modalRoot) {
+      modalRoot = document.createElement('div');
+      modalRoot.id = 'modal-root';
+      document.body.appendChild(modalRoot);
+      created = true;
+    }
+
+    setPortalElement(modalRoot);
+
+    return () => {
+      if (created && modalRoot?.parentNode) {
+        modalRoot.parentNode.removeChild(modalRoot);
+      }
+    };
+  }, [mounted]);
+
+  if (!mounted || !portalElement) {
     return null;
   }
 
-  const modalRoot = document.getElementById('modal-root');
-  if (!modalRoot) {
-    console.error("Element #modal-root nie został znaleziony w DOM.");
-    return null;
-  }
-
-  return createPortal(children, modalRoot);
+  return createPortal(children, portalElement);
 };
 
 export default Portal;

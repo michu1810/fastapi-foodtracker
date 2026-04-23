@@ -58,6 +58,19 @@ const AnimatedLogo = () => {
   );
 };
 
+const TEST_EMAIL_COOLDOWN_MS = 60 * 60 * 1000; // 1 godzina
+
+function getTestEmailCooldownKey(email: string) {
+  return `testEmail_lastSent_${email}`;
+}
+
+function getRemainingCooldownMinutes(email: string): number {
+  const raw = localStorage.getItem(getTestEmailCooldownKey(email));
+  if (!raw) return 0;
+  const diff = TEST_EMAIL_COOLDOWN_MS - (Date.now() - Number(raw));
+  return diff > 0 ? Math.ceil(diff / 60000) : 0;
+}
+
 export default function Header() {
   const { user, logout } = useAuth();
   const { pantries, selectedPantry, selectPantry, loading } = usePantry();
@@ -65,6 +78,17 @@ export default function Header() {
   const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const { t } = useTranslation();
+
+  // --- Test email cooldown ---
+  const [testEmailCooldownMin, setTestEmailCooldownMin] = useState(0);
+
+  useEffect(() => {
+    if (!user?.email) return;
+    const update = () => setTestEmailCooldownMin(getRemainingCooldownMinutes(user.email));
+    update();
+    const interval = setInterval(update, 30_000); // odświeżaj co 30s
+    return () => clearInterval(interval);
+  }, [user?.email]);
 
   const navLinks = [
     { path: '/', label: t('calendar') },
@@ -77,6 +101,24 @@ export default function Header() {
     try {
       await fn();
       toast.success(t(msgKey), { id });
+    } catch {
+      toast.error(`❌ ${t('somethingWentWrong')}`, { id });
+    }
+  };
+
+  const sendTestEmailWithCooldown = async () => {
+    if (testEmailCooldownMin > 0) {
+      toast.error(`⏳ Poczekaj jeszcze ${testEmailCooldownMin} min przed kolejnym testem.`);
+      return;
+    }
+    const id = toast.loading(`⏳ ${t('pleaseWait')}`);
+    try {
+      await productsService.sendTestNotification();
+      if (user?.email) {
+        localStorage.setItem(getTestEmailCooldownKey(user.email), String(Date.now()));
+        setTestEmailCooldownMin(Math.ceil(TEST_EMAIL_COOLDOWN_MS / 60000));
+      }
+      toast.success(t('testEmailSent'), { id });
     } catch {
       toast.error(`❌ ${t('somethingWentWrong')}`, { id });
     }
@@ -222,11 +264,16 @@ export default function Header() {
             <span className="text-left leading-tight break-words">{t('triggerExpirationCheck')}</span>
           </button>
           <button
-            onClick={() => notify(productsService.sendTestNotification, 'testEmailSent')}
-            className="mt-1 w-full grid grid-cols-[20px_1fr] items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100"
+            onClick={sendTestEmailWithCooldown}
+            disabled={testEmailCooldownMin > 0}
+            className="mt-1 w-full grid grid-cols-[20px_1fr] items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FaEnvelope className="w-5 h-5 text-emerald-600" />
-            <span className="text-left leading-tight break-words">{t('sendTestEmail')}</span>
+            <FaEnvelope className={`w-5 h-5 ${testEmailCooldownMin > 0 ? 'text-gray-400' : 'text-emerald-600'}`} />
+            <span className="text-left leading-tight break-words">
+              {testEmailCooldownMin > 0
+                ? `${t('sendTestEmail')} (${testEmailCooldownMin} min)`
+                : t('sendTestEmail')}
+            </span>
           </button>
         </div>
 
@@ -408,11 +455,16 @@ export default function Header() {
                             <span className="text-left leading-tight text-gray-800 dark:text-gray-100">{t('triggerExpirationCheck')}</span>
                           </button>
                           <button
-                            onClick={() => notify(productsService.sendTestNotification, 'testEmailSent')}
-                            className="w-full grid grid-cols-[20px_1fr] items-center gap-3 px-3 py-2 text-sm rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                            onClick={sendTestEmailWithCooldown}
+                            disabled={testEmailCooldownMin > 0}
+                            className="w-full grid grid-cols-[20px_1fr] items-center gap-3 px-3 py-2 text-sm rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <FaEnvelope className="w-5 h-5 text-emerald-600" />
-                            <span className="text-left leading-tight text-gray-800 dark:text-gray-100">{t('sendTestEmail')}</span>
+                            <FaEnvelope className={`w-5 h-5 ${testEmailCooldownMin > 0 ? 'text-gray-400' : 'text-emerald-600'}`} />
+                            <span className="text-left leading-tight text-gray-800 dark:text-gray-100">
+                              {testEmailCooldownMin > 0
+                                ? `${t('sendTestEmail')} (${testEmailCooldownMin} min)`
+                                : t('sendTestEmail')}
+                            </span>
                           </button>
                         </div>
 

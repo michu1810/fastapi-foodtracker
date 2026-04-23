@@ -36,7 +36,7 @@ export default function ExpiringSoonPanel() {
 
   const getText = (d: number) => {
     if (d === 0) return t('expiringToday');
-    return t('daysLeft', { count: d });
+    return t('daysLeft', { count: d, defaultValue: `Pozostało ${d} dni` });
   };
 
   if (error) {

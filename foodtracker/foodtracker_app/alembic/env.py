@@ -27,10 +27,14 @@ url = make_url(raw_url).set(drivername="postgresql")
 if settings.IS_PRODUCTION:
     url = url.update_query_pairs([("sslmode", "require")])
 
+rendered_url = url.render_as_string(hide_password=False)
+
 print("▶ DEBUG ALEMBIC - DATABASE_URL (z settings):", raw_url)
 print("▶ DEBUG ALEMBIC - FINAL SYNC_URL FOR ALEMBIC:", str(url))
 
-config.set_main_option("sqlalchemy.url", url.render_as_string(hide_password=False))
+# Alembic stores this in configparser, where "%" is treated as interpolation syntax.
+# Escaping it keeps URL-encoded passwords like "%21" valid during deploy-time migrations.
+config.set_main_option("sqlalchemy.url", rendered_url.replace("%", "%%"))
 
 
 def run_migrations_offline() -> None:

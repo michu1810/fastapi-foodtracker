@@ -125,6 +125,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   const handleEditClick = (product: Product) => {
     setEditingProduct(product);
     setFormData({

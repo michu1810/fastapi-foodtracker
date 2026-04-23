@@ -1,6 +1,6 @@
 from pathlib import Path
-
 from contextlib import asynccontextmanager
+
 from dotenv import load_dotenv
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
@@ -105,6 +105,7 @@ app.include_router(
 app.include_router(pantries_router, prefix="/pantries", tags=["Pantries"])
 app.include_router(categories_router, prefix="/categories")
 app.include_router(invitations_router)
+
 health_router = APIRouter()
 
 

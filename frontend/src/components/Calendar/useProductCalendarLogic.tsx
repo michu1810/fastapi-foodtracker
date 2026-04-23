@@ -76,36 +76,36 @@ export const useProductCalendarLogic = () => {
     setTimeout(() => setIsProductModalContentLoaded(true), RENDER_DELAY);
   };
 
-  const handleCloseProductModal = () => {
+  const handleCloseProductModal = useCallback(() => {
     setIsProductModalOpen(false);
     setIsProductModalContentLoaded(false);
-  };
+  }, []);
 
-  const handleOpenAddModal = () => {
+  const handleOpenAddModal = useCallback(() => {
     handleCloseProductModal();
     setIsAddModalOpen(true);
     setTimeout(() => setIsAddModalContentLoaded(true), RENDER_DELAY);
-  };
+  }, [handleCloseProductModal]);
 
-  const handleCloseAddModal = () => {
+  const handleCloseAddModal = useCallback(() => {
     setIsAddModalOpen(false);
     setIsAddModalContentLoaded(false);
-  };
+  }, []);
 
-  const handleOpenConsumptionModal = (product: Product, type: 'use' | 'waste') => {
+  const handleOpenConsumptionModal = useCallback((product: Product, type: 'use' | 'waste') => {
     handleCloseProductModal();
     setProductToConsume(product);
     setActionType(type);
     setIsConsumptionModalOpen(true);
     setTimeout(() => setIsConsumptionModalContentLoaded(true), RENDER_DELAY);
-  };
+  }, [handleCloseProductModal]);
 
-  const handleCloseConsumptionModal = () => {
+  const handleCloseConsumptionModal = useCallback(() => {
     setIsConsumptionModalOpen(false);
     setIsConsumptionModalContentLoaded(false);
     // Resetuj produkt do zużycia po zamknięciu modala
     setTimeout(() => setProductToConsume(null), 300);
-  };
+  }, []);
 
   // === Toasty / działania ===
 

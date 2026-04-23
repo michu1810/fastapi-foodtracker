@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import Confetti from 'react-confetti';
+import { BarChart3 } from 'lucide-react';
 import FancyCalendar from './FancyCalendar';
 import { getStats } from '../../services/statsService';
 import type { Stats } from '../../services/statsService';
@@ -36,7 +37,7 @@ export const ProductCalendar: React.FC = () => {
 
   return (
     <div className="card dark:bg-slate-900 dark:text-slate-200">
-      <h2 className="card-title text-base sm:text-xl dark:text-slate-100">📅 {t('productCalendar')}</h2>
+      <h2 className="card-title text-base dark:text-slate-100 sm:text-xl">{t('productCalendar')}</h2>
 
       <div className="relative space-y-4">
         {totalProductsCount === 0 && user && <OnboardingGuide />}
@@ -48,17 +49,20 @@ export const ProductCalendar: React.FC = () => {
           createdAt={createdAt}
         />
 
-        <div className="bg-white rounded-lg p-4 shadow-md text-center dark:bg-slate-800 dark:text-slate-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2 dark:text-slate-100">📊 {t('overallStats')}</h3>
+        <div className="rounded-lg bg-white p-4 text-center shadow-md dark:bg-slate-800 dark:text-slate-200">
+          <h3 className="mb-2 flex items-center justify-center gap-2 text-lg font-semibold text-gray-800 dark:text-slate-100">
+            <BarChart3 className="h-5 w-5 text-cyan-400" />
+            {t('overallStats')}
+          </h3>
 
-          <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-xs sm:text-sm">
-            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium dark:bg-blue-900/40 dark:text-blue-300">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:gap-4 sm:text-sm">
+            <span className="rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
               {t('active')}: {stats ? stats.active : '...'}
             </span>
-            <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium dark:bg-red-900/40 dark:text-red-300">
+            <span className="rounded-full bg-red-100 px-3 py-1 font-medium text-red-800 dark:bg-red-900/40 dark:text-red-300">
               {t('wasted')}: {stats?.wasted ?? '...'}
             </span>
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium dark:bg-green-900/40 dark:text-green-300">
+            <span className="rounded-full bg-green-100 px-3 py-1 font-medium text-green-800 dark:bg-green-900/40 dark:text-green-300">
               {t('used')}: {stats?.used ?? '...'}
             </span>
           </div>
@@ -66,7 +70,7 @@ export const ProductCalendar: React.FC = () => {
           <p className="mt-3 text-xs text-gray-400 dark:text-slate-400">
             {t('fullStatsHint')}{' '}
             <span
-              className="underline text-blue-500 cursor-pointer dark:text-blue-400"
+              className="cursor-pointer text-blue-500 underline dark:text-blue-400"
               onClick={() => (window.location.href = '/stats')}
             >
               {t('statistics')}
