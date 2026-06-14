@@ -416,24 +416,43 @@
     "createSectionTitle": "Create new pantry",
     "createSectionHint": "You can create up to 3 own pantries. Joining other pantries has no limit.",
     "createButton": "Add pantry",
+    "createLimit": "You currently have {{count}} active space. Separate home, business, or shared stock when it helps clarity.",
     "renameTitle": "Rename pantry",
+    "renameHint": "A clear name helps household members or teammates pick the right space instantly.",
     "save": "Save",
     "ownerOnlyRenameHint": "Only the owner can rename the pantry.",
     "membersInvitesTitle": "Members & invitations",
+    "membersHint": "Manage access without sharing passwords or manually creating accounts.",
     "role": { "owner": "Owner", "member": "Member" },
     "removeMember": "Remove",
+    "removeMemberAria": "Remove {{email}} from pantry",
     "inviteNew": "Invite a new person",
+    "inviteHint": "Generate a short-lived link and send it to the person who should join this pantry.",
+    "inviteOwnerOnly": "Only the pantry owner can generate invitation links.",
     "copy": "Copy",
     "inviteValid15m": "Remember, this link is valid for 15 minutes only!",
     "generateInvite": "Generate invitation link",
     "generating": "Generating...",
     "generatedActive15m": "The generated link will be active for 15 minutes.",
     "irreversibleTitle": "Irreversible options",
+    "dangerOwnerHint": "Deleting a pantry removes its products, members, and history. This action requires confirmation.",
+    "dangerMemberHint": "You can leave this pantry. To return, the owner must send you a new invite.",
     "leavePantry": "Leave pantry",
     "deletePantry": "Delete pantry",
+    "overview": {
+      "eyebrow": "Active pantry",
+      "ownerBody": "You have full control over naming, invitations, and member access.",
+      "memberBody": "You are a member here. You can use the pantry, while the owner manages settings.",
+      "members": "Members",
+      "owner": "Owner",
+      "role": "Your role",
+      "quickWinTitle": "Quick organization",
+      "quickWinBody": "Create a separate pantry for home, work, or shared shopping so dashboards and stats stay clean."
+    },
     "modals": {
       "removeTitle": "Confirm member removal",
       "removeMsg": "Are you sure you want to remove this user from the pantry? They will lose access.",
+      "removeMsgWithEmail": "{{email}} will lose access to this pantry and its products.",
       "deleteTitle": "REALLY DELETE THE PANTRY?",
       "deleteMsg": "This action is irreversible. All products and data in the \"{{name}}\" pantry will be permanently deleted.",
       "leaveTitle": "Confirm leaving the pantry",
@@ -441,6 +460,7 @@
       "cancel": "Cancel",
       "confirm": "Confirm",
       "createTitle": "Create new pantry",
+      "createBody": "Name the space in a way that makes its purpose obvious.",
       "namePlaceholder": "Pantry name...",
       "create": "Create"
     },
@@ -451,6 +471,7 @@
       "inviteOk": "Link generated!",
       "inviteFail": "Failed to generate link.",
       "copyOk": "Copied to clipboard!",
+      "copyFail": "Failed to copy the link.",
       "removeOk": "Member removed.",
       "removeFail": "Failed to remove member.",
       "deleteOk": "Pantry has been deleted.",
@@ -462,8 +483,20 @@
       "createFail": "Failed to create pantry."
     },
     "page": {
+      "eyebrow": "Access center",
       "title": "Pantry Management",
-      "subtitle": "Change the name, invite members or delete your pantry."
+      "subtitle": "Rename spaces, invite members, switch context, and keep access under control.",
+      "totalPantries": "Pantries",
+      "activeMembers": "Members",
+      "switchTitle": "Your spaces",
+      "switchBody": "Switch the pantry you want to edit now."
+    },
+    "empty": {
+      "eyebrow": "First pantry",
+      "title": "Start with one clearly named space",
+      "body": "Once you create a pantry, the dashboard can start organizing priorities, reminders, and goals.",
+      "placeholder": "e.g. Home, Business, Office",
+      "cta": "Create and continue"
     }
   },
   "auth": {
@@ -547,7 +580,22 @@
     "or": "or",
     "oauth": {
         "google": "Continue with Google",
-        "github": "Continue with GitHub"
+        "github": "Continue with GitHub",
+        "finalizingTitle": "Finalizing sign-in",
+        "finalizingBody": "We are validating the token, loading your profile, and sending you to the right pantry.",
+        "loading": "Connecting session...",
+        "missingToken": "Could not get a sign-in token.",
+        "finalizeError": "Something went wrong while finalizing the session."
+    },
+    "welcome": {
+      "eyebrow": "Signed in with {{provider}}",
+      "passwordProvider": "email",
+      "title": "Good to see you, {{email}}",
+      "bodyReady": "Your session is working. You can jump straight into the rescue plan and active products.",
+      "bodyNoPantry": "Your session is working. Create your first pantry to unlock the dashboard.",
+      "ctaDashboard": "Go to dashboard",
+      "ctaPantry": "Create pantry",
+      "dismiss": "Dismiss welcome message"
     },
     "loading": {
         "login": "Logging in...",

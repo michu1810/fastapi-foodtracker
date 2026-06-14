@@ -420,24 +420,43 @@
     "createSectionTitle": "Stwórz nową spiżarnię",
     "createSectionHint": "Możesz stworzyć maksymalnie 3 własne spiżarnie. Dołączanie do cudzych nie ma limitu.",
     "createButton": "Dodaj spiżarnię",
+    "createLimit": "Masz teraz {{count}} aktywną przestrzeń. Własne spiżarnie możesz rozdzielić np. na dom, firmę i zapasy.",
     "renameTitle": "Zmień nazwę spiżarni",
+    "renameHint": "Dobra nazwa pomaga domownikom i zespołowi od razu rozpoznać właściwą przestrzeń.",
     "save": "Zapisz",
     "ownerOnlyRenameHint": "Tylko właściciel może zmienić nazwę spiżarni.",
     "membersInvitesTitle": "Członkowie i zaproszenia",
+    "membersHint": "Zarządzaj dostępem bez wysyłania haseł i bez ręcznego dopisywania użytkowników.",
     "role": { "owner": "Właściciel", "member": "Członek" },
     "removeMember": "Usuń",
+    "removeMemberAria": "Usuń użytkownika {{email}} ze spiżarni",
     "inviteNew": "Zaproś nową osobę",
+    "inviteHint": "Wygeneruj krótko ważny link i wyślij go osobie, która ma dołączyć do tej spiżarni.",
+    "inviteOwnerOnly": "Zaproszenia może generować tylko właściciel tej spiżarni.",
     "copy": "Kopiuj",
     "inviteValid15m": "Pamiętaj, ten link jest ważny tylko przez 15 minut!",
     "generateInvite": "Wygeneruj link zaproszenia",
     "generating": "Generowanie...",
     "generatedActive15m": "Wygenerowany link będzie aktywny przez 15 minut.",
     "irreversibleTitle": "Opcje nieodwracalne",
+    "dangerOwnerHint": "Usunięcie spiżarni usuwa jej produkty, członków i historię. Ten ruch wymaga potwierdzenia.",
+    "dangerMemberHint": "Możesz opuścić tę spiżarnię. Aby wrócić, właściciel musi wysłać nowe zaproszenie.",
     "leavePantry": "Opuść spiżarnię",
     "deletePantry": "Usuń spiżarnię",
+    "overview": {
+      "eyebrow": "Aktywna spiżarnia",
+      "ownerBody": "Masz pełną kontrolę nad nazwą, zaproszeniami i dostępem członków.",
+      "memberBody": "Masz dostęp jako członek. Możesz korzystać z produktów, ale ustawieniami zarządza właściciel.",
+      "members": "Członkowie",
+      "owner": "Właściciel",
+      "role": "Twoja rola",
+      "quickWinTitle": "Szybka organizacja",
+      "quickWinBody": "Utwórz osobną spiżarnię dla domu, pracy albo wspólnych zakupów, żeby dashboard i statystyki były czytelniejsze."
+    },
     "modals": {
       "removeTitle": "Potwierdź usunięcie członka",
       "removeMsg": "Czy na pewno chcesz usunąć tego użytkownika ze spiżarni? Utraci on dostęp.",
+      "removeMsgWithEmail": "Użytkownik {{email}} straci dostęp do tej spiżarni i jej produktów.",
       "deleteTitle": "NA PEWNO USUNĄĆ SPIŻARNIĘ?",
       "deleteMsg": "Ta operacja jest nieodwracalna. Wszystkie produkty i dane w spiżarni „{{name}}” zostaną bezpowrotnie usunięte.",
       "leaveTitle": "Potwierdź opuszczenie spiżarni",
@@ -445,6 +464,7 @@
       "cancel": "Anuluj",
       "confirm": "Potwierdź",
       "createTitle": "Stwórz nową spiżarnię",
+      "createBody": "Nazwij przestrzeń tak, żeby od razu było jasne, do czego służy.",
       "namePlaceholder": "Nazwa spiżarni...",
       "create": "Stwórz"
     },
@@ -455,6 +475,7 @@
       "inviteOk": "Link wygenerowany!",
       "inviteFail": "Nie udało się wygenerować linku.",
       "copyOk": "Skopiowano do schowka!",
+      "copyFail": "Nie udało się skopiować linku.",
       "removeOk": "Usunięto członka.",
       "removeFail": "Nie udało się usunąć członka.",
       "deleteOk": "Spiżarnia została usunięta.",
@@ -466,8 +487,20 @@
       "createFail": "Nie udało się stworzyć spiżarni."
     },
     "page": {
+      "eyebrow": "Centrum dostępu",
       "title": "Zarządzanie spiżarniami",
-      "subtitle": "Zmień nazwę, zaproś członków lub usuń swoją spiżarnię."
+      "subtitle": "Zmień nazwę, zaproś członków, przełącz przestrzeń i pilnuj, kto ma dostęp do danych.",
+      "totalPantries": "Spiżarnie",
+      "activeMembers": "Członkowie",
+      "switchTitle": "Twoje przestrzenie",
+      "switchBody": "Przełącz spiżarnię, którą chcesz teraz edytować."
+    },
+    "empty": {
+      "eyebrow": "Pierwsza spiżarnia",
+      "title": "Zacznij od jednej dobrze nazwanej przestrzeni",
+      "body": "Po utworzeniu spiżarni dashboard zacznie układać priorytety, przypomnienia i cele dla produktów.",
+      "placeholder": "np. Dom, Firma, Biuro",
+      "cta": "Utwórz i przejdź dalej"
     }
   },
    "auth": {
@@ -552,7 +585,22 @@
     "or": "lub",
     "oauth": {
         "google": "Zaloguj przez Google",
-        "github": "Zaloguj przez GitHub"
+        "github": "Zaloguj przez GitHub",
+        "finalizingTitle": "Finalizujemy logowanie",
+        "finalizingBody": "Sprawdzamy token, pobieramy profil i przenosimy Cię do właściwej spiżarni.",
+        "loading": "Łączenie sesji...",
+        "missingToken": "Nie udało się uzyskać tokena do logowania.",
+        "finalizeError": "Wystąpił błąd podczas finalizowania sesji."
+    },
+    "welcome": {
+      "eyebrow": "Zalogowano przez {{provider}}",
+      "passwordProvider": "e-mail",
+      "title": "Dobrze Cię widzieć, {{email}}",
+      "bodyReady": "Sesja działa poprawnie. Możesz od razu przejść do planu ratunkowego i aktualnych produktów.",
+      "bodyNoPantry": "Sesja działa poprawnie. Utwórz pierwszą spiżarnię, żeby uruchomić dashboard.",
+      "ctaDashboard": "Przejdź do dashboardu",
+      "ctaPantry": "Utwórz spiżarnię",
+      "dismiss": "Zamknij komunikat powitalny"
     },
     "loading": {
         "login": "Logowanie...",

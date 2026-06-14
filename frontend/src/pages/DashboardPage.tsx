@@ -4,6 +4,7 @@ import { ProductCalendar } from '../components/Calendar/ProductCalendar';
 import ExpiringSoonPanel from '../components/ExpiringSoonPanel';
 import NextAchievementPanel from '../components/NextAchievementPanel';
 import ShoppingIntelligencePanel from '../components/ShoppingIntelligencePanel';
+import SessionWelcomeBanner from '../components/SessionWelcomeBanner';
 import SmartStartPanel from '../components/SmartStartPanel';
 import TodayFocusPanel from '../components/TodayFocusPanel';
 import { usePantry } from '../context/PantryContext';
@@ -33,6 +34,7 @@ export default function DashboardPage() {
       className="min-h-screen isolate"
     >
       <div className="w-full space-y-6 md:space-y-10">
+        <SessionWelcomeBanner />
         {!loading && !selectedPantry && <SmartStartPanel />}
         {!loading && selectedPantry && <TodayFocusPanel />}
         {!loading && selectedPantry && <ShoppingIntelligencePanel />}

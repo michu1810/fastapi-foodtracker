@@ -59,8 +59,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const redirectPath = loadFromStorage<string | null>('redirectAfterLogin', null);
         if (redirectPath) {
           clearStorageKey('redirectAfterLogin');
+          sessionStorage.setItem('foodtracker:auth-banner', 'password');
           navigate(redirectPath);
         } else {
+          sessionStorage.setItem('foodtracker:auth-banner', 'password');
           navigate('/');
         }
       } catch (err: unknown) {

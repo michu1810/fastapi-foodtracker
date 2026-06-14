@@ -22,9 +22,12 @@ export const PantryProvider = ({ children }: { children: ReactNode }) => {
       const lastSelectedId = localStorage.getItem('selectedPantryId');
       const lastPantry = userPantries.find((p) => p.id === Number(lastSelectedId));
 
-      if (lastPantry) {
+      if (userPantries.length === 0) {
+        setSelectedPantry(null);
+        localStorage.removeItem('selectedPantryId');
+      } else if (lastPantry) {
         setSelectedPantry(lastPantry);
-      } else if (userPantries.length > 0) {
+      } else {
         setSelectedPantry(userPantries[0]);
         localStorage.setItem('selectedPantryId', String(userPantries[0].id));
       }
