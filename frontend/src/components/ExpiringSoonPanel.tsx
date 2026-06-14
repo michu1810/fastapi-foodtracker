@@ -1,6 +1,7 @@
 import React from 'react';
 import useSWR from 'swr';
-import { ExpiringProduct, productsService } from '../services/productService';
+import { productsService } from '../services/productService';
+import type { ExpiringProduct } from '../services/productService';
 import { usePantry } from '../context/PantryContext';
 import { useTranslation } from 'react-i18next';
 

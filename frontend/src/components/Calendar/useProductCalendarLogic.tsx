@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { Product, productsService } from '../../services/productService';
+import { productsService } from '../../services/productService';
+import type { Product } from '../../services/productService';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { saveToStorage, loadFromStorage } from '../../utils/localStorage';
-import { Achievement } from '../../services/statsService';
+import type { Achievement } from '../../services/statsService';
 import { usePantry } from '../../context/PantryContext';
 import { useTranslation } from 'react-i18next';
 
@@ -61,12 +62,21 @@ export const useProductCalendarLogic = () => {
     }
   }, [fetchProducts, selectedPantry]);
 
+  useEffect(() => {
+    window.addEventListener('foodtracker:products-changed', fetchProducts);
+    return () => window.removeEventListener('foodtracker:products-changed', fetchProducts);
+  }, [fetchProducts]);
+
   const revalidateAllData = useCallback(() => {
     if (!selectedPantry) return;
     const pantryId = selectedPantry.id;
+    mutate(`/pantries/${pantryId}/products/get`);
+    mutate(`expiring/${pantryId}`);
     mutate(`/pantries/${pantryId}/products/stats`);
     mutate(`/pantries/${pantryId}/products/stats/financial`);
-    mutate(`/auth/achievements`);
+    mutate(`/pantries/${pantryId}/products/stats/trends`);
+    mutate('/products/achievements');
+    mutate(`/pantries/${pantryId}/products/achievements`);
     fetchProducts();
   }, [mutate, fetchProducts, selectedPantry]);
 
@@ -140,28 +150,57 @@ export const useProductCalendarLogic = () => {
 
         mutate(`/pantries/${selectedPantry.id}/products/stats`);
         mutate(`/pantries/${selectedPantry.id}/products/stats/financial`);
+        mutate(`/pantries/${selectedPantry.id}/products/get`);
+        mutate(`expiring/${selectedPantry.id}`);
+        mutate('/products/achievements');
+        mutate(`/pantries/${selectedPantry.id}/products/achievements`);
 
         // i18n jednostka
         const unitLabel =
           updatedProduct.unit === 'szt.' ? t('unitPiecesShort') : t('unitGramsShort');
 
-        if (action === 'use') {
-          toast.success(
-            t('toasts.consumed', {
-              amount,
-              unit: unitLabel,
-              name: updatedProduct.name,
-            })
-          );
-        } else {
-          toast.success(
-            t('toasts.wasted', {
-              amount,
-              unit: unitLabel,
-              name: updatedProduct.name,
-            })
-          );
-        }
+        toast.success(
+          (toastObj) => (
+            <div className="flex items-center gap-3">
+              <span>
+                {action === 'use'
+                  ? t('toasts.consumed', {
+                      amount,
+                      unit: unitLabel,
+                      name: updatedProduct.name,
+                    })
+                  : t('toasts.wasted', {
+                      amount,
+                      unit: unitLabel,
+                      name: updatedProduct.name,
+                    })}
+              </span>
+              <button
+                type="button"
+                onClick={async () => {
+                  toast.dismiss(toastObj.id);
+                  try {
+                    await productsService.undoProductAction(
+                      selectedPantry.id,
+                      updatedProduct.id,
+                      action,
+                      amount
+                    );
+                    toast.success(t('toasts.undone', { name: updatedProduct.name }));
+                    revalidateAllData();
+                  } catch (undoError) {
+                    console.error('Undo action failed:', undoError);
+                    toast.error(t('toasts.undoFailed'));
+                  }
+                }}
+                className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white transition hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              >
+                {t('toasts.undo')}
+              </button>
+            </div>
+          ),
+          { duration: 9000, style: { backgroundColor: '#0f766e', color: 'white' } }
+        );
 
         // Osiągnięcia
         if (response.unlocked_achievements?.length > 0) {
@@ -248,6 +287,10 @@ export const useProductCalendarLogic = () => {
         toast.success(t('toasts.deleted'));
         mutate(`/pantries/${selectedPantry.id}/products/stats`);
         mutate(`/pantries/${selectedPantry.id}/products/stats/financial`);
+        mutate(`/pantries/${selectedPantry.id}/products/get`);
+        mutate(`expiring/${selectedPantry.id}`);
+        mutate('/products/achievements');
+        mutate(`/pantries/${selectedPantry.id}/products/achievements`);
       } catch (error) {
         console.log(error);
         toast.error(t('toasts.actionFailed'));
@@ -301,6 +344,10 @@ export const useProductCalendarLogic = () => {
 
       mutate(`/pantries/${selectedPantry!.id}/products/stats`);
       mutate(`/pantries/${selectedPantry!.id}/products/stats/financial`);
+      mutate(`/pantries/${selectedPantry!.id}/products/get`);
+      mutate(`expiring/${selectedPantry!.id}`);
+      mutate('/products/achievements');
+      mutate(`/pantries/${selectedPantry!.id}/products/achievements`);
       toast.success(t('toasts.productUpdated'));
     },
     [mutate, selectedPantry, t]

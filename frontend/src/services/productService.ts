@@ -89,6 +89,19 @@ class ProductsService {
         return response.data;
     }
 
+    async undoProductAction(
+        pantryId: number,
+        productId: number,
+        actionType: 'use' | 'waste',
+        amount: number
+    ): Promise<Product> {
+        const response = await apiClient.post<Product>(`/pantries/${pantryId}/products/undo-action/${productId}`, {
+            action_type: actionType,
+            amount,
+        });
+        return response.data;
+    }
+
     async updateProduct(pantryId: number, productId: number, productData: CreateProductRequest): Promise<Product> {
         const response = await apiClient.put<Product>(`/pantries/${pantryId}/products/update/${productId}`, productData);
         return response.data;

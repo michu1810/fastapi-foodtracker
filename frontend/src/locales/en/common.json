@@ -113,12 +113,128 @@
   "delete": "Delete",
   "hide": "Hide",
 
+  "todayFocus": {
+    "eyebrow": "Rescue plan",
+    "title": "Today's focus",
+    "titleWithProduct": "Save first: {{name}}",
+    "bodyUrgent": "You have {{count}} product close to expiry. Build the day around it before it turns into waste.",
+    "bodyUrgent_one": "You have {{count}} product close to expiry. Build the day around it before it turns into waste.",
+    "bodyUrgent_other": "You have {{count}} products close to expiry. Build the day around them before they turn into waste.",
+    "bodyCalm": "Your pantry is in good shape. This is the right moment to use the oldest products before pressure builds up.",
+    "planTitle": "What to handle now",
+    "planBadge": "live from your pantry",
+    "scoreTitle": "Rescue score",
+    "score": "Rescue score: {{score}}/100",
+    "tipTitle": "Small move, real impact",
+    "tipBody": "Mark products as used right after a meal. Statistics, achievements, and forecasts refresh automatically.",
+    "error": "Could not load the rescue plan.",
+    "emptyEyebrow": "Pantry clear",
+    "emptyTitle": "No active products need rescuing",
+    "emptyBody": "Add products to your pantry and iPurel will build priorities, at-risk value, and a quick usage plan.",
+    "metrics": {
+      "urgent": "Urgent",
+      "value": "Value",
+      "expired": "Expired"
+    },
+    "days": {
+      "today": "today",
+      "left": "{{count}} day",
+      "left_one": "{{count}} day",
+      "left_other": "{{count}} days",
+      "expired": "{{count}} day late",
+      "expired_one": "{{count}} day late",
+      "expired_other": "{{count}} days late"
+    },
+    "recipe": {
+      "sandwich": "Make a quick sandwich, toast, or lunchbox from the products that expire first.",
+      "pan": "Put the priority ingredients in one pan and turn them into one warm meal.",
+      "bowl": "Make a dairy and fruit bowl: fast breakfast, less waste.",
+      "salad": "Build a salad or smoothie from whatever has the shortest date.",
+      "quick": "Pick the first product on the list and plan a simple meal around it."
+    },
+    "scoreCopy": {
+      "good": "You are on a strong track. Just keep an eye on the nearest dates.",
+      "medium": "A few products need attention. Two quick moves can lift the score fast.",
+      "low": "Your pantry needs action. Start with the first product in the plan."
+    },
+    "actions": {
+      "use": "Use",
+      "half": "1/2",
+      "all": "All",
+      "waste": "Waste",
+      "confirmWaste": "Confirm",
+      "undo": "Undo"
+    },
+    "toasts": {
+      "used": "Saved \"{{name}}\".",
+      "wasted": "Marked \"{{name}}\" as waste.",
+      "failed": "Could not complete the action.",
+      "undone": "Undid the action for \"{{name}}\".",
+      "undoFailed": "Could not undo the action."
+    }
+  },
+
+  "shoppingIntel": {
+    "eyebrow": "Shopping radar",
+    "title": "Buy only what makes sense",
+    "body": "iPurel reads your current pantry and suggests what to restock, what not to duplicate, and which essentials are missing.",
+    "coverage": "Essentials coverage: {{score}}%",
+    "error": "Could not load the shopping radar.",
+    "restockTitle": "Restock soon",
+    "restockBody": "Products that are almost gone or already depleted.",
+    "restockEmpty": "No urgent restock gaps detected.",
+    "avoidTitle": "Do not buy now",
+    "avoidBody": "Use what is close to expiry before adding more.",
+    "avoidEmpty": "Nothing is currently blocking the next shop.",
+    "coverageTitle": "Category gaps",
+    "coverageBody": "Core categories that are missing from your active pantry.",
+    "coverageEmpty": "Core categories are well covered.",
+    "remaining": "Remaining: {{amount}} {{unit}}",
+    "expired": "expired",
+    "daysLeft": "{{count}} day left",
+    "daysLeft_one": "{{count}} day left",
+    "daysLeft_other": "{{count}} days left",
+    "categoryMissing": "no active products"
+  },
+
+  "nextAchievement": {
+    "eyebrow": "Next goal",
+    "loading": "Finding the best goal...",
+    "completeTitle": "Everything unlocked",
+    "completeBody": "You have unlocked every achievement for now. New goals will arrive as iPurel grows.",
+    "cta": "View achievements"
+  },
+
+  "smartStart": {
+    "eyebrow": "Quick start",
+    "title": "Build your first intelligent pantry",
+    "body": "Create a pantry, add the first product, and let iPurel organize priorities, reminders, shopping advice, and goals automatically.",
+    "cta": "Create pantry",
+    "steps": {
+      "pantry": {
+        "title": "1. Create a pantry",
+        "body": "Separate home, business, or shared shopping into focused spaces."
+      },
+      "scan": {
+        "title": "2. Add products",
+        "body": "Enter items manually or scan a barcode when the product is available."
+      },
+      "track": {
+        "title": "3. Act with a plan",
+        "body": "The dashboard shows what to use, what not to buy, and the next goal to reach."
+      }
+    }
+  },
+
   "toasts": {
     "productAdded": "Product added!",
     "productUpdated": "Product updated!",
     "deleted": "Product deleted",
     "consumed": "Used {{amount}} {{unit}} of \"{{name}}\"",
     "wasted": "Wasted {{amount}} {{unit}} of \"{{name}}\"",
+    "undo": "Undo",
+    "undone": "Undid the action for \"{{name}}\".",
+    "undoFailed": "Could not undo the action.",
     "hidden": "Hidden \"{{name}}\"",
     "actionFailed": "Operation failed. Restoring...",
     "achievementUnlocked": "Achievement unlocked!"
@@ -146,7 +262,11 @@
     "terms": "Terms & Conditions",
     "contact": "Contact",
     "cta": "Interested in our booking widget?",
-    "rights": "© {{year}} iPurel. All rights reserved."
+    "ctaBody": "Write to us if you want to connect FoodTracker with restaurant, shop, or team operations.",
+    "ctaAction": "Contact us",
+    "website": "iPurel website",
+    "businessSubject": "FoodTracker for business",
+    "rights": "© {{year}} iPurel"
   },
 
   "currency": {

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { PantryRead } from '../services/pantryService';
+import type { PantryRead } from '../services/pantryService';
 
 export interface PantryContextType {
   pantries: PantryRead[];
@@ -14,7 +14,7 @@ export const PantryContext = createContext<PantryContextType | undefined>(undefi
 export const usePantry = () => {
   const context = useContext(PantryContext);
   if (context === undefined) {
-    throw new Error('usePantry musi byÄ‡ uĹĽywany wewnÄ…trz PantryProvider');
+    throw new Error('usePantry musi być używany wewnątrz PantryProvider');
   }
   return context;
 };

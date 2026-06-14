@@ -113,12 +113,132 @@
   "delete": "Usuń",
   "hide": "Ukryj",
 
+  "todayFocus": {
+    "eyebrow": "Plan ratunkowy",
+    "title": "Dzisiejszy fokus",
+    "titleWithProduct": "Najpierw uratuj: {{name}}",
+    "bodyUrgent": "Masz {{count}} produkt blisko terminu. Ułóż dzień wokół nich, zanim staną się stratą.",
+    "bodyUrgent_one": "Masz {{count}} produkt blisko terminu. Ułóż dzień wokół niego, zanim stanie się stratą.",
+    "bodyUrgent_few": "Masz {{count}} produkty blisko terminu. Ułóż dzień wokół nich, zanim staną się stratą.",
+    "bodyUrgent_many": "Masz {{count}} produktów blisko terminu. Ułóż dzień wokół nich, zanim staną się stratą.",
+    "bodyCalm": "Spiżarnia wygląda spokojnie. To dobry moment, żeby zużyć najstarsze produkty, zanim zrobi się tłoczno.",
+    "planTitle": "Co ogarnąć teraz",
+    "planBadge": "live z Twojej spiżarni",
+    "scoreTitle": "Rescue score",
+    "score": "Rescue score: {{score}}/100",
+    "tipTitle": "Mały ruch, duży efekt",
+    "tipBody": "Oznacz produkt jako zużyty od razu po posiłku. Statystyki, osiągnięcia i prognozy odświeżą się automatycznie.",
+    "error": "Nie udało się wczytać planu ratunkowego.",
+    "emptyEyebrow": "Spiżarnia czysta",
+    "emptyTitle": "Nie masz aktywnych produktów do ratowania",
+    "emptyBody": "Dodaj produkty do spiżarni, a iPurel ułoży priorytety, wartość zagrożoną i szybki plan zużycia.",
+    "metrics": {
+      "urgent": "Pilne",
+      "value": "Wartość",
+      "expired": "Po terminie"
+    },
+    "days": {
+      "today": "dzisiaj",
+      "left": "{{count}} dzień",
+      "left_one": "{{count}} dzień",
+      "left_few": "{{count}} dni",
+      "left_many": "{{count}} dni",
+      "expired": "{{count}} dzień po",
+      "expired_one": "{{count}} dzień po",
+      "expired_few": "{{count}} dni po",
+      "expired_many": "{{count}} dni po"
+    },
+    "recipe": {
+      "sandwich": "Zrób szybką kanapkę, tost albo lunchbox z produktów, które kończą się najszybciej.",
+      "pan": "Wrzuć priorytetowe składniki na patelnię i zamknij temat jednym ciepłym posiłkiem.",
+      "bowl": "Zrób miskę z nabiałem i owocami: szybkie śniadanie, mało strat.",
+      "salad": "Złóż sałatkę albo smoothie z tego, co ma najkrótszy termin.",
+      "quick": "Wybierz pierwszy produkt z listy i zaplanuj prosty posiłek wokół niego."
+    },
+    "scoreCopy": {
+      "good": "Jesteś na dobrej trajektorii. Wystarczy pilnować najbliższych terminów.",
+      "medium": "Jest kilka produktów do przechwycenia. Dwa szybkie ruchy mocno poprawią wynik.",
+      "low": "Spiżarnia prosi o reakcję. Zacznij od pierwszego produktu z planu."
+    },
+    "actions": {
+      "use": "Zużyj",
+      "half": "1/2",
+      "all": "Całość",
+      "waste": "Strata",
+      "confirmWaste": "Potwierdź",
+      "undo": "Cofnij"
+    },
+    "toasts": {
+      "used": "Uratowano „{{name}}”.",
+      "wasted": "Oznaczono „{{name}}” jako stratę.",
+      "failed": "Nie udało się wykonać akcji.",
+      "undone": "Cofnięto akcję dla „{{name}}”.",
+      "undoFailed": "Nie udało się cofnąć akcji."
+    }
+  },
+
+  "shoppingIntel": {
+    "eyebrow": "Radar zakupów",
+    "title": "Kupuj tylko to, co ma sens",
+    "body": "iPurel patrzy na aktualną spiżarnię i podpowiada, co warto uzupełnić, czego nie dublować oraz gdzie brakuje podstaw.",
+    "coverage": "Pokrycie podstaw: {{score}}%",
+    "error": "Nie udało się wczytać radaru zakupów.",
+    "restockTitle": "Do uzupełnienia",
+    "restockBody": "Produkty, które są na końcówce albo już się wyzerowały.",
+    "restockEmpty": "Nie widać braków do pilnego uzupełnienia.",
+    "avoidTitle": "Nie kupuj teraz",
+    "avoidBody": "Najpierw zużyj to, co niedługo straci świeżość.",
+    "avoidEmpty": "Brak produktów, które blokują kolejne zakupy.",
+    "coverageTitle": "Braki kategorii",
+    "coverageBody": "Podstawowe kategorie, których aktualnie nie ma w aktywnej spiżarni.",
+    "coverageEmpty": "Podstawowe kategorie są dobrze pokryte.",
+    "remaining": "Zostało: {{amount}} {{unit}}",
+    "expired": "po terminie",
+    "daysLeft": "{{count}} dzień do terminu",
+    "daysLeft_one": "{{count}} dzień do terminu",
+    "daysLeft_few": "{{count}} dni do terminu",
+    "daysLeft_many": "{{count}} dni do terminu",
+    "categoryMissing": "brak aktywnych produktów"
+  },
+
+  "nextAchievement": {
+    "eyebrow": "Następny cel",
+    "loading": "Szukamy najlepszego celu...",
+    "completeTitle": "Wszystko odblokowane",
+    "completeBody": "Masz komplet osiągnięć w tej chwili. Kolejne cele pojawią się wraz z rozwojem iPurel.",
+    "cta": "Zobacz osiągnięcia"
+  },
+
+  "smartStart": {
+    "eyebrow": "Szybki start",
+    "title": "Zbuduj pierwszą inteligentną spiżarnię",
+    "body": "Dodaj spiżarnię, wrzuć pierwszy produkt i pozwól iPurel układać priorytety, przypomnienia, listę zakupów i cele automatycznie.",
+    "cta": "Utwórz spiżarnię",
+    "steps": {
+      "pantry": {
+        "title": "1. Utwórz spiżarnię",
+        "body": "Oddziel dom, firmę albo wspólne zakupy w osobne przestrzenie."
+      },
+      "scan": {
+        "title": "2. Dodaj produkty",
+        "body": "Wpisz ręcznie albo skanuj kod, gdy produkt jest dostępny w bazie."
+      },
+      "track": {
+        "title": "3. Działaj z planem",
+        "body": "Dashboard pokaże, co zużyć, czego nie kupować i co jest następnym celem."
+      }
+    }
+  },
+
   "toasts": {
     "productAdded": "Dodano produkt!",
     "productUpdated": "Zaktualizowano produkt!",
     "deleted": "Produkt usunięty",
     "consumed": "Zużyto {{amount}} {{unit}} produktu „{{name}}”",
     "wasted": "Wyrzucono {{amount}} {{unit}} produktu „{{name}}”",
+    "undo": "Cofnij",
+    "undone": "Cofnięto akcję dla „{{name}}”.",
+    "undoFailed": "Nie udało się cofnąć akcji.",
     "hidden": "Ukryto „{{name}}”",
     "actionFailed": "Operacja nie powiodła się. Przywracanie...",
     "achievementUnlocked": "Osiągnięcie odblokowane!"
@@ -146,7 +266,11 @@
     "terms": "Regulamin",
     "contact": "Kontakt",
     "cta": "Zainteresował Cię nasz widget rezerwacji?",
-    "rights": "© {{year}} iPurel. Wszelkie prawa zastrzeżone."
+    "ctaBody": "Napisz, jeśli chcesz połączyć FoodTrackera z operacjami restauracji, sklepu albo zespołu.",
+    "ctaAction": "Napisz do nas",
+    "website": "Strona iPurel",
+    "businessSubject": "FoodTracker dla firmy",
+    "rights": "© {{year}} iPurel"
   },
 
   "currency": {

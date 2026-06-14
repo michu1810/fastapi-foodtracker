@@ -1,5 +1,7 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { pantryService, PantryRead } from '../services/pantryService';
+import { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { pantryService } from '../services/pantryService';
+import type { PantryRead } from '../services/pantryService';
 import { useAuth } from './AuthContext';
 import { PantryContext } from './PantryContext';
 
@@ -27,7 +29,7 @@ export const PantryProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem('selectedPantryId', String(userPantries[0].id));
       }
     } catch (error) {
-      console.error('Nie udaĹ‚o siÄ™ pobraÄ‡ spiĹĽarni', error);
+      console.error('Nie udało się pobrać spiżarni', error);
     } finally {
       setLoading(false);
     }

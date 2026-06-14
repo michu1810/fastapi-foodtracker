@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { PantryManagement } from '../components/PantryManagement';
 import { usePantry } from '../context/PantryContext';

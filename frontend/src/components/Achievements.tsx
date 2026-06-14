@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaLock, FaCrown } from 'react-icons/fa';
-import { Achievement } from '../services/statsService';
+import type { Achievement } from '../services/statsService';
 import { useTranslation } from 'react-i18next';
 
 interface AchievementsProps {

@@ -59,8 +59,8 @@ export async function getTrends(pantryId: number, range: 'day' | 'week' | 'month
     return res.data;
 }
 
-export async function getAchievements(): Promise<Achievement[]> {
-    const res = await apiClient.get('/pantries/{pantryId}/products/achievements');
+export async function getAchievements(pantryId: number): Promise<Achievement[]> {
+    const res = await apiClient.get(`/pantries/${pantryId}/products/achievements`);
     return res.data;
 }
 

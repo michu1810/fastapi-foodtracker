@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../services/api';
 import { clearStorageKey, loadFromStorage } from '../utils/localStorage';
@@ -9,7 +10,7 @@ interface ApiError {
   message?: string;
 }
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           axiosErr.response?.data?.detail ||
           axiosErr.response?.data?.message ||
           axiosErr.message ||
-          'Nie udaĹ‚o siÄ™ zalogowaÄ‡. SprawdĹş dane logowania.';
+          'Nie udało się zalogować. Sprawdź dane logowania.';
         setError(msg);
       } finally {
         setIsLoading(false);
@@ -84,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await apiClient.post('/auth/register', { email, password, recaptcha_token: recaptchaToken });
     } catch (err: unknown) {
       const e = err as ApiError;
-      const msg = e.response?.data?.detail || e.response?.data?.message || e.message || 'BĹ‚Ä…d rejestracji';
+      const msg = e.response?.data?.detail || e.response?.data?.message || e.message || 'Błąd rejestracji';
       setError(msg);
       throw new Error(msg);
     } finally {
@@ -96,7 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await apiClient.post('/auth/logout');
     } catch (err) {
-      console.error('BĹ‚Ä…d wylogowania:', err);
+      console.error('Błąd wylogowania:', err);
     } finally {
       localStorage.removeItem('token');
       delete apiClient.defaults.headers.common.Authorization;
@@ -111,7 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (!apiUrl) {
       console.error('VITE_API_BASE_URL is not set!');
-      setError('BĹ‚Ä…d konfiguracji aplikacji. Prosimy o kontakt z administratorem.');
+      setError('Błąd konfiguracji aplikacji. Prosimy o kontakt z administratorem.');
       return;
     }
 
@@ -134,9 +135,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return '/';
       } catch (err) {
-        console.error('BĹ‚Ä…d po ustawieniu tokena z callbacku:', err);
+        console.error('Błąd po ustawieniu tokena z callbacku:', err);
         await logout();
-        setError('BĹ‚Ä…d sesji OAuth. SprĂłbuj ponownie.');
+        setError('Błąd sesji OAuth. Spróbuj ponownie.');
         return '/login';
       }
     },

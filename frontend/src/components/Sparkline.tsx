@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 
 export default function Sparkline({ data }: { data: number[] }) {

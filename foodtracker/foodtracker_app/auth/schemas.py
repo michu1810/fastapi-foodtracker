@@ -89,6 +89,10 @@ class ProductActionRequest(BaseModel):
     amount: float = Field(gt=0)
 
 
+class ProductActionUndoRequest(ProductActionRequest):
+    action_type: Literal["use", "waste"]
+
+
 class ProductExpiringSoon(ProductBase):
     id: int
     days_left: int

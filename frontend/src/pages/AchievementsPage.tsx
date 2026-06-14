@@ -5,10 +5,20 @@ import { getAchievements } from '../services/statsService';
 import type { Achievement } from '../services/statsService';
 import Achievements from '../components/Achievements';
 import { Trans, useTranslation } from 'react-i18next';
+import { usePantry } from '../context/PantryContext';
 
 const AchievementsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { data: list, error } = useSWR<Achievement[]>('/products/achievements', getAchievements);
+  const { selectedPantry } = usePantry();
+  const achievementsKey = selectedPantry ? `/pantries/${selectedPantry.id}/products/achievements` : null;
+  const { data: list, error } = useSWR<Achievement[]>(
+    achievementsKey,
+    () => getAchievements(selectedPantry!.id)
+  );
+
+  if (!selectedPantry) {
+    return <div className="text-center p-10 text-gray-500 dark:text-slate-400">{t('statsPage.selectPantryPrompt')}</div>;
+  }
 
   if (error) {
     return (

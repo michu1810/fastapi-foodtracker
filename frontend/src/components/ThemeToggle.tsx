@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
-
-type Theme = 'light' | 'dark';
-const hasWindow = typeof window !== 'undefined';
-
-const getInitialTheme = (): Theme => {
-  if (!hasWindow) return 'light';
-  try {
-    const saved = localStorage.getItem('theme') as Theme | null;
-    if (saved === 'light' || saved === 'dark') return saved;
-    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  } catch {
-    return 'light';
-  }
-};
+import { getInitialTheme, setAppTheme } from '../utils/theme';
+import type { Theme } from '../utils/theme';
 
 export default function ThemeToggle() {
   const { t } = useTranslation();
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const isDark = theme === 'dark';
 
-  useEffect(() => {
-    if (!hasWindow) return;
-    document.documentElement.classList.toggle('dark', isDark);
-    try { localStorage.setItem('theme', theme); } catch { /* ignore */ }
-  }, [theme, isDark]);
+  const handleToggle = () => {
+    const nextTheme = isDark ? 'light' : 'dark';
+    setTheme(nextTheme);
+    setAppTheme(nextTheme);
+  };
 
   return (
     <button
@@ -34,11 +22,12 @@ export default function ThemeToggle() {
       role="switch"
       aria-checked={isDark}
       aria-label={isDark ? t('nightMode') : t('dayMode')}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={handleToggle}
       className="relative inline-flex items-center justify-between rounded-full
                  bg-white/90 dark:bg-gray-900/90 backdrop-blur p-1 shadow-md
                  h-10 w-[150px] select-none overflow-hidden
-                 outline-none focus:outline-none ring-0 focus:ring-0"
+                 outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white
+                 dark:focus-visible:ring-teal-300 dark:focus-visible:ring-offset-slate-950"
     >
       {/* gradient tła */}
       <motion.div

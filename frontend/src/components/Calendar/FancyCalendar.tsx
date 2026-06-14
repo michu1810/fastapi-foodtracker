@@ -5,7 +5,7 @@ import {
 } from 'date-fns';
 import { pl as dfnsPL, enUS as dfnsEN } from 'date-fns/locale';
 import clsx from 'clsx';
-import { Product } from '../../services/productService';
+import type { Product } from '../../services/productService';
 import DayCell from './DayCell';
 import { useTranslation } from 'react-i18next';
 

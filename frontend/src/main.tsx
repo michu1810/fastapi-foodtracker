@@ -5,7 +5,10 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './context/AuthProvider';
 import { PantryProvider } from './context/PantryProvider';
+import { initializeTheme } from './utils/theme';
 import './index.css';
+
+initializeTheme();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

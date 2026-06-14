@@ -15,6 +15,7 @@ from foodtracker_app.auth.schemas import (
     ChangePasswordRequest,
     FinancialStatsOut,
     ProductActionRequest,
+    ProductActionUndoRequest,
     ProductActionResponse,
     ProductCreate,
     ProductExpiringSoon,
@@ -427,6 +428,51 @@ async def waste_product(
     return await _handle_product_action(
         "waste", product_to_waste, financial_stat, amount_to_waste, user, db
     )
+
+
+@product_router.post("/undo-action/{product_id}", response_model=ProductOut)
+async def undo_product_action(
+    product_id: int,
+    undo_request: ProductActionUndoRequest,
+    pantry: Pantry = Depends(get_pantry_for_user),
+    db: AsyncSession = Depends(get_async_session),
+):
+    product = await db.get(Product, product_id)
+    if not product or product.pantry_id != pantry.id:
+        raise HTTPException(
+            status_code=404, detail="Produkt nie znaleziony w tej spiżarni"
+        )
+
+    amount = Decimal(str(undo_request.amount))
+    restored_amount = product.current_amount + amount
+    if restored_amount > product.initial_amount:
+        raise HTTPException(
+            status_code=400,
+            detail="Nie można cofnąć akcji powyżej początkowej ilości produktu.",
+        )
+
+    financial_stat = await db.scalar(
+        select(FinancialStat).where(FinancialStat.pantry_id == pantry.id)
+    )
+
+    if product.initial_amount > 0 and financial_stat:
+        value_of_action = (product.price / product.initial_amount) * amount
+        if undo_request.action_type == "use":
+            financial_stat.saved_value = max(
+                Decimal("0"), financial_stat.saved_value - value_of_action
+            )
+        else:
+            financial_stat.wasted_value = max(
+                Decimal("0"), financial_stat.wasted_value - value_of_action
+            )
+
+    product.current_amount = restored_amount
+    if undo_request.action_type == "waste":
+        product.wasted_amount = max(Decimal("0"), product.wasted_amount - amount)
+
+    await db.commit()
+    await db.refresh(product)
+    return product
 
 
 @product_router.get("/get", response_model=List[ProductOut])

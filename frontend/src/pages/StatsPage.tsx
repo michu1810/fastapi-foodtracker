@@ -1,8 +1,9 @@
-import React from 'react';
+import type React from 'react';
 import { motion } from 'framer-motion';
 import { FaBoxOpen, FaCheck, FaPiggyBank, FaTrash, FaExclamationCircle, FaChartLine } from 'react-icons/fa';
 import CountUp from 'react-countup';
-import { getStats, getFinancialStats, FinancialStats, Stats, TrendData } from '../services/statsService';
+import { getStats, getFinancialStats } from '../services/statsService';
+import type { FinancialStats, Stats, TrendData } from '../services/statsService';
 import useSWR from 'swr';
 import TrendChart from '../components/TrendChart';
 import FinancialBarChart from '../components/FinancialBarChart';

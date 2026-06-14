@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { format, isSameDay, isSameMonth } from 'date-fns';
 import clsx from 'clsx';
-import { Product, productsService } from '../../services/productService';
+import { productsService } from '../../services/productService';
+import type { Product } from '../../services/productService';
 import { useTranslation } from 'react-i18next';
 
 interface DayCellProps {

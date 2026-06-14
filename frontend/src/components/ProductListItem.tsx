@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Product } from '../services/productService';
+import type { Product } from '../services/productService';
 import { getCategoryIcon } from '../utils/icons';
 import { categoryI18nKey } from '../utils/categoryI18n';
 

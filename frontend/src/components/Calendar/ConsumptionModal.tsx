@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
-import { Product } from '../../services/productService';
+import type { Product } from '../../services/productService';
 import { useTranslation } from 'react-i18next';
 import Portal from '../Portal';
 

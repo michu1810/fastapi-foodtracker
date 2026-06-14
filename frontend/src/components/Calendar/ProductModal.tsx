@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Product, productsService } from '../../services/productService';
-import { categoryService, Category } from '../../services/categoryService';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from 'framer-motion';
+import { productsService } from '../../services/productService';
+import type { Product } from '../../services/productService';
+import { categoryService } from '../../services/categoryService';
+import type { Category } from '../../services/categoryService';
 import { usePantry } from '../../context/PantryContext';
 import Portal from '../Portal';
 import ProductListItem from '../ProductListItem';
