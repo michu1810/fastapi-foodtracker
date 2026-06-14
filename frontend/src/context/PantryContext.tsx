@@ -6,7 +6,7 @@ export interface PantryContextType {
   selectedPantry: PantryRead | null;
   selectPantry: (pantryId: number) => void;
   loading: boolean;
-  refreshPantries: () => void;
+  refreshPantries: () => Promise<void>;
 }
 
 export const PantryContext = createContext<PantryContextType | undefined>(undefined);

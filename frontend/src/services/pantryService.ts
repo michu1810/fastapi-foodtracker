@@ -28,12 +28,12 @@ export interface PantryInvitationLink {
 
 class PantryService {
     async getUserPantries(): Promise<PantryRead[]> {
-        const response = await apiClient.get<PantryRead[]>('/pantries/');
+        const response = await apiClient.get<PantryRead[]>('/pantries');
         return response.data;
     }
 
     async createPantry(name: string): Promise<PantryRead> {
-        const response = await apiClient.post<PantryRead>('/pantries/', { name });
+        const response = await apiClient.post<PantryRead>('/pantries', { name });
         return response.data;
     }
 
