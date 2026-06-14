@@ -6,12 +6,12 @@ from foodtracker_app.settings import settings
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine.url import make_url
 
-from foodtracker_app.models.user import User  # noqa: F401
-from foodtracker_app.models.product import Product  # noqa: F401
-from foodtracker_app.models.pantry import Pantry  # noqa: F401
-from foodtracker_app.models.pantry_user import PantryUser  # noqa: F401
 from foodtracker_app.models.category import Category  # noqa: F401
 from foodtracker_app.models.financial_stats import FinancialStat  # noqa: F401
+from foodtracker_app.models.pantry import Pantry  # noqa: F401
+from foodtracker_app.models.pantry_user import PantryUser  # noqa: F401
+from foodtracker_app.models.product import Product  # noqa: F401
+from foodtracker_app.models.user import User  # noqa: F401
 
 config = context.config
 
@@ -21,16 +21,13 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 raw_url = settings.DATABASE_URL
-
 url = make_url(raw_url).set(drivername="postgresql")
 
 if settings.IS_PRODUCTION:
     url = url.update_query_pairs([("sslmode", "require")])
 
 rendered_url = url.render_as_string(hide_password=False)
-
-print("▶ DEBUG ALEMBIC - DATABASE_URL (z settings):", raw_url)
-print("▶ DEBUG ALEMBIC - FINAL SYNC_URL FOR ALEMBIC:", str(url))
+print("Alembic database URL:", url.render_as_string(hide_password=True))
 
 # Alembic stores this in configparser, where "%" is treated as interpolation syntax.
 # Escaping it keeps URL-encoded passwords like "%21" valid during deploy-time migrations.
@@ -38,11 +35,7 @@ config.set_main_option("sqlalchemy.url", rendered_url.replace("%", "%%"))
 
 
 def run_migrations_offline() -> None:
-    """Uruchom migracje w trybie 'offline'.
-
-    To konfiguruje kontekst tylko z URL-em,
-    bez Engine. Skrypty są generowane do standardowego wyjścia.
-    """
+    """Run migrations without opening a database connection."""
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -55,11 +48,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Uruchom migracje w trybie 'online'.
-
-    W tym trybie tworzymy Engine i łączymy się z bazą danych,
-    a następnie przekazujemy to połączenie do kontekstu.
-    """
+    """Run migrations with a live database connection."""
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
